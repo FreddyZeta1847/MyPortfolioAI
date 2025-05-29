@@ -149,4 +149,4 @@ Project Link: [https://github.com/yourusername/myportfolioai](https://github.com
 
 ---
 
-*Built entirely with AI • Showcasing the future of development*
+*Built entirely with AI (also this README) • Showcasing the future of development*
