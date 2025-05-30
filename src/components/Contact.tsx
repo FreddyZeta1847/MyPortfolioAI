@@ -5,7 +5,6 @@ const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    subject: '',
     message: ''
   });
   
@@ -18,21 +17,44 @@ const Contact: React.FC = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
+    setSubmitError(false);
+    setSubmitSuccess(false);
+
+    try {
+      const response = await fetch('http://localhost:3001/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      console.log('Success:', result);
       setIsSubmitting(false);
       setSubmitSuccess(true);
-      setFormData({ name: '', email: '', subject: '', message: '' });
-      
+      setFormData({ name: '', email: '', message: '' });
+
       // Reset success message after 5 seconds
       setTimeout(() => {
         setSubmitSuccess(false);
       }, 5000);
-    }, 1500);
+    } catch (error) {
+      console.error('Error:', error);
+      setIsSubmitting(false);
+      setSubmitError(true);
+      // Reset error message after 5 seconds
+      setTimeout(() => {
+        setSubmitError(false);
+      }, 5000);
+    }
   };
 
   return (
@@ -136,19 +158,6 @@ const Contact: React.FC = () => {
                     id="email" 
                     name="email" 
                     value={formData.email}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-                    required
-                  />
-                </div>
-                
-                <div className="mb-4">
-                  <label htmlFor="subject" className="block text-gray-700 font-medium mb-2">Oggetto</label>
-                  <input 
-                    type="text" 
-                    id="subject" 
-                    name="subject" 
-                    value={formData.subject}
                     onChange={handleChange}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                     required
