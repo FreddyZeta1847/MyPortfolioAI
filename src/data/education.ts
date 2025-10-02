@@ -11,6 +11,6 @@ export const education: Education[] = [
     period: '2025 – Present',
     institution: 'Politecnico di Milano',
     degree: 'Computer Engineering',
-    description: 'Expected start: September 2025'
+    description: 'Currently pursuing Bachelor\'s degree in Computer Engineering'
   }
 ];

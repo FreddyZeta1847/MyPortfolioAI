@@ -19,10 +19,10 @@ export const projects: Project[] = [
   },
   {
     id: 3,
-    title: 'Social Network Platform',
-    description: 'A comprehensive social networking platform featuring a React frontend and Node.js backend with MongoDB. Implements user registration, authentication, post creation, commenting, and user profile management.',
-    technologies: ['React', 'Node.js', 'MongoDB', 'Express'],
-    imageUrl: 'https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    githubUrl: 'https://github.com/FreddyZeta1847/Social-Application'
+    title: 'Web Scraping Application',
+    description: 'A powerful web scraping application designed to extract and process data from websites efficiently. Features automated data collection, parsing, and storage capabilities with a user-friendly interface.',
+    technologies: ['Python', 'BeautifulSoup', 'Selenium', 'Pandas'],
+    imageUrl: 'https://images.pexels.com/photos/1089438/pexels-photo-1089438.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    githubUrl: 'https://github.com/FreddyZeta1847/Web-Scraping-App'
   }
 ];
