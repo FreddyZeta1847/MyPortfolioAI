@@ -14,7 +14,7 @@ export const projects: Project[] = [
     title: 'Real-Time Chat Application',
     description: 'A full-stack web chat application built with Node.js and Socket.io. Features a clean interface, real-time messaging, and multi-user support. Deployed both locally and on remote servers.',
     technologies: ['Node.js', 'Socket.io', 'JavaScript', 'React.js', 'MongoDB', "Express"],
-    imageUrl: 'https://images.pexels.com/photos/4126743/pexels-photo-4126743.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    imageUrl: 'https://images.pexels.com/photos/267350/pexels-photo-267350.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     githubUrl: 'https://github.com/FreddyZeta1847/fullstack-chat-app'
   },
   {
@@ -22,7 +22,7 @@ export const projects: Project[] = [
     title: 'ScrapeMind AI',
     description: 'A powerful web scraping application designed to extract and process data from websites efficiently. Features automated data collection, parsing, and storage capabilities with a user-friendly interface.',
     technologies: ['Ollama', 'Nodejs', 'Mongodb', 'Claude Code', "Express"],
-    imageUrl: 'https://images.pexels.com/photos/1089438/pexels-photo-1089438.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    imageUrl: 'https://images.pexels.com/photos/270360/pexels-photo-270360.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     githubUrl: 'https://github.com/FreddyZeta1847/Web-Scraping-App'
   }
 ];
