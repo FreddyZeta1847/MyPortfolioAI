@@ -2,19 +2,19 @@ import { Skill } from '../types';
 
 export const skills: Skill[] = [
   {
-    category: 'Linguaggi di programmazione',
+    category: 'Programming Languages',
     items: ['Python (Jupyter)', 'JavaScript (React, Node.js)', 'C++', 'Java', 'PHP']
   },
   {
-    category: 'Tecnologie web',
+    category: 'Web Technologies',
     items: ['HTML', 'CSS']
   },
   {
-    category: 'Strumenti e ambienti di sviluppo',
-    items: ['VS Code', 'Github', 'Cisco Packet Tracer']
+    category: 'Development Tools & Environments',
+    items: ['VS Code', 'GitHub', 'Cisco Packet Tracer']
   },
   {
-    category: 'Competenze aggiuntive',
-    items: ['Networking di base', 'Versionamento', 'Problem solving', 'Debug', 'API REST']
+    category: 'Additional Skills',
+    items: ['Basic Networking', 'Version Control', 'Problem Solving', 'Debugging', 'REST APIs']
   }
 ];

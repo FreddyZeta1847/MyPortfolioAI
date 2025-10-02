@@ -7,7 +7,7 @@ const Education: React.FC = () => {
     <section id="education" className="py-20 bg-white">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Percorso di Studi</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Education</h2>
           <div className="w-20 h-1 bg-blue-600 mx-auto"></div>
         </div>
         
@@ -58,7 +58,7 @@ const Education: React.FC = () => {
           
           <div className="mt-8 text-center">
             <p className="text-gray-700 italic">
-              Durante il mio percorso scolastico ho sviluppato solide basi in programmazione, networking, sistemi operativi, basi di dati e sviluppo software.
+              Throughout my academic journey, I developed strong foundations in programming, networking, operating systems, databases, and software development.
             </p>
           </div>
         </div>

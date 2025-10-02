@@ -10,7 +10,7 @@ const Footer: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-6 md:mb-0">
             <h2 className="text-2xl font-bold text-blue-400 mb-2">Federico Santini</h2>
-            <p className="text-gray-400">Studente di Ingegneria Informatica</p>
+            <p className="text-gray-400">Computer Engineering Student</p>
           </div>
           
           <div className="flex space-x-4">
@@ -50,7 +50,7 @@ const Footer: React.FC = () => {
         </div>
         
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; {currentYear} Federico Santini. Tutti i diritti riservati.</p>
+          <p>&copy; {currentYear} Federico Santini. All rights reserved.</p>
         </div>
       </div>
     </footer>

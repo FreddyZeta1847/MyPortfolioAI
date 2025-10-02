@@ -17,10 +17,10 @@ const Projects: React.FC = () => {
     <section id="projects" className="py-20 bg-white">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Progetti Personali</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Personal Projects</h2>
           <div className="w-20 h-1 bg-blue-600 mx-auto mb-6"></div>
           <p className="text-gray-700 max-w-2xl mx-auto">
-            Ecco alcuni progetti che ho realizzato recentemente, mettendo in pratica le mie conoscenze e imparando nuove tecnologie.
+            Here are some projects I've recently developed, applying my knowledge and learning new technologies.
           </p>
         </div>
         
@@ -43,7 +43,7 @@ const Projects: React.FC = () => {
                       className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm font-medium transition-colors duration-300 flex items-center"
                     >
                       <ExternalLink size={16} className="mr-2" />
-                      Visualizza Dettagli
+                      View Details
                     </button>
                   </div>
                 </div>
@@ -65,7 +65,7 @@ const Projects: React.FC = () => {
                     
                     <div className="flex items-center mb-3">
                       <Code size={18} className="text-blue-600 mr-2" />
-                      <span className="text-gray-700 font-medium">Tecnologie utilizzate:</span>
+                      <span className="text-gray-700 font-medium">Technologies used:</span>
                     </div>
                     <div className="flex flex-wrap gap-2 mb-3">
                       {project.technologies.map((tech, idx) => (
@@ -87,7 +87,7 @@ const Projects: React.FC = () => {
                           className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-300"
                         >
                           <Github size={18} className="mr-2" />
-                          Visualizza su GitHub
+                          View on GitHub
                         </a>
                       </div>
                     )}
@@ -98,7 +98,7 @@ const Projects: React.FC = () => {
                   onClick={() => toggleProject(project.id)}
                   className={`mt-4 text-blue-600 hover:text-blue-800 text-sm font-medium focus:outline-none transition-colors duration-300 ${activeProject === project.id ? 'flex items-center' : ''}`}
                 >
-                  {activeProject === project.id ? 'Nascondi dettagli' : 'Mostra dettagli'}
+                  {activeProject === project.id ? 'Hide details' : 'Show details'}
                 </button>
               </div>
             </div>

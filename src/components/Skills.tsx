@@ -4,13 +4,13 @@ import { skills } from '../data/skills';
 
 const getIconForCategory = (category: string) => {
   switch(category) {
-    case 'Linguaggi di programmazione':
+    case 'Programming Languages':
       return <Code size={24} className="text-blue-600" />;
-    case 'Tecnologie web':
+    case 'Web Technologies':
       return <Globe size={24} className="text-green-600" />;
-    case 'Strumenti e ambienti di sviluppo':
+    case 'Development Tools & Environments':
       return <Tool size={24} className="text-purple-600" />;
-    case 'Competenze aggiuntive':
+    case 'Additional Skills':
       return <Brain size={24} className="text-orange-600" />;
     default:
       return <Code size={24} className="text-blue-600" />;
@@ -22,10 +22,10 @@ const Skills: React.FC = () => {
     <section id="skills\" className="py-20 bg-gray-50">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Tecnologie e Competenze</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Skills & Technologies</h2>
           <div className="w-20 h-1 bg-blue-600 mx-auto mb-6"></div>
           <p className="text-gray-700 max-w-2xl mx-auto">
-            Ecco gli strumenti e linguaggi con cui ho già lavorato. Mi tengo costantemente aggiornato con corsi online e progetti personali.
+            Here are the tools and languages I've worked with. I continuously stay updated through online courses and personal projects.
           </p>
         </div>
         

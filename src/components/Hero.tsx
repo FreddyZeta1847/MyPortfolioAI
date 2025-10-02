@@ -20,19 +20,19 @@ const Hero: React.FC = () => {
           
           <div className="md:w-1/2">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-              Ciao! Mi chiamo <span className="text-blue-600">Federico Santini</span>.
+              Hello! I'm <span className="text-blue-600">Federico Santini</span>.
             </h1>
-            
+
             <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-              Sono un ragazzo di 18 anni, nato a Desio (MB) il 1° agosto 2006. Ho appena concluso il mio percorso di studi superiori in Informatica presso l'ITIS P. Hensemberger di Monza e ho già intrapreso il prossimo passo: sono stato ammesso alla facoltà di Ingegneria Informatica al Politecnico di Milano.
+              I am an aspiring Computer Engineering student at Politecnico di Milano, having recently graduated with honors in Computer Science from ITIS P. Hensemberger in Monza. Born on August 1st, 2006 in Desio, Italy, I bring a strong foundation in software development and a passion for innovative technology solutions.
             </p>
-            
+
             <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-              Fin da piccolo, sono sempre stato affascinato dalla tecnologia. Oggi le mie passioni principali sono lo sviluppo di videogiochi, la ricerca e sviluppo nel campo dell'intelligenza artificiale, la cybersecurity e anche lo sport, che mi ha insegnato disciplina, costanza e lavoro di squadra.
+              My technical interests span across game development, artificial intelligence research, and cybersecurity. I am particularly drawn to creating robust, scalable applications and exploring cutting-edge AI technologies. Beyond coding, competitive sports have instilled in me the values of discipline, perseverance, and effective teamwork—qualities I bring to every project I undertake.
             </p>
-            
+
             <p className="text-lg text-gray-700 mb-8 leading-relaxed">
-              Mi definisco una persona curiosa, determinata e sempre alla ricerca di nuove sfide. Amo imparare, sperimentare e collaborare.
+              I am a curious, driven problem-solver with a commitment to continuous learning and collaboration. I thrive in challenging environments where I can leverage technology to create meaningful impact.
             </p>
             
             <div className="flex flex-wrap gap-4">
@@ -41,7 +41,7 @@ const Hero: React.FC = () => {
                 className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-300"
               >
                 <Mail size={20} />
-                Contattami
+                Contact Me
               </a>
               <div className="flex gap-4">
                 <a 

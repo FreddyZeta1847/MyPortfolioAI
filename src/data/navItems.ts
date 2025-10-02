@@ -3,22 +3,22 @@ import { NavItem } from '../types';
 export const navItems: NavItem[] = [
   {
     id: 'hero',
-    title: 'Chi Sono'
+    title: 'About Me'
   },
   {
     id: 'education',
-    title: 'Percorso di Studi'
+    title: 'Education'
   },
   {
     id: 'skills',
-    title: 'Tecnologie e Competenze'
+    title: 'Skills & Technologies'
   },
   {
     id: 'projects',
-    title: 'Progetti'
+    title: 'Projects'
   },
   {
     id: 'contact',
-    title: 'Contatti'
+    title: 'Contact'
   }
 ];

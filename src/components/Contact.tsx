@@ -61,17 +61,17 @@ const Contact: React.FC = () => {
     <section id="contact" className="py-20 bg-gray-50">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Contatti</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Contact</h2>
           <div className="w-20 h-1 bg-blue-600 mx-auto mb-6"></div>
           <p className="text-gray-700 max-w-2xl mx-auto">
-            Se vuoi collaborare con me, propormi un'opportunità o semplicemente scambiare due parole sul mondo tech, non esitare a scrivermi!
+            Whether you'd like to collaborate, discuss an opportunity, or simply connect about technology, feel free to reach out!
           </p>
         </div>
         
         <div className="flex flex-col md:flex-row gap-12 max-w-5xl mx-auto">
           <div className="md:w-2/5">
             <div className="bg-white rounded-lg shadow-md p-8">
-              <h3 className="text-2xl font-semibold text-gray-800 mb-6">Informazioni di contatto</h3>
+              <h3 className="text-2xl font-semibold text-gray-800 mb-6">Contact Information</h3>
               
               <div className="space-y-6">
                 <div className="flex items-start">
@@ -91,7 +91,7 @@ const Contact: React.FC = () => {
                     <Phone size={24} className="text-blue-600" />
                   </div>
                   <div className="ml-4">
-                    <h4 className="text-lg font-medium text-gray-800">Telefono</h4>
+                    <h4 className="text-lg font-medium text-gray-800">Phone</h4>
                     <a href="tel:+393393338159" className="text-blue-600 hover:underline">
                       +39 339 333 8159
                     </a>
@@ -125,21 +125,21 @@ const Contact: React.FC = () => {
           
           <div className="md:w-3/5">
             <div className="bg-white rounded-lg shadow-md p-8">
-              <h3 className="text-2xl font-semibold text-gray-800 mb-6">Scrivimi un messaggio</h3>
+              <h3 className="text-2xl font-semibold text-gray-800 mb-6">Send me a message</h3>
               
               {submitSuccess ? (
                 <div className="bg-green-100 border-l-4 border-green-600 text-green-700 p-4 mb-6 rounded">
-                  <p>Grazie per il tuo messaggio! Ti risponderò al più presto.</p>
+                  <p>Thank you for your message! I'll get back to you as soon as possible.</p>
                 </div>
               ) : submitError ? (
                 <div className="bg-red-100 border-l-4 border-red-600 text-red-700 p-4 mb-6 rounded">
-                  <p>Si è verificato un errore nell'invio del messaggio. Riprova più tardi.</p>
+                  <p>An error occurred while sending your message. Please try again later.</p>
                 </div>
               ) : null}
               
               <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                  <label htmlFor="name" className="block text-gray-700 font-medium mb-2">Nome</label>
+                  <label htmlFor="name" className="block text-gray-700 font-medium mb-2">Name</label>
                   <input 
                     type="text" 
                     id="name" 
@@ -165,7 +165,7 @@ const Contact: React.FC = () => {
                 </div>
                 
                 <div className="mb-6">
-                  <label htmlFor="message" className="block text-gray-700 font-medium mb-2">Messaggio</label>
+                  <label htmlFor="message" className="block text-gray-700 font-medium mb-2">Message</label>
                   <textarea 
                     id="message" 
                     name="message" 
@@ -188,12 +188,12 @@ const Contact: React.FC = () => {
                         <circle className="opacity-25\" cx="12\" cy="12\" r="10\" stroke="currentColor\" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      Invio in corso...
+                      Sending...
                     </>
                   ) : (
                     <>
                       <Send size={20} className="mr-2" />
-                      Invia Messaggio
+                      Send Message
                     </>
                   )}
                 </button>
