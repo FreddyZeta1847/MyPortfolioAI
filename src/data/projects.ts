@@ -19,7 +19,7 @@ export const projects: Project[] = [
   },
   {
     id: 3,
-    title: 'Web Scraping Application',
+    title: 'ScrapeMind AI',
     description: 'A powerful web scraping application designed to extract and process data from websites efficiently. Features automated data collection, parsing, and storage capabilities with a user-friendly interface.',
     technologies: ['Ollama', 'Nodejs', 'Mongodb', 'Claude Code', "Express"],
     imageUrl: 'https://images.pexels.com/photos/1089438/pexels-photo-1089438.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
