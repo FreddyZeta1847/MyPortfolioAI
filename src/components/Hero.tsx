@@ -1,16 +1,30 @@
 import React from 'react';
 import { Github, Linkedin, Mail, Phone } from 'lucide-react';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import TypingEffect from './TypingEffect';
 
 const Hero: React.FC = () => {
+  const { ref, isVisible } = useScrollAnimation({ threshold: 0.1 });
+
+  const typingWords = [
+    'Cloud Infrastructures',
+    'Scalable Software',
+    'AI Solutions',
+    'Game Prototypes',
+  ];
+
   return (
-    <section id="hero" className="pt-28 pb-20 md:min-h-screen flex items-center bg-warm-100">
+    <section id="hero" className="pt-28 pb-20 md:min-h-screen flex items-center bg-warm-100 dark:bg-slate-900 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="flex flex-col md:flex-row items-center md:space-x-16">
+        <div
+          ref={ref}
+          className={`flex flex-col md:flex-row items-center md:space-x-16 animate-on-scroll ${isVisible ? 'visible' : ''}`}
+        >
           <div className="md:w-1/2 mb-10 md:mb-0 hidden md:flex justify-center">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-br from-primary-400 to-accent-400 rounded-full blur-2xl opacity-20 scale-110"></div>
               <div className="relative bg-gradient-to-br from-primary-500 to-primary-700 p-1.5 rounded-full shadow-warm">
-                <div className="bg-white p-2 rounded-full">
+                <div className="bg-white dark:bg-slate-800 p-2 rounded-full">
                   <img
                     src="/images/profile_pic.jpg"
                     alt="Federico Santini"
@@ -22,15 +36,23 @@ const Hero: React.FC = () => {
           </div>
 
           <div className="md:w-1/2">
-            <h1 className="font-display text-4xl md:text-5xl font-bold text-slate-800 mb-6">
+            <h1 className="font-display text-4xl md:text-5xl font-bold text-slate-800 dark:text-white mb-6">
               Hello! I'm <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-primary-500">Federico Santini</span>.
             </h1>
 
-            <p className="text-lg text-slate-600 mb-5 leading-relaxed">
+            <p className="text-xl text-slate-600 dark:text-slate-300 mb-2">
+              I build{' '}
+              <TypingEffect
+                words={typingWords}
+                className="text-primary-600 dark:text-primary-400 font-semibold"
+              />
+            </p>
+
+            <p className="text-lg text-slate-600 dark:text-slate-400 mb-5 leading-relaxed">
               Computer Engineering student at Politecnico di Milano with a strong foundation in software development. My interests span game development, AI research, and cybersecurity—I love building scalable applications and exploring cutting-edge technologies.
             </p>
 
-            <p className="text-lg text-slate-600 mb-8 leading-relaxed">
+            <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
               A curious problem-solver who thrives in challenging environments. Competitive sports taught me discipline and teamwork—qualities I bring to every project. Always learning, always building.
             </p>
 
@@ -47,7 +69,7 @@ const Hero: React.FC = () => {
                   href="https://github.com/FreddyZeta1847"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center w-11 h-11 bg-slate-800 hover:bg-slate-900 text-white rounded-xl transition-all duration-300 hover:scale-105"
+                  className="flex items-center justify-center w-11 h-11 bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white rounded-xl transition-all duration-300 hover:scale-105"
                 >
                   <Github size={20} />
                 </a>

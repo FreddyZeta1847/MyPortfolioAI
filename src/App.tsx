@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Education from './components/Education';
@@ -13,17 +14,19 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white font-sans antialiased">
-      <Navbar />
-      <main>
-        <Hero />
-        <Education />
-        <Skills />
-        <Projects />
-        <Contact />
-      </main>
-      <Footer />
-    </div>
+    <ThemeProvider>
+      <div className="min-h-screen bg-white dark:bg-slate-900 font-sans antialiased transition-colors duration-300">
+        <Navbar />
+        <main>
+          <Hero />
+          <Education />
+          <Skills />
+          <Projects />
+          <Contact />
+        </main>
+        <Footer />
+      </div>
+    </ThemeProvider>
   );
 }
 
