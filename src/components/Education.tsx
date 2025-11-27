@@ -34,9 +34,9 @@ const Education: React.FC = () => {
                     <span className="text-primary-600 font-medium">{item.period}</span>
                   </div>
 
-                  <div className={`bg-white rounded-xl shadow-soft p-6 border-l-4 border-primary-500 hover:shadow-warm transition-all duration-300 ${
+                  <div className={`bg-white rounded-xl shadow-soft p-6 border-primary-500 hover:shadow-warm transition-all duration-300 ${
                     isLeft ? 'md:mr-6' : 'md:ml-6'
-                  }`}>
+                  } ${isLeft ? 'border-r-4' : 'border-l-4'}`}>
                     <div className={`absolute top-8 ${
                       isLeft ? 'right-0 md:-right-3' : 'left-0 md:-left-3'
                     } w-6 h-6 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 border-4 border-white z-20 shadow-md`}></div>

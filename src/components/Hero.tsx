@@ -6,7 +6,7 @@ const Hero: React.FC = () => {
     <section id="hero" className="pt-28 pb-20 md:min-h-screen flex items-center bg-warm-100">
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col md:flex-row items-center md:space-x-16">
-          <div className="md:w-1/2 mb-10 md:mb-0 flex justify-center">
+          <div className="md:w-1/2 mb-10 md:mb-0 hidden md:flex justify-center">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-br from-primary-400 to-accent-400 rounded-full blur-2xl opacity-20 scale-110"></div>
               <div className="relative bg-gradient-to-br from-primary-500 to-primary-700 p-1.5 rounded-full shadow-warm">
@@ -55,7 +55,7 @@ const Hero: React.FC = () => {
                   href="https://www.linkedin.com/in/federico-santini"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center w-11 h-11 bg-primary-600 hover:bg-primary-700 text-white rounded-xl transition-all duration-300 hover:scale-105"
+                  className="flex items-center justify-center w-11 h-11 bg-[#0077B5] hover:bg-[#006396] text-white rounded-xl transition-all duration-300 hover:scale-105"
                 >
                   <Linkedin size={20} />
                 </a>

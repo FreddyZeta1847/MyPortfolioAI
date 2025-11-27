@@ -9,9 +9,9 @@ const categoryStyles: Record<string, { icon: string; badge: string; border: stri
     border: 'border-primary-500',
   },
   'Web Technologies': {
-    icon: 'text-teal-600',
-    badge: 'bg-teal-100 text-teal-700',
-    border: 'border-teal-500',
+    icon: 'text-blue-600',
+    badge: 'bg-blue-100 text-blue-700',
+    border: 'border-blue-500',
   },
   'Development Tools & Environments': {
     icon: 'text-accent-600',

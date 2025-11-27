@@ -1,113 +1,69 @@
-import React, { useState } from 'react';
-import { ExternalLink, Code, Github, ChevronDown, ChevronUp } from 'lucide-react';
+import React from 'react';
+import { Github, ExternalLink } from 'lucide-react';
 import { projects } from '../data/projects';
 
 const Projects: React.FC = () => {
-  const [activeProject, setActiveProject] = useState<number | null>(null);
-
-  const toggleProject = (id: number) => {
-    if (activeProject === id) {
-      setActiveProject(null);
-    } else {
-      setActiveProject(id);
-    }
-  };
-
   return (
     <section id="projects" className="py-24 bg-white">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-16">
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-slate-800 mb-4">Personal Projects</h2>
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-slate-800 mb-4">Top Personal Projects</h2>
           <div className="w-20 h-1 bg-gradient-to-r from-primary-500 to-accent-500 mx-auto mb-6 rounded-full"></div>
           <p className="text-slate-600 max-w-2xl mx-auto">
             Here are some projects I've recently developed, applying my knowledge and learning new technologies.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {projects.map((project) => (
+        <div className="flex flex-col gap-8 max-w-4xl mx-auto">
+          {projects.map((project, index) => (
             <div
               key={project.id}
-              className="bg-white rounded-2xl shadow-soft overflow-hidden group hover:shadow-warm transition-all duration-300 hover:-translate-y-1 border border-slate-100"
+              className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} bg-white rounded-2xl overflow-hidden shadow-soft hover:shadow-warm transition-all duration-300 border border-slate-100`}
             >
-              <div className="relative h-48 overflow-hidden">
+              {/* Image */}
+              <div className="md:w-2/5 h-56 md:h-auto relative overflow-hidden">
                 <img
                   src={project.imageUrl}
                   alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-                  <div className="p-4 text-white">
-                    <button
-                      onClick={() => toggleProject(project.id)}
-                      className="px-4 py-2 bg-primary-600 hover:bg-primary-700 rounded-lg text-sm font-medium transition-colors duration-300 flex items-center"
-                    >
-                      <ExternalLink size={16} className="mr-2" />
-                      View Details
-                    </button>
-                  </div>
-                </div>
               </div>
 
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-slate-800 mb-2">{project.title}</h3>
-                {activeProject !== project.id && (
-                  <p className="text-slate-600 mb-4 line-clamp-3">
+              {/* Content */}
+              <div className="md:w-3/5 p-6 md:p-8 flex flex-col justify-between">
+                <div>
+                  <h3 className="text-2xl font-bold text-slate-800 mb-3">{project.title}</h3>
+                  <p className="text-slate-600 mb-5 leading-relaxed">
                     {project.description}
                   </p>
-                )}
 
-                {activeProject === project.id && (
-                  <div className="mt-4 p-4 bg-primary-50/50 rounded-xl animate-fadeIn border border-primary-100">
-                    <p className="text-slate-600 mb-4">
-                      {project.description}
-                    </p>
-
-                    <div className="flex items-center mb-3">
-                      <Code size={18} className="text-primary-600 mr-2" />
-                      <span className="text-slate-700 font-medium">Technologies used:</span>
-                    </div>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {project.technologies.map((tech, idx) => (
-                        <span
-                          key={idx}
-                          className="bg-primary-100 text-primary-700 px-2.5 py-1 rounded-lg text-xs font-medium"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-
-                    {project.githubUrl && (
-                      <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center text-slate-700 hover:text-primary-600 transition-colors duration-300 bg-white px-3 py-2 rounded-lg border border-slate-200 hover:border-primary-300"
+                  {/* Technologies */}
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {project.technologies.map((tech, idx) => (
+                      <span
+                        key={idx}
+                        className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-sm"
                       >
-                        <Github size={18} className="mr-2" />
-                        View on GitHub
-                      </a>
-                    )}
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Actions */}
+                {project.githubUrl && (
+                  <div className="flex gap-3">
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white px-5 py-2.5 rounded-xl font-medium transition-all duration-300 hover:scale-105"
+                    >
+                      <Github size={18} />
+                      GitHub
+                    </a>
                   </div>
                 )}
-
-                <button
-                  onClick={() => toggleProject(project.id)}
-                  className="mt-4 text-primary-600 hover:text-primary-700 text-sm font-medium focus:outline-none transition-colors duration-300 flex items-center gap-1"
-                >
-                  {activeProject === project.id ? (
-                    <>
-                      Hide details
-                      <ChevronUp size={16} />
-                    </>
-                  ) : (
-                    <>
-                      Show details
-                      <ChevronDown size={16} />
-                    </>
-                  )}
-                </button>
               </div>
             </div>
           ))}
