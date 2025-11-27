@@ -1,203 +1,104 @@
-import React, { useState } from 'react';
-import { Mail, Phone, Github, Linkedin, Send } from 'lucide-react';
+import React from 'react';
+import { Mail, Phone, Github, Linkedin, MapPin } from 'lucide-react';
 
 const Contact: React.FC = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
-  
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [submitError, setSubmitError] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitError(false);
-    setSubmitSuccess(false);
-
-    try {
-      const response = await fetch('http://localhost:3001/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const result = await response.json();
-      console.log('Success:', result);
-      setIsSubmitting(false);
-      setSubmitSuccess(true);
-      setFormData({ name: '', email: '', message: '' });
-
-      // Reset success message after 5 seconds
-      setTimeout(() => {
-        setSubmitSuccess(false);
-      }, 5000);
-    } catch (error) {
-      console.error('Error:', error);
-      setIsSubmitting(false);
-      setSubmitError(true);
-      // Reset error message after 5 seconds
-      setTimeout(() => {
-        setSubmitError(false);
-      }, 5000);
-    }
-  };
-
   return (
-    <section id="contact" className="py-20 bg-gray-50">
+    <section id="contact" className="py-24 bg-warm-100">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Contact</h2>
-          <div className="w-20 h-1 bg-blue-600 mx-auto mb-6"></div>
-          <p className="text-gray-700 max-w-2xl mx-auto">
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-slate-800 mb-4">Get In Touch</h2>
+          <div className="w-20 h-1 bg-gradient-to-r from-primary-500 to-accent-500 mx-auto mb-6 rounded-full"></div>
+          <p className="text-slate-600 max-w-2xl mx-auto">
             Whether you'd like to collaborate, discuss an opportunity, or simply connect about technology, feel free to reach out!
           </p>
         </div>
-        
-        <div className="flex flex-col md:flex-row gap-12 max-w-5xl mx-auto">
-          <div className="md:w-2/5">
-            <div className="bg-white rounded-lg shadow-md p-8">
-              <h3 className="text-2xl font-semibold text-gray-800 mb-6">Contact Information</h3>
-              
-              <div className="space-y-6">
-                <div className="flex items-start">
-                  <div className="flex-shrink-0 bg-blue-100 p-3 rounded-full">
-                    <Mail size={24} className="text-blue-600" />
-                  </div>
-                  <div className="ml-4">
-                    <h4 className="text-lg font-medium text-gray-800">Email</h4>
-                    <a href="mailto:santinifederico06@gmail.com" className="text-blue-600 hover:underline">
-                      santinifederico06@gmail.com
-                    </a>
-                  </div>
+
+        <div className="max-w-3xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-soft p-8 md:p-12">
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Email */}
+              <a
+                href="mailto:santinifederico06@gmail.com"
+                className="group flex items-center p-4 rounded-xl bg-warm-50 hover:bg-primary-50 transition-all duration-300"
+              >
+                <div className="flex-shrink-0 bg-primary-100 group-hover:bg-primary-200 p-4 rounded-xl transition-colors">
+                  <Mail size={28} className="text-primary-600" />
                 </div>
-                
-                <div className="flex items-start">
-                  <div className="flex-shrink-0 bg-blue-100 p-3 rounded-full">
-                    <Phone size={24} className="text-blue-600" />
-                  </div>
-                  <div className="ml-4">
-                    <h4 className="text-lg font-medium text-gray-800">Phone</h4>
-                    <a href="tel:+393393338159" className="text-blue-600 hover:underline">
-                      +39 339 333 8159
-                    </a>
-                  </div>
+                <div className="ml-4">
+                  <h4 className="text-sm font-medium text-slate-500 uppercase tracking-wide">Email</h4>
+                  <p className="text-slate-800 font-medium group-hover:text-primary-600 transition-colors">
+                    santinifederico06@gmail.com
+                  </p>
                 </div>
-                
-                <div className="pt-6 mt-6 border-t border-gray-200">
-                  <h4 className="text-lg font-medium text-gray-800 mb-4">Social</h4>
-                  <div className="flex space-x-4">
-                    <a 
-                      href="https://github.com/FreddyZeta1847" 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="bg-gray-800 hover:bg-gray-900 text-white p-3 rounded-full transition-colors duration-300"
+              </a>
+
+              {/* Phone */}
+              <a
+                href="tel:+393393338159"
+                className="group flex items-center p-4 rounded-xl bg-warm-50 hover:bg-accent-50 transition-all duration-300"
+              >
+                <div className="flex-shrink-0 bg-accent-100 group-hover:bg-accent-200 p-4 rounded-xl transition-colors">
+                  <Phone size={28} className="text-accent-600" />
+                </div>
+                <div className="ml-4">
+                  <h4 className="text-sm font-medium text-slate-500 uppercase tracking-wide">Phone</h4>
+                  <p className="text-slate-800 font-medium group-hover:text-accent-600 transition-colors">
+                    +39 339 333 8159
+                  </p>
+                </div>
+              </a>
+
+              {/* Location */}
+              <div className="flex items-center p-4 rounded-xl bg-warm-50">
+                <div className="flex-shrink-0 bg-slate-200 p-4 rounded-xl">
+                  <MapPin size={28} className="text-slate-600" />
+                </div>
+                <div className="ml-4">
+                  <h4 className="text-sm font-medium text-slate-500 uppercase tracking-wide">Location</h4>
+                  <p className="text-slate-800 font-medium">Italy</p>
+                </div>
+              </div>
+
+              {/* Social Links */}
+              <div className="flex items-center p-4 rounded-xl bg-warm-50">
+                <div className="flex-shrink-0 bg-slate-200 p-4 rounded-xl">
+                  <Github size={28} className="text-slate-600" />
+                </div>
+                <div className="ml-4">
+                  <h4 className="text-sm font-medium text-slate-500 uppercase tracking-wide">Social</h4>
+                  <div className="flex space-x-3 mt-1">
+                    <a
+                      href="https://github.com/FreddyZeta1847"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-slate-800 hover:bg-slate-900 text-white p-2 rounded-lg transition-all duration-300 hover:scale-110"
+                      aria-label="GitHub"
                     >
-                      <Github size={20} />
+                      <Github size={18} />
                     </a>
-                    <a 
-                      href="https://www.linkedin.com/in/federico-santini" 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="bg-blue-700 hover:bg-blue-800 text-white p-3 rounded-full transition-colors duration-300"
+                    <a
+                      href="https://www.linkedin.com/in/federico-santini"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-[#0077B5] hover:bg-[#006396] text-white p-2 rounded-lg transition-all duration-300 hover:scale-110"
+                      aria-label="LinkedIn"
                     >
-                      <Linkedin size={20} />
+                      <Linkedin size={18} />
                     </a>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          
-          <div className="md:w-3/5">
-            <div className="bg-white rounded-lg shadow-md p-8">
-              <h3 className="text-2xl font-semibold text-gray-800 mb-6">Send me a message</h3>
-              
-              {submitSuccess ? (
-                <div className="bg-green-100 border-l-4 border-green-600 text-green-700 p-4 mb-6 rounded">
-                  <p>Thank you for your message! I'll get back to you as soon as possible.</p>
-                </div>
-              ) : submitError ? (
-                <div className="bg-red-100 border-l-4 border-red-600 text-red-700 p-4 mb-6 rounded">
-                  <p>An error occurred while sending your message. Please try again later.</p>
-                </div>
-              ) : null}
-              
-              <form onSubmit={handleSubmit}>
-                <div className="mb-4">
-                  <label htmlFor="name" className="block text-gray-700 font-medium mb-2">Name</label>
-                  <input 
-                    type="text" 
-                    id="name" 
-                    name="name" 
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-                    required
-                  />
-                </div>
-                
-                <div className="mb-4">
-                  <label htmlFor="email" className="block text-gray-700 font-medium mb-2">Email</label>
-                  <input 
-                    type="email" 
-                    id="email" 
-                    name="email" 
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-                    required
-                  />
-                </div>
-                
-                <div className="mb-6">
-                  <label htmlFor="message" className="block text-gray-700 font-medium mb-2">Message</label>
-                  <textarea 
-                    id="message" 
-                    name="message" 
-                    rows={5} 
-                    value={formData.message}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent resize-none"
-                    required
-                  ></textarea>
-                </div>
-                
-                <button 
-                  type="submit" 
-                  disabled={isSubmitting}
-                  className={`w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white\" xmlns="http://www.w3.org/2000/svg\" fill="none\" viewBox="0 0 24 24">
-                        <circle className="opacity-25\" cx="12\" cy="12\" r="10\" stroke="currentColor\" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Sending...
-                    </>
-                  ) : (
-                    <>
-                      <Send size={20} className="mr-2" />
-                      Send Message
-                    </>
-                  )}
-                </button>
-              </form>
+
+            {/* CTA Button */}
+            <div className="mt-10 text-center">
+              <a
+                href="mailto:santinifederico06@gmail.com"
+                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white font-medium rounded-xl transition-all duration-300 shadow-soft hover:shadow-warm hover:scale-105"
+              >
+                <Mail size={20} className="mr-2" />
+                Send me an Email
+              </a>
             </div>
           </div>
         </div>

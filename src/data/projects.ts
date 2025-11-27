@@ -22,7 +22,7 @@ export const projects: Project[] = [
     title: 'ScrapeMind AI',
     description: 'A powerful web scraping application designed to extract and process data from websites efficiently. Features automated data collection, parsing, and storage capabilities with a user-friendly interface.',
     technologies: ['Ollama', 'Nodejs', 'Mongodb', 'Claude Code', "Express"],
-    imageUrl: 'https://images.pexels.com/photos/270360/pexels-photo-270360.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    imageUrl: '/images/ScrapeMind.png',
     githubUrl: 'https://github.com/FreddyZeta1847/Web-Scraping-App'
   }
 ];
