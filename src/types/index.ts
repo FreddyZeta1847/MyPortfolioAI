@@ -10,6 +10,7 @@ export interface Project {
   technologies: string[];
   imageUrl: string;
   githubUrl?: string;
+  gifUrl?: string;
 }
 
 export interface Skill {

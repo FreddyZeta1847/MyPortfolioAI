@@ -29,7 +29,7 @@ const Footer: React.FC = () => {
               href="https://www.linkedin.com/in/federico-santini"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-primary-600 hover:bg-primary-500 p-2.5 rounded-xl transition-all duration-300 hover:scale-105"
+              className="bg-[#0077B5] hover:bg-[#2283B7] p-2.5 rounded-xl transition-all duration-300 hover:scale-105"
               aria-label="LinkedIn"
             >
               <Linkedin size={20} />

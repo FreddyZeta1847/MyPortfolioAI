@@ -49,11 +49,11 @@ const Hero: React.FC = () => {
             </p>
 
             <p className="text-lg text-slate-600 dark:text-slate-400 mb-5 leading-relaxed">
-              Computer Engineering student at Politecnico di Milano with a strong foundation in software development. My interests span game development, AI research, and cybersecurity—I love building scalable applications and exploring cutting-edge technologies.
+              Computer Engineering student at Politecnico di Milano with a strong foundation in software development. My interests span game development, AI research, and cybersecurity. I love building scalable applications and exploring cutting-edge technologies.
             </p>
 
             <p className="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
-              A curious problem-solver who thrives in challenging environments. Competitive sports taught me discipline and teamwork—qualities I bring to every project. Always learning, always building.
+              A curious problem-solver who thrives in challenging environments. Competitive sports taught me discipline and teamwork; qualities I bring to every project. Always learning, always building.
             </p>
 
             <div className="flex flex-wrap gap-4 items-center">

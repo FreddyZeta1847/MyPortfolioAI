@@ -11,10 +11,10 @@ export const skills: Skill[] = [
   },
   {
     category: 'Development Tools & Environments',
-    items: ['VS Code', 'GitHub', 'Cisco Packet Tracer', "Claude Code", "Cursor", "MongoDB", "PHPMyAdmin", "SQLServer"]
+    items: ['VS Code', 'GitHub', 'Cisco Packet Tracer', "Claude Code", "Cursor", "MongoDB", "PHPMyAdmin", "SQLServer", "Azure", "Docker"]
   },
   {
     category: 'Additional Skills',
-    items: ['Basic Networking', 'Version Control', 'Problem Solving', 'Debugging', 'REST APIs', "AI implementation and development", "Team Working", "Ollama"]
+    items: ['Basic Networking', 'Version Control', 'Problem Solving', 'Debugging', 'REST APIs', "AI implementation and development", "Team Working", "Ollama", "Agents"]
   }
 ];
