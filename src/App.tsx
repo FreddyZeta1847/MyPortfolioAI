@@ -1,31 +1,51 @@
-import React, { useEffect } from 'react';
+import { lazy, Suspense } from 'react';
+import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from './context/ThemeContext';
+import { SmoothScrollProvider } from './context/SmoothScrollContext';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import Education from './components/Education';
-import Skills from './components/Skills';
-import Projects from './components/Projects';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
+import ScrollProgress from './components/ScrollProgress';
+import LoadingScreen from './components/LoadingScreen';
+import CustomCursor from './components/CustomCursor';
+
+const Education = lazy(() => import('./components/Education'));
+const Skills = lazy(() => import('./components/Skills'));
+const Projects = lazy(() => import('./components/Projects'));
+const Contact = lazy(() => import('./components/Contact'));
+const Footer = lazy(() => import('./components/Footer'));
+const BackToTop = lazy(() => import('./components/BackToTop'));
 
 function App() {
-  useEffect(() => {
-    document.title = "Federico Santini | Portfolio";
-  }, []);
-
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-white dark:bg-slate-900 font-sans antialiased transition-colors duration-300">
-        <Navbar />
-        <main>
-          <Hero />
-          <Education />
-          <Skills />
-          <Projects />
-          <Contact />
-        </main>
-        <Footer />
-      </div>
+      <SmoothScrollProvider>
+        <LoadingScreen />
+        <CustomCursor />
+        <div className="min-h-screen bg-surface-50 dark:bg-surface-950 font-sans antialiased transition-colors duration-300">
+          <ScrollProgress />
+          <Navbar />
+          <main>
+            <Hero />
+            <Suspense fallback={null}>
+              <Education />
+              <Skills />
+              <Projects />
+              <Contact />
+            </Suspense>
+          </main>
+          <Suspense fallback={null}>
+            <Footer />
+            <BackToTop />
+          </Suspense>
+          <Toaster
+            position="bottom-right"
+            toastOptions={{
+              className: '!bg-white dark:!bg-surface-800 !text-surface-800 dark:!text-surface-100 !shadow-glass',
+              duration: 4000,
+            }}
+          />
+        </div>
+      </SmoothScrollProvider>
     </ThemeProvider>
   );
 }

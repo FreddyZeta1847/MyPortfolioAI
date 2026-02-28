@@ -1,102 +1,150 @@
-import React from 'react';
-import { Code, Globe, PenTool as Tool, Brain } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
+import { Code, Globe, Wrench, Brain } from 'lucide-react';
 import { skills } from '../data/skills';
-import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import { skillIconMap } from '../data/skillIcons';
+import SectionHeader from './SectionHeader';
 
-const categoryStyles: Record<string, { icon: string; badge: string; badgeDark: string; border: string }> = {
+const categoryConfig: Record<
+  string,
+  {
+    icon: typeof Code;
+    gradient: string;
+    badgeBg: string;
+    badgeText: string;
+    colSpan: string;
+    theme: string;
+  }
+> = {
   'Programming Languages': {
-    icon: 'text-primary-600 dark:text-primary-400',
-    badge: 'bg-primary-100 text-primary-700',
-    badgeDark: 'dark:bg-primary-900/40 dark:text-primary-300',
-    border: 'border-primary-500',
+    icon: Code,
+    gradient: 'from-primary-500 to-primary-700',
+    badgeBg: 'bg-primary-100 dark:bg-primary-900/40',
+    badgeText: 'text-primary-700 dark:text-primary-300',
+    colSpan: 'md:col-span-2',
+    theme: 'code',
   },
   'Web Technologies': {
-    icon: 'text-blue-600 dark:text-blue-400',
-    badge: 'bg-blue-100 text-blue-700',
-    badgeDark: 'dark:bg-blue-900/40 dark:text-blue-300',
-    border: 'border-blue-500',
+    icon: Globe,
+    gradient: 'from-blue-500 to-blue-700',
+    badgeBg: 'bg-blue-100 dark:bg-blue-900/40',
+    badgeText: 'text-blue-700 dark:text-blue-300',
+    colSpan: '',
+    theme: 'browser',
   },
   'Development Tools & Environments': {
-    icon: 'text-accent-600 dark:text-accent-400',
-    badge: 'bg-accent-100 text-accent-700',
-    badgeDark: 'dark:bg-accent-900/40 dark:text-accent-300',
-    border: 'border-accent-500',
+    icon: Wrench,
+    gradient: 'from-accent-500 to-accent-700',
+    badgeBg: 'bg-accent-100 dark:bg-accent-900/40',
+    badgeText: 'text-accent-700 dark:text-accent-300',
+    colSpan: '',
+    theme: 'terminal',
   },
   'Additional Skills': {
-    icon: 'text-rose-500 dark:text-rose-400',
-    badge: 'bg-rose-100 text-rose-600',
-    badgeDark: 'dark:bg-rose-900/40 dark:text-rose-300',
-    border: 'border-rose-400',
+    icon: Brain,
+    gradient: 'from-rose-500 to-rose-700',
+    badgeBg: 'bg-rose-100 dark:bg-rose-900/40',
+    badgeText: 'text-rose-700 dark:text-rose-300',
+    colSpan: 'md:col-span-2',
+    theme: 'default',
   },
 };
 
-const getIconForCategory = (category: string) => {
-  const style = categoryStyles[category] || categoryStyles['Programming Languages'];
-  switch(category) {
-    case 'Programming Languages':
-      return <Code size={24} className={style.icon} />;
-    case 'Web Technologies':
-      return <Globe size={24} className={style.icon} />;
-    case 'Development Tools & Environments':
-      return <Tool size={24} className={style.icon} />;
-    case 'Additional Skills':
-      return <Brain size={24} className={style.icon} />;
-    default:
-      return <Code size={24} className={style.icon} />;
-  }
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.12 },
+  },
 };
 
-const Skills: React.FC = () => {
-  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
-  const { ref: gridRef, isVisible: gridVisible } = useScrollAnimation();
+const cardVariants = {
+  hidden: { opacity: 0, y: 30, scale: 0.97 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
+  },
+};
+
+export default function Skills() {
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
   return (
-    <section id="skills" className="py-24 bg-warm-100 dark:bg-slate-900 transition-colors duration-300">
+    <section id="skills" className="section-padding bg-surface-50 dark:bg-surface-950 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
-        <div
-          ref={headerRef}
-          className={`text-center mb-16 animate-on-scroll ${headerVisible ? 'visible' : ''}`}
+        <SectionHeader
+          title="Skills & Technologies"
+          subtitle="The tools and languages I work with. I continuously stay updated through courses and personal projects."
+        />
+
+        <motion.div
+          ref={ref}
+          variants={containerVariants}
+          initial="hidden"
+          animate={inView ? 'visible' : 'hidden'}
+          className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl mx-auto"
         >
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-slate-800 dark:text-white mb-4">Skills & Technologies</h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-primary-500 to-accent-500 mx-auto mb-6 rounded-full"></div>
-          <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-            Here are the tools and languages I've worked with. I continuously stay updated through online courses and personal projects.
-          </p>
-        </div>
+          {skills.map((skill) => {
+            const config = categoryConfig[skill.category] || categoryConfig['Programming Languages'];
+            const Icon = config.icon;
 
-        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          {skills.map((skill, index) => {
-            const style = categoryStyles[skill.category] || categoryStyles['Programming Languages'];
             return (
-              <div
-                key={index}
-                className={`bg-white dark:bg-slate-800 rounded-xl shadow-soft p-6 border-l-4 ${style.border} hover:shadow-warm transition-all duration-300 hover:-translate-y-1 animate-on-scroll-scale ${gridVisible ? 'visible' : ''}`}
-                style={{ transitionDelay: `${index * 100}ms` }}
+              <motion.div
+                key={skill.category}
+                variants={cardVariants}
+                className={`glass rounded-2xl overflow-hidden group hover:shadow-glass transition-all duration-300 ${config.colSpan}`}
               >
-                <div className="flex items-center mb-4">
-                  <div className="p-2 bg-warm-100 dark:bg-slate-700 rounded-lg">
-                    {getIconForCategory(skill.category)}
-                  </div>
-                  <h3 className="text-lg font-semibold text-slate-800 dark:text-white ml-3">{skill.category}</h3>
+                {/* Card header bar */}
+                <div className={`flex items-center gap-3 px-6 py-4 bg-gradient-to-r ${config.gradient}`}>
+                  <Icon size={20} className="text-white/90" />
+                  <h3 className="font-display font-semibold text-white text-sm tracking-wide">
+                    {skill.category}
+                  </h3>
+                  {config.theme === 'code' && (
+                    <div className="ml-auto flex gap-1.5">
+                      <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
+                    </div>
+                  )}
+                  {config.theme === 'terminal' && (
+                    <span className="ml-auto text-xs text-white/40 font-mono">~</span>
+                  )}
+                  {config.theme === 'browser' && (
+                    <div className="ml-auto flex gap-1.5">
+                      <div className="w-2 h-2 rounded-full bg-red-400/60" />
+                      <div className="w-2 h-2 rounded-full bg-yellow-400/60" />
+                      <div className="w-2 h-2 rounded-full bg-green-400/60" />
+                    </div>
+                  )}
                 </div>
 
-                <div className="flex flex-wrap gap-2">
-                  {skill.items.map((item, idx) => (
-                    <span
-                      key={idx}
-                      className={`${style.badge} ${style.badgeDark} px-3 py-1.5 rounded-lg text-sm font-medium`}
-                    >
-                      {item}
-                    </span>
-                  ))}
+                {/* Skills badges */}
+                <div className="p-6">
+                  <div className="flex flex-wrap gap-2.5">
+                    {skill.items.map((item, idx) => {
+                      const IconComp = skillIconMap[item];
+                      return (
+                        <motion.span
+                          key={idx}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={inView ? { opacity: 1, scale: 1 } : {}}
+                          transition={{ delay: 0.5 + idx * 0.04 }}
+                          className={`inline-flex items-center gap-1.5 ${config.badgeBg} ${config.badgeText} px-3 py-2 rounded-lg text-sm font-medium`}
+                        >
+                          {IconComp && <IconComp className="text-[0.9em]" />}
+                          {item}
+                        </motion.span>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
-};
-
-export default Skills;
+}
