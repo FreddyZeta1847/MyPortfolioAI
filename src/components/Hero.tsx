@@ -127,7 +127,7 @@ export default function Hero() {
               Get in Touch
             </a>
             <a
-              href="/Federico_Santini_CV.pdf"
+              href="/CV.pdf"
               download
               className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-medium border-2 border-surface-200 dark:border-surface-700 text-surface-700 dark:text-surface-300 hover:border-primary-500 dark:hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300"
             >
