@@ -42,6 +42,8 @@ export default {
           900: '#1c1917',
           950: '#0c0a09',
         },
+        // Warm light-mode alternate (pairs with white)
+        cream: '#f4efe5',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -56,6 +58,7 @@ export default {
       },
       animation: {
         'shimmer': 'shimmer 2s linear infinite',
+        'shine': 'shine 3.5s ease-in-out infinite',
         'float': 'float 6s ease-in-out infinite',
         'pulse-slow': 'pulse 3s ease-in-out infinite',
         'gradient': 'gradient 8s ease infinite',
@@ -65,6 +68,10 @@ export default {
         shimmer: {
           '0%': { transform: 'translateX(-100%)' },
           '100%': { transform: 'translateX(100%)' },
+        },
+        shine: {
+          '0%': { transform: 'translateX(-120%) skewX(-12deg)' },
+          '60%, 100%': { transform: 'translateX(320%) skewX(-12deg)' },
         },
         float: {
           '0%, 100%': { transform: 'translateY(0px)' },

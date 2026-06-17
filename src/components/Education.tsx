@@ -13,7 +13,7 @@ export default function Education() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
   return (
-    <section id="education" className="section-padding bg-white dark:bg-surface-900 transition-colors duration-300">
+    <section id="education" className="section-padding bg-cream dark:bg-surface-900 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeader title="Education" />
 

@@ -289,7 +289,7 @@ export default function Projects() {
     : -1;
 
   return (
-    <section id="projects" className="section-padding bg-white dark:bg-surface-900 transition-colors duration-300">
+    <section id="projects" className="section-padding bg-white dark:bg-surface-950 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeader
           title="Projects"

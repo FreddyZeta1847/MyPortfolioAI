@@ -16,7 +16,7 @@ const getInitialTheme = (): Theme => {
       return saved;
     }
   }
-  return 'light'; // Default to light theme
+  return 'dark'; // Default to dark theme
 };
 
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {

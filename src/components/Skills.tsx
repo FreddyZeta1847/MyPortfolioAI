@@ -1,149 +1,151 @@
-import { motion } from 'framer-motion';
+import { useMemo, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Code, Globe, Wrench, Brain } from 'lucide-react';
+import { Code, Globe, Wrench, Brain, LayoutGrid } from 'lucide-react';
 import { skills } from '../data/skills';
 import { skillIconMap } from '../data/skillIcons';
 import SectionHeader from './SectionHeader';
+import SkillRadar from './SkillRadar';
 
-const categoryConfig: Record<
-  string,
-  {
-    icon: typeof Code;
-    gradient: string;
-    badgeBg: string;
-    badgeText: string;
-    colSpan: string;
-    theme: string;
-  }
-> = {
-  'Programming Languages': {
-    icon: Code,
-    gradient: 'from-primary-500 to-primary-700',
-    badgeBg: 'bg-primary-100 dark:bg-primary-900/40',
-    badgeText: 'text-primary-700 dark:text-primary-300',
-    colSpan: 'md:col-span-2',
-    theme: 'code',
-  },
-  'Web Technologies': {
-    icon: Globe,
-    gradient: 'from-blue-500 to-blue-700',
-    badgeBg: 'bg-blue-100 dark:bg-blue-900/40',
-    badgeText: 'text-blue-700 dark:text-blue-300',
-    colSpan: '',
-    theme: 'browser',
-  },
-  'Development Tools & Environments': {
-    icon: Wrench,
-    gradient: 'from-accent-500 to-accent-700',
-    badgeBg: 'bg-accent-100 dark:bg-accent-900/40',
-    badgeText: 'text-accent-700 dark:text-accent-300',
-    colSpan: '',
-    theme: 'terminal',
-  },
-  'Additional Skills': {
-    icon: Brain,
-    gradient: 'from-rose-500 to-rose-700',
-    badgeBg: 'bg-rose-100 dark:bg-rose-900/40',
-    badgeText: 'text-rose-700 dark:text-rose-300',
-    colSpan: 'md:col-span-2',
-    theme: 'default',
-  },
-};
+// Filter chips — keyed to the categories in data/skills.ts, with a short label
+// and the accent color used when active.
+const filters: { key: string; label: string; icon: typeof Code; active: string }[] = [
+  { key: 'all', label: 'All', icon: LayoutGrid, active: 'from-primary-500 to-accent-500' },
+  { key: 'Programming Languages', label: 'Languages', icon: Code, active: 'from-primary-500 to-primary-700' },
+  { key: 'Web Technologies', label: 'Web', icon: Globe, active: 'from-blue-500 to-blue-700' },
+  { key: 'Development Tools & Environments', label: 'Tools', icon: Wrench, active: 'from-accent-500 to-accent-700' },
+  { key: 'Additional Skills', label: 'Other', icon: Brain, active: 'from-rose-500 to-rose-700' },
+];
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.12 },
-  },
-};
+type FlatSkill = { name: string; categories: string[] };
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 30, scale: 0.97 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
-  },
-};
+// Top skills — rendered with a gold border + luxury sheen (case-insensitive).
+const FEATURED = new Set(['claude code', 'python', 'azure']);
 
 export default function Skills() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const [active, setActive] = useState('all');
+
+  // Flatten the categorized data into a de-duplicated list (case-insensitive),
+  // remembering which categories each skill belongs to so filtering works.
+  const allSkills = useMemo<FlatSkill[]>(() => {
+    const map = new Map<string, FlatSkill>();
+    skills.forEach((group) => {
+      group.items.forEach((item) => {
+        const key = item.trim().toLowerCase();
+        const existing = map.get(key);
+        if (existing) {
+          if (!existing.categories.includes(group.category)) existing.categories.push(group.category);
+        } else {
+          map.set(key, { name: item.trim(), categories: [group.category] });
+        }
+      });
+    });
+    return Array.from(map.values());
+  }, []);
+
+  const visible =
+    active === 'all' ? allSkills : allSkills.filter((s) => s.categories.includes(active));
 
   return (
-    <section id="skills" className="section-padding bg-surface-50 dark:bg-surface-950 transition-colors duration-300">
+    <section id="skills" className="section-padding bg-cream dark:bg-surface-900 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeader
           title="Skills & Technologies"
-          subtitle="The tools and languages I work with. I continuously stay updated through courses and personal projects."
+          subtitle="A snapshot of where my strengths lie, and the tools I reach for. I keep this current through courses and personal projects."
         />
 
-        <motion.div
-          ref={ref}
-          variants={containerVariants}
-          initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
-          className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl mx-auto"
-        >
-          {skills.map((skill) => {
-            const config = categoryConfig[skill.category] || categoryConfig['Programming Languages'];
-            const Icon = config.icon;
+        <div ref={ref} className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-5xl mx-auto">
+          {/* ── Left: radar ─────────────────────────────────────────────── */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.6 }}
+            className="glass rounded-3xl p-6 md:p-8 shadow-soft"
+          >
+            <SkillRadar />
+            <p className="text-center text-sm text-surface-500 dark:text-surface-400 mt-2">
+              Strength across the domains I work in.
+            </p>
+          </motion.div>
 
-            return (
-              <motion.div
-                key={skill.category}
-                variants={cardVariants}
-                className={`glass rounded-2xl overflow-hidden group hover:shadow-glass transition-all duration-300 ${config.colSpan}`}
-              >
-                {/* Card header bar */}
-                <div className={`flex items-center gap-3 px-6 py-4 bg-gradient-to-r ${config.gradient}`}>
-                  <Icon size={20} className="text-white/90" />
-                  <h3 className="font-display font-semibold text-white text-sm tracking-wide">
-                    {skill.category}
-                  </h3>
-                  {config.theme === 'code' && (
-                    <div className="ml-auto flex gap-1.5">
-                      <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
-                    </div>
-                  )}
-                  {config.theme === 'terminal' && (
-                    <span className="ml-auto text-xs text-white/40 font-mono">~</span>
-                  )}
-                  {config.theme === 'browser' && (
-                    <div className="ml-auto flex gap-1.5">
-                      <div className="w-2 h-2 rounded-full bg-red-400/60" />
-                      <div className="w-2 h-2 rounded-full bg-yellow-400/60" />
-                      <div className="w-2 h-2 rounded-full bg-green-400/60" />
-                    </div>
-                  )}
-                </div>
+          {/* ── Right: filterable skill grid ────────────────────────────── */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.15 }}
+          >
+            {/* Filter chips */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {filters.map((f) => {
+                const Icon = f.icon;
+                const isActive = active === f.key;
+                return (
+                  <button
+                    key={f.key}
+                    onClick={() => setActive(f.key)}
+                    className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                      isActive
+                        ? `bg-gradient-to-r ${f.active} text-white shadow-glow`
+                        : 'glass text-surface-600 dark:text-surface-300 hover:text-surface-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <Icon size={15} />
+                    {f.label}
+                  </button>
+                );
+              })}
+            </div>
 
-                {/* Skills badges */}
-                <div className="p-6">
-                  <div className="flex flex-wrap gap-2.5">
-                    {skill.items.map((item, idx) => {
-                      const IconComp = skillIconMap[item];
-                      return (
-                        <motion.span
-                          key={idx}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={inView ? { opacity: 1, scale: 1 } : {}}
-                          transition={{ delay: 0.5 + idx * 0.04 }}
-                          className={`inline-flex items-center gap-1.5 ${config.badgeBg} ${config.badgeText} px-3 py-2 rounded-lg text-sm font-medium`}
-                        >
-                          {IconComp && <IconComp className="text-[0.9em]" />}
-                          {item}
-                        </motion.span>
-                      );
-                    })}
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </motion.div>
+            {/* Pills */}
+            <motion.div layout className="flex flex-wrap gap-2.5">
+              <AnimatePresence mode="popLayout">
+                {visible.map((skill) => {
+                  const IconComp = skillIconMap[skill.name];
+                  const featured = FEATURED.has(skill.name.toLowerCase());
+
+                  if (featured) {
+                    return (
+                      <motion.span
+                        key={skill.name}
+                        layout
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+                        whileHover={{ y: -3 }}
+                        className="relative inline-flex p-[1.5px] rounded-xl bg-gradient-to-br from-amber-200 via-yellow-400 to-amber-500 shadow-[0_0_16px_rgba(245,180,40,0.45)] cursor-default"
+                      >
+                        <span className="relative flex items-center gap-1.5 px-3.5 py-2 rounded-[10px] bg-white dark:bg-surface-900 text-sm font-semibold text-amber-700 dark:text-amber-300 overflow-hidden">
+                          {IconComp && <IconComp className="text-[0.95em]" />}
+                          {skill.name}
+                          {/* luxury sheen sweep */}
+                          <span className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-white/70 to-transparent animate-shine" />
+                        </span>
+                      </motion.span>
+                    );
+                  }
+
+                  return (
+                    <motion.span
+                      key={skill.name}
+                      layout
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+                      whileHover={{ y: -3 }}
+                      className="inline-flex items-center gap-1.5 glass px-3.5 py-2 rounded-xl text-sm font-medium text-surface-700 dark:text-surface-200 hover:shadow-glow hover:text-primary-600 dark:hover:text-primary-400 transition-colors cursor-default"
+                    >
+                      {IconComp && <IconComp className="text-[0.95em]" />}
+                      {skill.name}
+                    </motion.span>
+                  );
+                })}
+              </AnimatePresence>
+            </motion.div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

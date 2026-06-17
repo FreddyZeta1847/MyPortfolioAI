@@ -10,6 +10,10 @@ export const navItems: NavItem[] = [
     title: 'Education'
   },
   {
+    id: 'experience',
+    title: 'Experience'
+  },
+  {
     id: 'skills',
     title: 'Skills & Technologies'
   },

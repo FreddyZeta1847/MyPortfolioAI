@@ -9,6 +9,7 @@ import LoadingScreen from './components/LoadingScreen';
 import CustomCursor from './components/CustomCursor';
 
 const Education = lazy(() => import('./components/Education'));
+const Experience = lazy(() => import('./components/Experience'));
 const Skills = lazy(() => import('./components/Skills'));
 const Projects = lazy(() => import('./components/Projects'));
 const Contact = lazy(() => import('./components/Contact'));
@@ -28,6 +29,7 @@ function App() {
             <Hero />
             <Suspense fallback={null}>
               <Education />
+              <Experience />
               <Skills />
               <Projects />
               <Contact />
