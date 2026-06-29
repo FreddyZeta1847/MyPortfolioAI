@@ -43,8 +43,8 @@ export default function Hero() {
       <div className="absolute top-1/4 -left-32 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl animate-float" />
       <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }} />
 
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
-        <div className="max-w-4xl mx-auto text-center pt-20">
+      <div className="container mx-auto px-4 md:pl-16 md:pr-6 relative z-10">
+        <div className="max-w-4xl pt-20 text-left">
           {/* Status badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -106,7 +106,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1 }}
-            className="text-lg text-surface-500 dark:text-surface-400 max-w-2xl mx-auto mb-10 leading-relaxed"
+            className="text-lg text-surface-500 dark:text-surface-400 max-w-2xl mb-10 leading-relaxed"
           >
             Computer Engineering student at Politecnico di Milano with a passion for
             software development, AI research, and building scalable applications.
@@ -117,7 +117,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2 }}
-            className="flex flex-wrap items-center justify-center gap-4 mb-10"
+            className="flex flex-wrap items-center justify-start gap-4 mb-10"
           >
             <a
               href="mailto:santinifederico06@gmail.com"
@@ -141,7 +141,7 @@ export default function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.4 }}
-            className="flex items-center justify-center gap-4"
+            className="flex items-center justify-start gap-4"
           >
             <MagneticButton
               href="https://github.com/FreddyZeta1847"

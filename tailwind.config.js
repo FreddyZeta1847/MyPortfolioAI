@@ -63,6 +63,7 @@ export default {
         'pulse-slow': 'pulse 3s ease-in-out infinite',
         'gradient': 'gradient 8s ease infinite',
         'bounce-slow': 'bounce 2s ease-in-out infinite',
+        'marquee': 'marquee 30s linear infinite',
       },
       keyframes: {
         shimmer: {
@@ -80,6 +81,10 @@ export default {
         gradient: {
           '0%, 100%': { backgroundPosition: '0% 50%' },
           '50%': { backgroundPosition: '100% 50%' },
+        },
+        marquee: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
         },
       },
     },

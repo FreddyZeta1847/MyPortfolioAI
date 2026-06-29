@@ -22,6 +22,10 @@ export default function HeroBackground() {
       opacity: number;
     }> = [];
 
+    // Pointer in canvas coordinates (canvas covers the viewport via inset-0).
+    const mouse = { x: -9999, y: -9999 };
+    const INFLUENCE = 170;
+
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -44,65 +48,101 @@ export default function HeroBackground() {
 
       const isDark = document.documentElement.classList.contains('dark');
       const color = isDark ? '20, 184, 166' : '13, 148, 136';
+      const accent = isDark ? '249, 115, 22' : '234, 88, 12';
 
-      particles.forEach((p, i) => {
-        // Move
+      const rendered = particles.map((p) => {
+        // Drift + wrap (base position)
         p.x += p.vx;
         p.y += p.vy;
-
-        // Wrap
         if (p.x < 0) p.x = canvas.width;
         if (p.x > canvas.width) p.x = 0;
         if (p.y < 0) p.y = canvas.height;
         if (p.y > canvas.height) p.y = 0;
 
-        // Draw particle
+        // Cursor influence — render-time offset (non-destructive) + brighten
+        const dx = p.x - mouse.x;
+        const dy = p.y - mouse.y;
+        const dist = Math.hypot(dx, dy);
+        const f = dist < INFLUENCE ? 1 - dist / INFLUENCE : 0;
+        const ang = Math.atan2(dy, dx);
+        const push = f * 26;
+        const rx = p.x + Math.cos(ang) * push;
+        const ry = p.y + Math.sin(ang) * push;
+
+        // Particle (shifts toward accent + grows near the cursor)
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${color}, ${p.opacity})`;
+        ctx.arc(rx, ry, p.radius + f * 1.6, 0, Math.PI * 2);
+        ctx.fillStyle =
+          f > 0.05
+            ? `rgba(${accent}, ${Math.min(1, p.opacity + f * 0.6)})`
+            : `rgba(${color}, ${p.opacity})`;
         ctx.fill();
 
-        // Connect nearby particles
-        for (let j = i + 1; j < particles.length; j++) {
-          const p2 = particles[j];
-          const dx = p.x - p2.x;
-          const dy = p.y - p2.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+        // Line to the cursor when close
+        if (f > 0) {
+          ctx.beginPath();
+          ctx.moveTo(rx, ry);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.strokeStyle = `rgba(${accent}, ${f * 0.28})`;
+          ctx.lineWidth = 0.6;
+          ctx.stroke();
+        }
+
+        return { x: rx, y: ry };
+      });
+
+      // Connect nearby particles (using rendered positions)
+      for (let i = 0; i < rendered.length; i++) {
+        for (let j = i + 1; j < rendered.length; j++) {
+          const dx = rendered[i].x - rendered[j].x;
+          const dy = rendered[i].y - rendered[j].y;
+          const dist = Math.hypot(dx, dy);
           if (dist < 150) {
             ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(p2.x, p2.y);
+            ctx.moveTo(rendered[i].x, rendered[i].y);
+            ctx.lineTo(rendered[j].x, rendered[j].y);
             ctx.strokeStyle = `rgba(${color}, ${0.08 * (1 - dist / 150)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
         }
-      });
+      }
 
       if (!prefersReducedMotion) {
         animationId = requestAnimationFrame(draw);
       }
     };
 
+    const onMove = (e: MouseEvent) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    };
+    const onLeave = () => {
+      mouse.x = -9999;
+      mouse.y = -9999;
+    };
+    const onResize = () => {
+      resize();
+      createParticles();
+    };
+
     resize();
     createParticles();
     draw();
 
-    window.addEventListener('resize', () => {
-      resize();
-      createParticles();
-    });
+    window.addEventListener('resize', onResize);
+    if (!prefersReducedMotion) {
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('mouseout', onLeave);
+    }
 
     return () => {
       cancelAnimationFrame(animationId);
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseout', onLeave);
     };
   }, []);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 pointer-events-none"
-      aria-hidden="true"
-    />
-  );
+  return <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" aria-hidden="true" />;
 }

@@ -22,6 +22,11 @@ type FlatSkill = { name: string; categories: string[] };
 // Top skills — rendered with a gold border + luxury sheen (case-insensitive).
 const FEATURED = new Set(['claude code', 'python', 'azure']);
 
+// Distinct icons for the scrolling tech band between Skills and Projects.
+const iconBand = Array.from(
+  new Map(Object.entries(skillIconMap).map(([name, Icon]) => [Icon, { name, Icon }])).values()
+);
+
 export default function Skills() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const [active, setActive] = useState('all');
@@ -55,7 +60,7 @@ export default function Skills() {
           subtitle="A snapshot of where my strengths lie, and the tools I reach for. I keep this current through courses and personal projects."
         />
 
-        <div ref={ref} className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-5xl mx-auto">
+        <div ref={ref} className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start max-w-5xl mx-auto">
           {/* ── Left: radar ─────────────────────────────────────────────── */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -145,6 +150,29 @@ export default function Skills() {
               </AnimatePresence>
             </motion.div>
           </motion.div>
+        </div>
+      </div>
+
+      {/* Scrolling tech-icon band — bridges Skills → Projects */}
+      <div className="edge-fade group relative mt-20 flex overflow-hidden border-y border-surface-200 dark:border-surface-700/60 py-6">
+        <div className="flex">
+          {[0, 1].map((dup) => (
+            <ul
+              key={dup}
+              aria-hidden={dup === 1}
+              className="flex shrink-0 animate-marquee items-center gap-12 pr-12 group-hover:[animation-play-state:paused]"
+            >
+              {iconBand.map(({ name, Icon }) => (
+                <li
+                  key={name}
+                  title={name}
+                  className="text-surface-400 dark:text-surface-500 hover:text-primary-500 dark:hover:text-primary-400 transition-colors"
+                >
+                  <Icon size={34} />
+                </li>
+              ))}
+            </ul>
+          ))}
         </div>
       </div>
     </section>
