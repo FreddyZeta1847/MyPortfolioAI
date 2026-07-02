@@ -170,7 +170,7 @@ export default function Experience() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 });
 
   return (
-    <section id="experience" className="section-padding bg-white dark:bg-surface-950 transition-colors duration-300">
+    <section id="experience" className="section-padding bg-white/80 dark:bg-surface-950/60 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeader title="Work Experience" />
 

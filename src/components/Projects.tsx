@@ -15,7 +15,7 @@ export default function Projects() {
   const [openId, setOpenId] = useState<number | null>(projects[0]?.id ?? null);
 
   return (
-    <section id="projects" className="section-padding bg-white dark:bg-surface-950 transition-colors duration-300">
+    <section id="projects" className="section-padding bg-white/80 dark:bg-surface-950/60 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeader
           title="Projects"

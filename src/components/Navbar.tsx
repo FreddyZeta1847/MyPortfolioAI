@@ -54,7 +54,7 @@ export default function Navbar() {
                 {activeSection === item.id && (
                   <motion.div
                     layoutId="activeNav"
-                    className="absolute inset-0 bg-primary-50 dark:bg-primary-900/30 rounded-lg"
+                    className="absolute inset-0 bg-primary-500/10 dark:bg-primary-500/15 rounded-lg"
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}

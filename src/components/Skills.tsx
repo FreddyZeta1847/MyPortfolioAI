@@ -53,7 +53,7 @@ export default function Skills() {
     active === 'all' ? allSkills : allSkills.filter((s) => s.categories.includes(active));
 
   return (
-    <section id="skills" className="section-padding bg-primary-50/50 dark:bg-surface-900 transition-colors duration-300">
+    <section id="skills" className="section-padding bg-primary-50/60 dark:bg-surface-900/50 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeader
           title="Skills & Technologies"

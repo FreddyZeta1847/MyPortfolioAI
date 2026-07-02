@@ -7,6 +7,7 @@ import Hero from './components/Hero';
 import ScrollProgress from './components/ScrollProgress';
 import LoadingScreen from './components/LoadingScreen';
 import CustomCursor from './components/CustomCursor';
+import AuroraBackground from './components/AuroraBackground';
 
 const Education = lazy(() => import('./components/Education'));
 const Experience = lazy(() => import('./components/Experience'));
@@ -23,6 +24,7 @@ function App() {
         <LoadingScreen />
         <CustomCursor />
         <div className="min-h-screen bg-surface-50 dark:bg-surface-950 font-sans antialiased transition-colors duration-300">
+          <AuroraBackground />
           <ScrollProgress />
           <Navbar />
           <main>
@@ -42,7 +44,7 @@ function App() {
           <Toaster
             position="bottom-right"
             toastOptions={{
-              className: '!bg-white dark:!bg-surface-800 !text-surface-800 dark:!text-surface-100 !shadow-glass',
+              className: '!bg-white dark:!bg-surface-900 !text-surface-800 dark:!text-surface-100 !border !border-surface-200 dark:!border-white/10 !shadow-glass',
               duration: 4000,
             }}
           />

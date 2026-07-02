@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
+import { getLenis } from '../utils/lenis';
 
 export default function BackToTop() {
   const [visible, setVisible] = useState(false);
@@ -20,8 +21,12 @@ export default function BackToTop() {
           exit={{ opacity: 0, scale: 0.8 }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-8 right-8 z-50 p-3 rounded-full bg-primary-600 hover:bg-primary-700 text-white shadow-glow transition-colors"
+          onClick={() => {
+            const lenis = getLenis();
+            if (lenis) lenis.scrollTo(0);
+            else window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className="fixed bottom-8 right-8 z-50 p-3 rounded-full glass text-primary-500 dark:text-primary-400 hover:shadow-glow transition-shadow"
           aria-label="Back to top"
         >
           <ArrowUp size={20} />
