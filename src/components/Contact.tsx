@@ -9,7 +9,7 @@ const Contact: React.FC = () => {
   const { ref: contentRef, isVisible: contentVisible } = useScrollAnimation();
 
   return (
-    <section id="contact" className="section-padding bg-cream dark:bg-surface-900 transition-colors duration-300">
+    <section id="contact" className="section-padding bg-primary-50/50 dark:bg-surface-900 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
         <div
           ref={headerRef}
