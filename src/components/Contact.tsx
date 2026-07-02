@@ -1,6 +1,8 @@
 import React from 'react';
 import { Mail, Phone, Github, Linkedin, MapPin } from 'lucide-react';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import SpotlightCard from './SpotlightCard';
+import MagneticButton from './MagneticButton';
 
 const Contact: React.FC = () => {
   const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
@@ -24,7 +26,7 @@ const Contact: React.FC = () => {
           ref={contentRef}
           className={`max-w-3xl mx-auto animate-on-scroll-scale ${contentVisible ? 'visible' : ''}`}
         >
-          <div className="bg-white dark:bg-surface-800 rounded-2xl shadow-soft p-8 md:p-12">
+          <SpotlightCard className="bg-white dark:bg-surface-800 rounded-2xl shadow-soft p-8 md:p-12">
             <div className="grid md:grid-cols-2 gap-8">
               {/* Email */}
               <a
@@ -101,16 +103,16 @@ const Contact: React.FC = () => {
             </div>
 
             {/* CTA Button */}
-            <div className="mt-10 text-center">
-              <a
+            <div className="mt-10 flex justify-center">
+              <MagneticButton
                 href="mailto:santinifederico06@gmail.com"
-                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white font-medium rounded-xl transition-all duration-300 shadow-soft hover:shadow-soft hover:scale-105"
+                className="shimmer-btn inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white font-medium rounded-xl transition-all duration-300 shadow-soft"
               >
                 <Mail size={20} className="mr-2" />
                 Send me an Email
-              </a>
+              </MagneticButton>
             </div>
-          </div>
+          </SpotlightCard>
         </div>
       </div>
     </section>

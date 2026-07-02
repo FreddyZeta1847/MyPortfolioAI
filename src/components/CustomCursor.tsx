@@ -5,6 +5,7 @@ export default function CustomCursor() {
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [visible, setVisible] = useState(false);
   const [clicking, setClicking] = useState(false);
+  const [hovering, setHovering] = useState(false);
 
   useEffect(() => {
     // Only show on desktop with fine pointer
@@ -16,6 +17,8 @@ export default function CustomCursor() {
 
     const onMove = (e: MouseEvent) => {
       setPos({ x: e.clientX, y: e.clientY });
+      const target = (e.target as HTMLElement)?.closest('a, button, [data-hover], input, textarea, select');
+      setHovering(!!target);
     };
 
     const onDown = () => setClicking(true);
@@ -48,19 +51,24 @@ export default function CustomCursor() {
         animate={{
           x: pos.x - 4,
           y: pos.y - 4,
-          scale: clicking ? 0.5 : 1,
+          scale: clicking ? 0.5 : hovering ? 0.4 : 1,
         }}
         transition={{ type: 'spring', stiffness: 500, damping: 28, mass: 0.5 }}
       />
-      {/* Outer ring */}
+      {/* Outer ring — swells and tints over interactive elements */}
       <motion.div
-        className="fixed top-0 left-0 w-8 h-8 border border-primary-500/50 rounded-full pointer-events-none z-[9999] mix-blend-difference"
+        className="fixed top-0 left-0 rounded-full pointer-events-none z-[9999]"
         animate={{
-          x: pos.x - 16,
-          y: pos.y - 16,
+          x: pos.x - (hovering ? 24 : 16),
+          y: pos.y - (hovering ? 24 : 16),
+          width: hovering ? 48 : 32,
+          height: hovering ? 48 : 32,
           scale: clicking ? 0.8 : 1,
+          borderColor: hovering ? 'rgba(20,184,166,0.9)' : 'rgba(20,184,166,0.5)',
+          backgroundColor: hovering ? 'rgba(20,184,166,0.08)' : 'rgba(20,184,166,0)',
         }}
-        transition={{ type: 'spring', stiffness: 150, damping: 15, mass: 0.5 }}
+        style={{ borderWidth: 1, borderStyle: 'solid' }}
+        transition={{ type: 'spring', stiffness: 200, damping: 18, mass: 0.5 }}
       />
     </>
   );

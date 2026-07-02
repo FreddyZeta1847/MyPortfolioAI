@@ -6,6 +6,11 @@ import { projects } from '../data/projects';
 import { Project } from '../types';
 import SectionHeader from './SectionHeader';
 
+const detailItem = {
+  hidden: { opacity: 0, y: 12 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as const } },
+};
+
 export default function Projects() {
   const [openId, setOpenId] = useState<number | null>(projects[0]?.id ?? null);
 
@@ -93,37 +98,50 @@ function ProjectRow({
             className="overflow-hidden"
           >
             <div className="grid gap-6 pb-10 md:grid-cols-2 md:gap-10">
-              {/* Image */}
+              {/* Image — slow reveal + zoom */}
               <div className="overflow-hidden rounded-2xl border border-surface-200/60 shadow-soft dark:border-surface-700/50">
-                <div className="aspect-video">
-                  <img
+                <div className="aspect-video overflow-hidden">
+                  <motion.img
                     src={project.imageUrl}
                     alt={project.title}
                     className="h-full w-full object-cover"
                     loading="lazy"
+                    initial={{ scale: 1.12, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
                   />
                 </div>
               </div>
 
-              {/* Details */}
-              <div className="flex flex-col">
-                <p className="leading-relaxed text-surface-600 dark:text-surface-300">
+              {/* Details — staggered in */}
+              <motion.div
+                className="flex flex-col"
+                initial="hidden"
+                animate="visible"
+                variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.06, delayChildren: 0.12 } } }}
+              >
+                <motion.p
+                  variants={detailItem}
+                  className="leading-relaxed text-surface-600 dark:text-surface-300"
+                >
                   {project.description}
-                </p>
+                </motion.p>
 
                 <div className="mt-5 flex flex-wrap gap-2">
                   {project.technologies.map((tech) => (
-                    <span
+                    <motion.span
                       key={tech}
+                      variants={detailItem}
                       className="rounded-lg border border-primary-200/50 bg-primary-50 px-3 py-1 text-sm font-medium text-primary-700 dark:border-primary-800/30 dark:bg-primary-900/30 dark:text-primary-300"
                     >
                       {tech}
-                    </span>
+                    </motion.span>
                   ))}
                 </div>
 
                 {project.githubUrl && (
-                  <a
+                  <motion.a
+                    variants={detailItem}
                     href={project.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -132,9 +150,9 @@ function ProjectRow({
                     <Github size={18} />
                     View on GitHub
                     <ArrowUpRight size={16} className="transition-transform duration-300 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
-                  </a>
+                  </motion.a>
                 )}
-              </div>
+              </motion.div>
             </div>
           </motion.div>
         )}

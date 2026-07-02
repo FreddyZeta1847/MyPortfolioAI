@@ -8,6 +8,7 @@ import ScrollProgress from './components/ScrollProgress';
 import LoadingScreen from './components/LoadingScreen';
 import CustomCursor from './components/CustomCursor';
 
+const About = lazy(() => import('./components/About'));
 const Education = lazy(() => import('./components/Education'));
 const Experience = lazy(() => import('./components/Experience'));
 const Skills = lazy(() => import('./components/Skills'));
@@ -28,6 +29,7 @@ function App() {
           <main>
             <Hero />
             <Suspense fallback={null}>
+              <About />
               <Education />
               <Experience />
               <Skills />

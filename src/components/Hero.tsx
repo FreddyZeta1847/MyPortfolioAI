@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { Github, Linkedin, Mail, ChevronDown, Download } from 'lucide-react';
 import TypingEffect from './TypingEffect';
 import HeroBackground from './HeroBackground';
@@ -30,9 +31,15 @@ const letterAnimation = {
 
 export default function Hero() {
   const nameWords = ['Federico', 'Santini'];
+  const ref = useRef<HTMLElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
+  const contentY = useTransform(scrollYProgress, [0, 1], ['0%', reduce ? '0%' : '38%']);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.6], [1, reduce ? 1 : 0]);
 
   return (
     <section
+      ref={ref}
       id="hero"
       className="relative min-h-screen flex items-center overflow-hidden bg-surface-50 dark:bg-surface-950 transition-colors duration-300"
     >
@@ -44,7 +51,7 @@ export default function Hero() {
       <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }} />
 
       <div className="container mx-auto px-4 md:pl-16 md:pr-6 relative z-10">
-        <div className="max-w-4xl pt-20 text-left">
+        <motion.div style={{ y: contentY, opacity: contentOpacity }} className="max-w-4xl pt-20 text-left">
           {/* Status badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -162,7 +169,7 @@ export default function Hero() {
               <Linkedin size={20} />
             </MagneticButton>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Scroll indicator */}

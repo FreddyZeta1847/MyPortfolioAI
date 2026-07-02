@@ -3,6 +3,7 @@ import { useInView } from 'react-intersection-observer';
 import { GraduationCap, Calendar } from 'lucide-react';
 import { education } from '../data/education';
 import SectionHeader from './SectionHeader';
+import SpotlightCard from './SpotlightCard';
 
 const institutionImages: Record<string, string> = {
   'ITIS P. Hensemberger, Monza': '/images/hensemberger.jpg',
@@ -62,7 +63,7 @@ export default function Education() {
                 </div>
 
                 {/* Card */}
-                <div className={`glass rounded-xl p-6 shadow-soft hover:shadow-glass transition-all duration-300 group ${
+                <SpotlightCard className={`glass rounded-xl p-6 shadow-soft hover:shadow-glass transition-all duration-300 group ${
                   isLeft ? 'md:mr-4' : 'md:ml-4'
                 }`}>
                   <div className={`flex items-start gap-4 ${isLeft ? 'md:flex-row-reverse' : ''}`}>
@@ -91,7 +92,7 @@ export default function Education() {
                       )}
                     </div>
                   </div>
-                </div>
+                </SpotlightCard>
               </motion.div>
             );
           })}
