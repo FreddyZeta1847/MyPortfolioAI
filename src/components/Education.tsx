@@ -42,7 +42,7 @@ export default function Education() {
                 initial={{ scale: 0 }}
                 animate={inView ? { scale: 1 } : {}}
                 transition={{ duration: 0.4, delay: 0.5 + index * 0.25, type: 'spring' }}
-                className="absolute -left-10 md:-left-14 translate-x-[3.5px] md:translate-x-[7.5px] top-9 w-3 h-3 rounded-full bg-primary-500 ring-4 ring-primary-500/20 shadow-glow z-10"
+                className="absolute left-[-37.5px] md:left-[-49.5px] top-9 w-3 h-3 rounded-full bg-primary-500 ring-4 ring-primary-500/20 shadow-glow z-10"
               />
 
               <SpotlightCard className="glass rounded-2xl p-6 md:p-8 shadow-soft hover:shadow-glass transition-shadow duration-300">

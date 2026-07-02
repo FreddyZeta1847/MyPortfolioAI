@@ -40,6 +40,16 @@ export default function Projects() {
     mouseY.set(e.clientY - 100);
   };
 
+  // Teleport the preview to the cursor when entering a row, so it doesn't
+  // swoop in from wherever it was last (or from 0,0 on first hover).
+  const onRowEnter = (id: number) => (e: React.MouseEvent) => {
+    mouseX.jump(e.clientX + 28);
+    mouseY.jump(e.clientY - 100);
+    previewX.jump(e.clientX + 28);
+    previewY.jump(e.clientY - 100);
+    setPreviewId(id);
+  };
+
   return (
     <section id="projects" className="section-padding bg-white/80 dark:bg-surface-950/60 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
@@ -57,7 +67,7 @@ export default function Projects() {
               index={index}
               isOpen={openId === project.id}
               onToggle={() => setOpenId((cur) => (cur === project.id ? null : project.id))}
-              onHoverStart={() => setPreviewId(project.id)}
+              onHoverStart={onRowEnter(project.id)}
               onHoverEnd={() => setPreviewId((cur) => (cur === project.id ? null : cur))}
               onMouseMove={onRowMove}
             />
@@ -106,7 +116,7 @@ function ProjectRow({
   index: number;
   isOpen: boolean;
   onToggle: () => void;
-  onHoverStart: () => void;
+  onHoverStart: (e: React.MouseEvent) => void;
   onHoverEnd: () => void;
   onMouseMove: (e: React.MouseEvent) => void;
 }) {
@@ -118,8 +128,8 @@ function ProjectRow({
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: index * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className={`relative border-b border-surface-200 dark:border-white/[0.06] ${
-        isOpen ? 'pl-1' : ''
+      className={`relative border-b border-surface-200 dark:border-white/[0.06] transition-[padding] duration-300 ${
+        isOpen ? 'pl-5 md:pl-8' : ''
       }`}
     >
       {/* Active marker on the open row */}
