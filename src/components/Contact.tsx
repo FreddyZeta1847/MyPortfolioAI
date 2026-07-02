@@ -1,122 +1,129 @@
-import React from 'react';
-import { Mail, Phone, Github, Linkedin, MapPin } from 'lucide-react';
-import { useScrollAnimation } from '../hooks/useScrollAnimation';
-import SpotlightCard from './SpotlightCard';
+import { motion } from 'framer-motion';
+import toast from 'react-hot-toast';
+import { Mail, Phone, Github, Linkedin, MapPin, Copy } from 'lucide-react';
 import MagneticButton from './MagneticButton';
 
-const Contact: React.FC = () => {
-  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
-  const { ref: contentRef, isVisible: contentVisible } = useScrollAnimation();
+const EMAIL = 'santinifederico06@gmail.com';
+
+const reveal = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (delay: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, delay, ease: [0.25, 0.46, 0.45, 0.94] as const },
+  }),
+};
+
+const detailChips = [
+  { icon: Phone, label: '+39 339 333 8159', href: 'tel:+393393338159' },
+  { icon: MapPin, label: 'Italy', href: undefined },
+  { icon: Github, label: 'GitHub', href: 'https://github.com/FreddyZeta1847' },
+  { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/federico-santini' },
+];
+
+export default function Contact() {
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+      toast.success('Email copied to clipboard');
+    } catch {
+      toast.error('Could not copy — please copy it manually');
+    }
+  };
 
   return (
     <section id="contact" className="section-padding bg-primary-50/60 dark:bg-surface-900/50 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
-        <div
-          ref={headerRef}
-          className={`text-center mb-16 animate-on-scroll ${headerVisible ? 'visible' : ''}`}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          className="relative max-w-3xl mx-auto text-center"
         >
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-surface-800 dark:text-white mb-4">Get In Touch</h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-primary-500 to-accent-500 mx-auto mb-6 rounded-full"></div>
-          <p className="text-surface-600 dark:text-surface-400 max-w-2xl mx-auto">
-            Whether you'd like to collaborate, discuss an opportunity, or simply connect about technology, feel free to reach out!
-          </p>
-        </div>
+          {/* Ambient glow */}
+          <div className="aurora-glow w-96 h-96 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary-500/10 dark:bg-primary-600/20" />
 
-        <div
-          ref={contentRef}
-          className={`max-w-3xl mx-auto animate-on-scroll-scale ${contentVisible ? 'visible' : ''}`}
-        >
-          <SpotlightCard className="bg-white dark:bg-surface-800 rounded-2xl shadow-soft p-8 md:p-12">
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Email */}
-              <a
-                href="mailto:santinifederico06@gmail.com"
-                className="group flex items-center p-4 rounded-xl bg-surface-50 dark:bg-surface-700/50 hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-all duration-300"
-              >
-                <div className="flex-shrink-0 bg-primary-100 dark:bg-primary-900/40 group-hover:bg-primary-200 dark:group-hover:bg-primary-800/40 p-4 rounded-xl transition-colors">
-                  <Mail size={28} className="text-primary-600 dark:text-primary-400" />
-                </div>
-                <div className="ml-4">
-                  <h4 className="text-sm font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wide">Email</h4>
-                  <p className="text-surface-800 dark:text-white font-medium group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                    santinifederico06@gmail.com
-                  </p>
-                </div>
-              </a>
+          <motion.p
+            variants={reveal}
+            custom={0}
+            className="relative font-mono text-xs tracking-[0.3em] text-accent-600 dark:text-accent-400 uppercase mb-6"
+          >
+            05 / Contact
+          </motion.p>
 
-              {/* Phone */}
-              <a
-                href="tel:+393393338159"
-                className="group flex items-center p-4 rounded-xl bg-surface-50 dark:bg-surface-700/50 hover:bg-accent-50 dark:hover:bg-accent-900/30 transition-all duration-300"
-              >
-                <div className="flex-shrink-0 bg-accent-100 dark:bg-accent-900/40 group-hover:bg-accent-200 dark:group-hover:bg-accent-800/40 p-4 rounded-xl transition-colors">
-                  <Phone size={28} className="text-accent-600 dark:text-accent-400" />
-                </div>
-                <div className="ml-4">
-                  <h4 className="text-sm font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wide">Phone</h4>
-                  <p className="text-surface-800 dark:text-white font-medium group-hover:text-accent-600 dark:group-hover:text-accent-400 transition-colors">
-                    +39 339 333 8159
-                  </p>
-                </div>
-              </a>
+          <motion.h2
+            variants={reveal}
+            custom={0.1}
+            className="relative font-display text-4xl md:text-6xl font-bold text-surface-800 dark:text-white mb-6 leading-tight"
+          >
+            Let&apos;s build <span className="gradient-text">something.</span>
+          </motion.h2>
 
-              {/* Location */}
-              <div className="flex items-center p-4 rounded-xl bg-surface-50 dark:bg-surface-700/50">
-                <div className="flex-shrink-0 bg-surface-200 dark:bg-surface-600 p-4 rounded-xl">
-                  <MapPin size={28} className="text-surface-600 dark:text-surface-300" />
-                </div>
-                <div className="ml-4">
-                  <h4 className="text-sm font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wide">Location</h4>
-                  <p className="text-surface-800 dark:text-white font-medium">Italy</p>
-                </div>
-              </div>
+          <motion.p
+            variants={reveal}
+            custom={0.2}
+            className="relative text-surface-600 dark:text-surface-400 max-w-xl mx-auto mb-10 text-lg"
+          >
+            Whether you&apos;d like to collaborate, discuss an opportunity, or simply connect about
+            technology, feel free to reach out!
+          </motion.p>
 
-              {/* Social Links */}
-              <div className="flex items-center p-4 rounded-xl bg-surface-50 dark:bg-surface-700/50">
-                <div className="flex-shrink-0 bg-surface-200 dark:bg-surface-600 p-4 rounded-xl">
-                  <Github size={28} className="text-surface-600 dark:text-surface-300" />
-                </div>
-                <div className="ml-4">
-                  <h4 className="text-sm font-medium text-surface-500 dark:text-surface-400 uppercase tracking-wide">Social</h4>
-                  <div className="flex space-x-3 mt-1">
-                    <a
-                      href="https://github.com/FreddyZeta1847"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-surface-800 hover:bg-surface-900 dark:bg-surface-600 dark:hover:bg-surface-500 text-white p-2 rounded-lg transition-all duration-300 hover:scale-110"
-                      aria-label="GitHub"
-                    >
-                      <Github size={18} />
-                    </a>
-                    <a
-                      href="https://www.linkedin.com/in/federico-santini"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-[#0077B5] hover:bg-[#006396] text-white p-2 rounded-lg transition-all duration-300 hover:scale-110"
-                      aria-label="LinkedIn"
-                    >
-                      <Linkedin size={18} />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
+          {/* Email CTA + copy */}
+          <motion.div
+            variants={reveal}
+            custom={0.3}
+            className="relative flex flex-wrap items-center justify-center gap-3 mb-10"
+          >
+            <MagneticButton
+              href={`mailto:${EMAIL}`}
+              className="shimmer-btn inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-primary-600 to-accent-500 hover:from-primary-500 hover:to-accent-400 text-white font-medium rounded-xl transition-all duration-300 shadow-glow hover:shadow-glow-lg"
+            >
+              <Mail size={20} />
+              {EMAIL}
+            </MagneticButton>
+            <button
+              onClick={copyEmail}
+              aria-label="Copy email address"
+              className="inline-flex items-center gap-2 px-4 py-4 glass rounded-xl text-surface-600 dark:text-surface-300 hover:text-accent-600 dark:hover:text-accent-400 hover:shadow-glow-cyan transition-all duration-300"
+            >
+              <Copy size={18} />
+            </button>
+          </motion.div>
 
-            {/* CTA Button */}
-            <div className="mt-10 flex justify-center">
-              <MagneticButton
-                href="mailto:santinifederico06@gmail.com"
-                className="shimmer-btn inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white font-medium rounded-xl transition-all duration-300 shadow-soft"
-              >
-                <Mail size={20} className="mr-2" />
-                Send me an Email
-              </MagneticButton>
-            </div>
-          </SpotlightCard>
-        </div>
+          {/* Detail chips */}
+          <motion.div
+            variants={reveal}
+            custom={0.4}
+            className="relative flex flex-wrap items-center justify-center gap-3"
+          >
+            {detailChips.map(({ icon: Icon, label, href }) => {
+              const content = (
+                <>
+                  <Icon size={15} className="text-primary-500 dark:text-primary-400" />
+                  <span className="text-sm font-medium">{label}</span>
+                </>
+              );
+              return href ? (
+                <a
+                  key={label}
+                  href={href}
+                  {...(href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  className="inline-flex items-center gap-2 glass px-4 py-2.5 rounded-full text-surface-700 dark:text-surface-200 hover:shadow-glow hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300"
+                >
+                  {content}
+                </a>
+              ) : (
+                <span
+                  key={label}
+                  className="inline-flex items-center gap-2 glass px-4 py-2.5 rounded-full text-surface-700 dark:text-surface-200"
+                >
+                  {content}
+                </span>
+              );
+            })}
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );
-};
-
-export default Contact;
+}

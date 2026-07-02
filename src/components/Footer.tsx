@@ -32,7 +32,7 @@ export default function Footer() {
                 <button
                   key={item.id}
                   onClick={() => scrollToElement(item.id)}
-                  className="block text-surface-400 hover:text-primary-400 text-sm transition-colors"
+                  className="block text-surface-400 hover:text-accent-400 text-sm transition-colors"
                 >
                   {item.title}
                 </button>
@@ -83,7 +83,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-surface-800 pt-8 text-center text-surface-500 text-sm">
+        <div className="border-t border-surface-800 pt-8 text-center text-surface-500 text-sm font-mono">
           <p>&copy; {currentYear} Federico Santini. All rights reserved.</p>
         </div>
       </div>

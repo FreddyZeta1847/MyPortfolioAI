@@ -48,8 +48,8 @@ export default function SkillRadar() {
       <svg viewBox={`0 0 ${SIZE} ${SIZE - 20}`} className="w-full h-auto overflow-visible">
         <defs>
           <linearGradient id="radarFill" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#14b8a6" />
-            <stop offset="100%" stopColor="#f97316" />
+            <stop offset="0%" stopColor="#8b5cf6" />
+            <stop offset="100%" stopColor="#22d3ee" />
           </linearGradient>
         </defs>
 
@@ -95,6 +95,15 @@ export default function SkillRadar() {
           animate={inView ? { scale: 1, opacity: 1 } : {}}
           transition={{ duration: 0.9, delay: 0.5, ease: [0.34, 1.3, 0.64, 1] }}
         >
+          {/* Faint echo pulsing behind the data shape */}
+          <motion.polygon
+            points={polygon(dataValues)}
+            fill="url(#radarFill)"
+            style={{ transformBox: 'view-box', transformOrigin: `${CX}px ${CY}px` }}
+            initial={{ opacity: 0.08, scale: 1 }}
+            animate={{ opacity: [0.08, 0.16, 0.08], scale: [1, 1.05, 1] }}
+            transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
+          />
           <polygon
             points={polygon(dataValues)}
             fill="url(#radarFill)"
@@ -106,7 +115,15 @@ export default function SkillRadar() {
           {radar.map((_, i) => {
             const { x, y } = point(i, dataValues[i]);
             return (
-              <circle key={i} cx={x} cy={y} r={3.5} fill="#14b8a6" stroke="white" strokeWidth={1.5} />
+              <circle
+                key={i}
+                cx={x}
+                cy={y}
+                r={3.5}
+                fill="#a78bfa"
+                strokeWidth={1.5}
+                className="stroke-white dark:stroke-surface-950"
+              />
             );
           })}
         </motion.g>
