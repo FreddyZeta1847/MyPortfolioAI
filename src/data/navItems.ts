@@ -6,10 +6,6 @@ export const navItems: NavItem[] = [
     title: 'Home'
   },
   {
-    id: 'about',
-    title: 'About'
-  },
-  {
     id: 'education',
     title: 'Education'
   },
