@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion
 import { Github, Linkedin, Mail, ChevronDown, Download } from 'lucide-react';
 import TypingEffect from './TypingEffect';
 import HeroBackground from './HeroBackground';
+import HeroTerminal from './HeroTerminal';
 import MagneticButton from './MagneticButton';
 import { scrollToElement } from '../utils/scrollTo';
 
@@ -41,17 +42,17 @@ export default function Hero() {
     <section
       ref={ref}
       id="hero"
-      className="relative min-h-screen flex items-center overflow-hidden bg-surface-50 dark:bg-surface-950 transition-colors duration-300"
+      className="relative min-h-screen flex items-center overflow-hidden"
     >
       {/* Animated background */}
       <HeroBackground />
 
-      {/* Gradient blobs */}
-      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl animate-float" />
-      <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }} />
-
       <div className="container mx-auto px-4 md:pl-16 md:pr-6 relative z-10">
-        <motion.div style={{ y: contentY, opacity: contentOpacity }} className="max-w-4xl pt-20 text-left">
+        <motion.div
+          style={{ y: contentY, opacity: contentOpacity }}
+          className="flex items-center justify-between gap-12 pt-20"
+        >
+        <div className="max-w-4xl text-left">
           {/* Status badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -104,7 +105,7 @@ export default function Hero() {
             I build{' '}
             <TypingEffect
               words={typingWords}
-              className="text-primary-600 dark:text-primary-400 font-semibold"
+              className="text-accent-500 dark:text-accent-400 font-semibold"
             />
           </motion.p>
 
@@ -128,7 +129,7 @@ export default function Hero() {
           >
             <a
               href="mailto:santinifederico06@gmail.com"
-              className="shimmer-btn inline-flex items-center gap-2 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white px-8 py-3.5 rounded-xl font-medium shadow-glow hover:shadow-glow-lg transition-all duration-300"
+              className="shimmer-btn inline-flex items-center gap-2 bg-gradient-to-r from-primary-600 to-accent-500 hover:from-primary-500 hover:to-accent-400 text-white px-8 py-3.5 rounded-xl font-medium shadow-glow hover:shadow-glow-lg transition-all duration-300"
             >
               <Mail size={18} />
               Get in Touch
@@ -169,6 +170,12 @@ export default function Hero() {
               <Linkedin size={20} />
             </MagneticButton>
           </motion.div>
+        </div>
+
+        {/* Terminal card (decorative, lg+ only) */}
+        <div className="hidden lg:block shrink-0 pr-4">
+          <HeroTerminal />
+        </div>
         </motion.div>
       </div>
 
