@@ -83,9 +83,11 @@ export default {
           '0%, 100%': { backgroundPosition: '0% 50%' },
           '50%': { backgroundPosition: '100% 50%' },
         },
+        // Shifts exactly one list copy; the band renders 4 copies so one list
+        // width always exceeds any viewport overhang (seamless on wide screens).
         marquee: {
           '0%': { transform: 'translateX(0)' },
-          '100%': { transform: 'translateX(-50%)' },
+          '100%': { transform: 'translateX(-25%)' },
         },
         aurora: {
           '0%, 100%': { transform: 'translate(0, 0) scale(1)' },

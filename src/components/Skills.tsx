@@ -161,12 +161,12 @@ export default function Skills() {
 
       {/* Scrolling tech-icon band — bridges Skills → Projects */}
       <div className="edge-fade group relative mt-20 flex overflow-hidden border-y border-surface-200 dark:border-white/[0.06] py-6">
-        <div className="flex">
-          {[0, 1].map((dup) => (
+        <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused]">
+          {[0, 1, 2, 3].map((dup) => (
             <ul
               key={dup}
-              aria-hidden={dup === 1}
-              className="flex shrink-0 animate-marquee items-center gap-12 pr-12 group-hover:[animation-play-state:paused]"
+              aria-hidden={dup > 0}
+              className="flex shrink-0 items-center gap-12 pr-12"
             >
               {iconBand.map(({ name, Icon }) => (
                 <li

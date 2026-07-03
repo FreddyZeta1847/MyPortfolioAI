@@ -38,3 +38,12 @@ export interface RadarAxis {
   label: string;
   value: number;           // 0–100, your proficiency / weight in your toolkit
 }
+
+export interface GitHubRepo {
+  name: string;
+  description: string | null;
+  htmlUrl: string;
+  language: string | null;
+  stars: number;
+  updatedAt: string;
+}

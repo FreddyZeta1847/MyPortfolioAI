@@ -11,6 +11,7 @@ import { Github, Plus, ArrowUpRight } from 'lucide-react';
 import { projects } from '../data/projects';
 import { Project } from '../types';
 import SectionHeader from './SectionHeader';
+import MoreBuilds from './MoreBuilds';
 
 const detailItem = {
   hidden: { opacity: 0, y: 12 },
@@ -72,6 +73,7 @@ export default function Projects() {
               onMouseMove={onRowMove}
             />
           ))}
+          <MoreBuilds />
         </div>
       </div>
 
