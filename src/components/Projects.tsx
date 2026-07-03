@@ -67,7 +67,13 @@ export default function Projects() {
               project={project}
               index={index}
               isOpen={openId === project.id}
-              onToggle={() => setOpenId((cur) => (cur === project.id ? null : project.id))}
+              onToggle={() => {
+                // Hide the hover preview on toggle — otherwise closing a row
+                // instantly pops the preview under the cursor and the row
+                // looks like it never closed.
+                setPreviewId(null);
+                setOpenId((cur) => (cur === project.id ? null : project.id));
+              }}
               onHoverStart={onRowEnter(project.id)}
               onHoverEnd={() => setPreviewId((cur) => (cur === project.id ? null : cur))}
               onMouseMove={onRowMove}
