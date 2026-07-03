@@ -44,7 +44,7 @@ function App() {
           <Toaster
             position="bottom-right"
             toastOptions={{
-              className: '!bg-white dark:!bg-surface-900 !text-surface-800 dark:!text-surface-100 !border !border-surface-200 dark:!border-white/10 !shadow-glass',
+              className: '!bg-surface-50 dark:!bg-surface-900 !text-surface-800 dark:!text-surface-100 !border !border-surface-200 dark:!border-white/10 !shadow-glass',
               duration: 4000,
             }}
           />

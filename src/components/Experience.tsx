@@ -143,7 +143,7 @@ function TimelineNode({
         initial={{ scale: 0 }}
         animate={inView ? { scale: 1 } : {}}
         transition={{ duration: 0.4, delay: delay + 0.1, type: 'spring' }}
-        className={`absolute w-4 h-4 rounded-full ring-4 ring-white dark:ring-surface-950 z-10 transition-colors duration-300 ${
+        className={`absolute w-4 h-4 rounded-full ring-4 ring-surface-50 dark:ring-surface-950 z-10 transition-colors duration-300 ${
           expanded ? 'bg-accent-400 shadow-glow-cyan' : 'bg-primary-500'
         }`}
         style={{ left: `${pos}%`, top: `${yPct}%`, transform: 'translate(-50%, -50%)' }}
@@ -176,7 +176,7 @@ export default function Experience() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 });
 
   return (
-    <section id="experience" className="section-padding bg-white/80 dark:bg-surface-950/60 transition-colors duration-300">
+    <section id="experience" className="section-padding bg-surface-50/80 dark:bg-surface-950/60 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeader kicker="02 / Experience" title="Work Experience" />
 
@@ -261,7 +261,7 @@ export default function Experience() {
               transition={{ duration: 0.5, delay: i * 0.1 }}
               className="relative mb-8 last:mb-0"
             >
-              <div className="absolute -left-8 top-3 w-4 h-4 rounded-full bg-primary-500 ring-4 ring-white dark:ring-surface-950" />
+              <div className="absolute -left-8 top-3 w-4 h-4 rounded-full bg-primary-500 ring-4 ring-surface-50 dark:ring-surface-950" />
               <div className="glass rounded-xl p-4 shadow-soft">
                 <CardBody item={item} expanded />
               </div>

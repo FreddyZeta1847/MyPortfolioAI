@@ -31,11 +31,11 @@
 
 @layer components {
   .glass {
-    @apply bg-white/70 dark:bg-surface-900/60 backdrop-blur-xl border border-surface-200/60 dark:border-white/[0.06];
+    @apply bg-surface-50/70 dark:bg-surface-900/60 backdrop-blur-xl border border-surface-200/60 dark:border-white/[0.06];
   }
 
   .glass-strong {
-    @apply bg-white/90 dark:bg-surface-900/80 backdrop-blur-xl border border-surface-200/80 dark:border-white/10;
+    @apply bg-surface-50/90 dark:bg-surface-900/80 backdrop-blur-xl border border-surface-200/80 dark:border-white/10;
   }
 
   .gradient-text {

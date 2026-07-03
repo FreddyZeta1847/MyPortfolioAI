@@ -33,7 +33,7 @@ function SkillPill({ name }: { name: string }) {
         whileHover={{ y: -3 }}
         className="relative inline-flex p-[1.5px] rounded-xl bg-gradient-to-br from-primary-400 via-fuchsia-400 to-accent-400 shadow-glow cursor-default"
       >
-        <span className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-[10px] bg-white dark:bg-surface-900 text-sm font-semibold text-primary-700 dark:text-primary-300 overflow-hidden">
+        <span className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-[10px] bg-surface-50 dark:bg-surface-900 text-sm font-semibold text-primary-700 dark:text-primary-300 overflow-hidden">
           {IconComp && <IconComp className="text-[0.95em]" />}
           {name}
           {/* sheen sweep */}
@@ -99,7 +99,7 @@ export default function Skills() {
   const byCategory = (key: string) => skills.find((g) => g.category === key)?.items ?? [];
 
   return (
-    <section id="skills" className="section-padding bg-primary-50/60 dark:bg-surface-900/50 transition-colors duration-300">
+    <section id="skills" className="section-padding bg-primary-100/40 dark:bg-surface-900/50 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeader
           kicker="03 / Skills"

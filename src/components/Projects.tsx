@@ -51,7 +51,7 @@ export default function Projects() {
   };
 
   return (
-    <section id="projects" className="section-padding bg-white/80 dark:bg-surface-950/60 transition-colors duration-300">
+    <section id="projects" className="section-padding bg-surface-50/80 dark:bg-surface-950/60 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeader
           kicker="04 / Projects"

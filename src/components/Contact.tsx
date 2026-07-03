@@ -32,7 +32,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="section-padding bg-primary-50/60 dark:bg-surface-900/50 transition-colors duration-300">
+    <section id="contact" className="section-padding bg-primary-100/40 dark:bg-surface-900/50 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
         <motion.div
           initial="hidden"
