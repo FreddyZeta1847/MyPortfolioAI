@@ -6,7 +6,7 @@ import { projects } from '../data/projects';
 import { GitHubRepo } from '../types';
 
 const GITHUB_USER = 'FreddyZeta1847';
-const CACHE_KEY = 'gh-more-builds';
+const CACHE_KEY = 'gh-more-builds-v2';
 
 // Repos already shown as featured projects (from data/projects.ts githubUrl slugs),
 // plus the profile-README repo.
@@ -105,17 +105,19 @@ export default function MoreBuilds() {
             </p>
           </div>
 
-          {!open && (
-            <div className="flex justify-center">
-              <button
-                onClick={() => setOpen(true)}
-                className="inline-flex items-center gap-2 glass px-6 py-3 rounded-full text-sm font-medium text-surface-700 dark:text-surface-200 hover:shadow-glow hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300"
-              >
-                Show more builds ({repos.length})
-                <ChevronDown size={16} />
-              </button>
-            </div>
-          )}
+          <div className="flex justify-center mb-6">
+            <button
+              onClick={() => setOpen((o) => !o)}
+              aria-expanded={open}
+              className="inline-flex items-center gap-2 glass px-6 py-3 rounded-full text-sm font-medium text-surface-700 dark:text-surface-200 hover:shadow-glow hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300"
+            >
+              {open ? 'Show less' : `Show more builds (${repos.length})`}
+              <ChevronDown
+                size={16}
+                className={`transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
+              />
+            </button>
+          </div>
 
           <AnimatePresence initial={false}>
             {open && (
