@@ -1,3 +1,9 @@
+/**
+ * Hero.tsx
+ *
+ * Landing section: animated name/title, typing effect, CTAs, and social
+ * links, plus a decorative terminal card shown on large screens.
+ */
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { Github, Linkedin, Mail, ChevronDown, Download } from 'lucide-react';
@@ -47,7 +53,7 @@ export default function Hero() {
       {/* Animated background */}
       <HeroBackground />
 
-      <div className="container mx-auto px-4 md:pl-16 md:pr-6 relative z-10">
+      <div className="container mx-auto px-4 md:pl-10 md:pr-6 relative z-10">
         <motion.div
           style={{ y: contentY, opacity: contentOpacity }}
           className="flex items-center justify-between gap-12 pt-20"
@@ -71,13 +77,13 @@ export default function Hero() {
 
           {/* Name with staggered animation */}
           <motion.h1
-            className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6"
+            className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6 flex flex-wrap gap-x-4"
             variants={wordAnimation}
             initial="hidden"
             animate="visible"
           >
             {nameWords.map((word, wi) => (
-              <span key={wi} className="inline-block mr-4">
+              <span key={wi} className="inline-block">
                 {word.split('').map((letter, li) => (
                   <motion.span
                     key={li}
