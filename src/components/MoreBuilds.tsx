@@ -6,7 +6,7 @@ import { projects } from '../data/projects';
 import { GitHubRepo } from '../types';
 
 const GITHUB_USER = 'FreddyZeta1847';
-const CACHE_KEY = 'gh-more-builds-v2';
+const CACHE_KEY = 'gh-more-builds-v3';
 
 // Repos already shown as featured projects (from data/projects.ts githubUrl slugs),
 // plus the profile-README repo.
@@ -91,7 +91,7 @@ export default function MoreBuilds() {
     };
   }, [inView]);
 
-  const startIndex = projects.length + 1; // numbering continues after featured rows
+  const startIndex = 1; // featured projects are unnumbered cards now, so restart at 01
 
   return (
     <div ref={ref}>

@@ -1,55 +1,27 @@
-import { useEffect, useState } from 'react';
-import {
-  motion,
-  AnimatePresence,
-  useMotionValue,
-  useSpring,
-  useReducedMotion,
-} from 'framer-motion';
+/**
+ * Projects.tsx
+ *
+ * The "Projects" section: the six GitHub-pinned builds shown as a card grid
+ * (3 across on desktop = 2 rows, 2 on tablet, 1 on phone), followed by the
+ * collapsible live GitHub archive in <MoreBuilds />.
+ *
+ * Each card is a single link straight to the repository — the thumbnail,
+ * description and tech pills are all visible up front, so there is no expand
+ * step and no cursor-following preview to compensate for text-only rows.
+ *
+ * Card data (including the OG-card thumbnails) comes from data/projects.ts.
+ */
+import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Github, Plus, ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { projects } from '../data/projects';
 import { Project } from '../types';
 import SectionHeader from './SectionHeader';
+import SpotlightCard from './SpotlightCard';
 import MoreBuilds from './MoreBuilds';
 
-const detailItem = {
-  hidden: { opacity: 0, y: 12 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as const } },
-};
-
 export default function Projects() {
-  const [openId, setOpenId] = useState<number | null>(projects[0]?.id ?? null);
-  const [previewId, setPreviewId] = useState<number | null>(null);
-  const [finePointer, setFinePointer] = useState(false);
-  const reduce = useReducedMotion();
-
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const previewX = useSpring(mouseX, { stiffness: 180, damping: 22, mass: 0.6 });
-  const previewY = useSpring(mouseY, { stiffness: 180, damping: 22, mass: 0.6 });
-
-  useEffect(() => {
-    setFinePointer(window.matchMedia('(pointer: fine)').matches);
-  }, []);
-
-  const previewEnabled = finePointer && !reduce;
-  const previewProject = previewEnabled ? projects.find((p) => p.id === previewId) : undefined;
-
-  const onRowMove = (e: React.MouseEvent) => {
-    mouseX.set(e.clientX + 28);
-    mouseY.set(e.clientY - 100);
-  };
-
-  // Teleport the preview to the cursor when entering a row, so it doesn't
-  // swoop in from wherever it was last (or from 0,0 on first hover).
-  const onRowEnter = (id: number) => (e: React.MouseEvent) => {
-    mouseX.jump(e.clientX + 28);
-    mouseY.jump(e.clientY - 100);
-    previewX.jump(e.clientX + 28);
-    previewY.jump(e.clientY - 100);
-    setPreviewId(id);
-  };
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
   return (
     <section id="projects" className="section-padding bg-surface-50/80 dark:bg-surface-950/60 transition-colors duration-300">
@@ -57,198 +29,83 @@ export default function Projects() {
         <SectionHeader
           kicker="04 / Projects"
           title="Projects"
-          subtitle="Recent builds — tap any project to expand the details."
+          subtitle="My six pinned builds — tap a card to open it on GitHub."
         />
 
-        <div className="max-w-4xl mx-auto border-t border-surface-200 dark:border-white/[0.06]">
+        <div ref={ref} className="mx-auto grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((project, index) => (
-            <ProjectRow
-              key={project.id}
-              project={project}
-              index={index}
-              isOpen={openId === project.id}
-              onToggle={() => {
-                // Hide the hover preview on toggle — otherwise closing a row
-                // instantly pops the preview under the cursor and the row
-                // looks like it never closed.
-                setPreviewId(null);
-                setOpenId((cur) => (cur === project.id ? null : project.id));
-              }}
-              onHoverStart={onRowEnter(project.id)}
-              onHoverEnd={() => setPreviewId((cur) => (cur === project.id ? null : cur))}
-              onMouseMove={onRowMove}
-            />
+            <ProjectCard key={project.id} project={project} index={index} inView={inView} />
           ))}
+        </div>
+
+        <div className="mx-auto mt-16 max-w-6xl">
           <MoreBuilds />
         </div>
       </div>
-
-      {/* Floating preview that trails the cursor over closed rows (desktop only) */}
-      <AnimatePresence>
-        {previewProject && previewProject.id !== openId && (
-          <motion.div
-            key={previewProject.id}
-            initial={{ opacity: 0, scale: 0.85, rotate: -3 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
-            style={{ x: previewX, y: previewY }}
-            className="pointer-events-none fixed left-0 top-0 z-40 hidden md:block"
-            aria-hidden="true"
-          >
-            <div className="p-[1.5px] rounded-2xl bg-gradient-to-br from-primary-500/70 to-accent-400/70 shadow-glow-lg">
-              <img
-                src={previewProject.imageUrl}
-                alt=""
-                className="w-80 h-48 object-cover rounded-[14px]"
-                loading="lazy"
-              />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }
 
-function ProjectRow({
+function ProjectCard({
   project,
   index,
-  isOpen,
-  onToggle,
-  onHoverStart,
-  onHoverEnd,
-  onMouseMove,
+  inView,
 }: {
   project: Project;
   index: number;
-  isOpen: boolean;
-  onToggle: () => void;
-  onHoverStart: (e: React.MouseEvent) => void;
-  onHoverEnd: () => void;
-  onMouseMove: (e: React.MouseEvent) => void;
+  inView: boolean;
 }) {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 });
-
   return (
     <motion.div
-      ref={ref}
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: index * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className={`relative border-b border-surface-200 dark:border-white/[0.06] transition-[padding] duration-300 ${
-        isOpen ? 'pl-5 md:pl-8' : ''
-      }`}
+      transition={{ duration: 0.5, delay: index * 0.06, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
-      {/* Active marker on the open row */}
-      {isOpen && (
-        <motion.span
-          layoutId="projectActiveRule"
-          className="absolute left-0 top-6 bottom-6 w-0.5 rounded-full bg-gradient-to-b from-primary-500 to-accent-400"
-        />
-      )}
-
-      <button
-        onClick={onToggle}
-        onMouseEnter={onHoverStart}
-        onMouseLeave={onHoverEnd}
-        onMouseMove={onMouseMove}
-        aria-expanded={isOpen}
-        className="group flex w-full items-center gap-4 py-6 text-left md:gap-8 md:py-8"
+      <a
+        href={project.githubUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${project.title} on GitHub`}
+        className="group block h-full rounded-2xl transition-transform duration-300 hover:-translate-y-1"
       >
-        <span className="w-8 shrink-0 font-mono text-sm font-bold tabular-nums text-accent-500/80 dark:text-accent-400/80">
-          {String(index + 1).padStart(2, '0')}
-        </span>
-        <h3
-          className={`flex-1 font-display text-2xl font-bold transition-colors duration-300 md:text-4xl ${
-            isOpen
-              ? 'text-primary-600 dark:text-primary-400'
-              : 'text-surface-800 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400'
-          }`}
-        >
-          {project.title}
-        </h3>
-        <span
-          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${
-            isOpen
-              ? 'rotate-45 border-transparent bg-gradient-to-br from-primary-500 to-accent-500 text-white shadow-glow'
-              : 'border-surface-300 text-surface-500 group-hover:border-primary-500 group-hover:text-primary-500 dark:border-surface-700 dark:text-surface-400'
-          }`}
-        >
-          <Plus size={20} />
-        </span>
-      </button>
+        <SpotlightCard className="glass flex h-full flex-col overflow-hidden rounded-2xl shadow-soft transition-shadow duration-300 group-hover:shadow-glow">
+          {/* Thumbnail — GitHub OG card, 2:1, slow zoom on hover */}
+          <div className="aspect-video overflow-hidden border-b border-surface-200/60 dark:border-white/[0.06]">
+            <img
+              src={project.imageUrl}
+              alt={project.title}
+              loading="lazy"
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </div>
 
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div
-            key="content"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="overflow-hidden"
-          >
-            <div className="grid gap-6 pb-10 md:grid-cols-2 md:gap-10">
-              {/* Image — gradient border + slow zoom reveal */}
-              <div className="p-[1.5px] rounded-2xl bg-gradient-to-br from-primary-500/50 via-transparent to-accent-400/50 self-start">
-                <div className="aspect-video overflow-hidden rounded-[14px]">
-                  <motion.img
-                    src={project.imageUrl}
-                    alt={project.title}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                    initial={{ scale: 1.12, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  />
-                </div>
-              </div>
+          <div className="flex flex-1 flex-col p-5">
+            <h3 className="flex items-start gap-2 font-display text-lg font-bold text-surface-800 transition-colors duration-300 group-hover:text-primary-600 dark:text-white dark:group-hover:text-primary-400">
+              <span className="flex-1">{project.title}</span>
+              <ArrowUpRight
+                size={18}
+                className="mt-1 shrink-0 text-surface-400 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary-500"
+              />
+            </h3>
 
-              {/* Details — staggered in */}
-              <motion.div
-                className="flex flex-col"
-                initial="hidden"
-                animate="visible"
-                variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.06, delayChildren: 0.12 } } }}
-              >
-                <motion.p
-                  variants={detailItem}
-                  className="leading-relaxed text-surface-600 dark:text-surface-300"
+            <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-surface-600 dark:text-surface-300">
+              {project.description}
+            </p>
+
+            {/* Pills pinned to the bottom so cards line up despite ragged copy */}
+            <div className="mt-auto flex flex-wrap gap-1.5 pt-4">
+              {project.technologies.map((tech) => (
+                <span
+                  key={tech}
+                  className="rounded-lg border border-primary-500/30 bg-primary-500/10 px-2.5 py-1 text-xs font-medium text-primary-700 dark:text-primary-300"
                 >
-                  {project.description}
-                </motion.p>
-
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {project.technologies.map((tech) => (
-                    <motion.span
-                      key={tech}
-                      variants={detailItem}
-                      className="rounded-lg border border-primary-500/30 bg-primary-500/10 px-3 py-1 text-sm font-medium text-primary-700 dark:text-primary-300"
-                    >
-                      {tech}
-                    </motion.span>
-                  ))}
-                </div>
-
-                {project.githubUrl && (
-                  <motion.a
-                    variants={detailItem}
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group/link mt-6 inline-flex w-fit items-center gap-2 rounded-xl bg-gradient-to-r from-primary-600 to-accent-500 px-5 py-3 font-medium text-white shadow-soft transition-all duration-300 hover:shadow-glow hover:from-primary-500 hover:to-accent-400"
-                  >
-                    <Github size={18} />
-                    View on GitHub
-                    <ArrowUpRight size={16} className="transition-transform duration-300 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
-                  </motion.a>
-                )}
-              </motion.div>
+                  {tech}
+                </span>
+              ))}
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </SpotlightCard>
+      </a>
     </motion.div>
   );
 }
