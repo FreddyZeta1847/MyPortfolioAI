@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Calendar, Briefcase } from 'lucide-react';
@@ -26,6 +26,29 @@ const ARROW_PATH = (() => {
 
 // Node's vertical position as a % of the container, mapped from the wave.
 const nodeYPct = (t: number) => ((TIMELINE_H / 2 - WAVE_AMP * Math.sin(2 * Math.PI * t)) / TIMELINE_H) * 100;
+
+// End-tangent of the wave, in screen degrees. dx/dt is the container's pixel
+// width; dy/dt is -WAVE_AMP*2*PI because the SVG's 160px height matches its
+// 160-unit viewBox 1:1. Computing it (instead of hardcoding) keeps the
+// arrowhead glued to the curve's tip at every breakpoint.
+const headAngleFor = (width: number) =>
+  width ? (Math.atan2(-WAVE_AMP * 2 * Math.PI, width) * 180) / Math.PI : -22;
+
+// Tracks an element's rendered width so the arrowhead can follow the curve.
+function useElementWidth<T extends HTMLElement>() {
+  const ref = useRef<T>(null);
+  const [width, setWidth] = useState(0);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new ResizeObserver(([entry]) => setWidth(entry.contentRect.width));
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return [ref, width] as const;
+}
 
 // ── Company logo with a graceful fallback if the image is missing ───────────
 function Logo({ company, src, size = 'w-12 h-12' }: { company: string; src: string; size?: string }) {
@@ -174,6 +197,7 @@ function TimelineNode({
 
 export default function Experience() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 });
+  const [waveRef, waveWidth] = useElementWidth<HTMLDivElement>();
 
   return (
     <section id="experience" className="section-padding bg-surface-50/80 dark:bg-surface-950/60 transition-colors duration-300">
@@ -182,8 +206,12 @@ export default function Experience() {
 
         {/* ── Desktop: curved time arrow ──────────────────────────────── */}
         <div ref={ref} className="hidden md:block max-w-5xl mx-auto">
-          <div className="relative h-[520px]">
-            {/* Curved arrow (sine wave). Stroke stays 2px despite the stretch. */}
+          <div ref={waveRef} className="relative h-[520px]">
+            {/* Curved arrow (sine wave). No vector-effect here: non-scaling-stroke
+                makes the browser resolve Framer Motion's pathLength dasharray in
+                screen units, which paints a 1px-dash/1px-gap line instead of a
+                solid one. The viewBox stretch is near-uniform, so 2.5px reads
+                as ~2px at every width. */}
             <svg
               viewBox="0 0 1000 160"
               preserveAspectRatio="none"
@@ -199,10 +227,9 @@ export default function Experience() {
                 d={ARROW_PATH}
                 fill="none"
                 stroke="url(#expArrow)"
-                strokeWidth={2}
+                strokeWidth={2.5}
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                vectorEffect="non-scaling-stroke"
                 initial={{ pathLength: 0 }}
                 animate={inView ? { pathLength: 1 } : {}}
                 transition={{ duration: 1.4, ease: 'easeInOut' }}
@@ -212,7 +239,7 @@ export default function Experience() {
                 tilted to follow the curve's gentle descent. */}
             <div
               className="absolute right-0 top-1/2 overflow-visible"
-              style={{ transform: 'translate(3px, -50%) rotate(-22deg)' }}
+              style={{ transform: `translate(3px, -50%) rotate(${headAngleFor(waveWidth)}deg)` }}
             >
               <motion.svg
                 width="14"
