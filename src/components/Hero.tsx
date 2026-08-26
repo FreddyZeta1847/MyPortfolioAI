@@ -3,6 +3,13 @@
  *
  * Landing section: animated name/title, typing effect, CTAs, and social
  * links, plus a decorative terminal card shown on large screens.
+ *
+ * The action row is responsive by design: desktop shows the two text CTAs
+ * ("Get in Touch" / "Download CV") above small icon-only social buttons, while
+ * mobile drops those CTAs and promotes GitHub + LinkedIn to full labelled
+ * buttons, because the 48px icons were too easy to miss on a phone. The CV
+ * stays reachable there via a quiet text link -- Hero is the only place in the
+ * app that links /CV.pdf.
  */
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
@@ -12,6 +19,14 @@ import HeroBackground from './HeroBackground';
 import HeroTerminal from './HeroTerminal';
 import MagneticButton from './MagneticButton';
 import { scrollToElement } from '../utils/scrollTo';
+
+// Shared so the desktop CTAs and the mobile social buttons keep identical
+// weight without duplicating ~200-character class strings.
+const PRIMARY_BTN =
+  'shimmer-btn inline-flex items-center justify-center gap-2 bg-gradient-to-r from-primary-600 to-accent-500 hover:from-primary-500 hover:to-accent-400 text-white px-8 py-3.5 rounded-xl font-medium shadow-glow hover:shadow-glow-lg transition-all duration-300';
+
+const OUTLINE_BTN =
+  'inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-medium border-2 border-surface-200 dark:border-surface-700 text-surface-700 dark:text-surface-300 hover:border-primary-500 dark:hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300';
 
 const typingWords = [
   'Cloud Infrastructures',
@@ -53,7 +68,7 @@ export default function Hero() {
       {/* Animated background */}
       <HeroBackground />
 
-      <div className="container mx-auto px-4 md:pl-10 md:pr-6 relative z-10">
+      <div className="mx-auto w-full max-w-[1800px] px-4 md:pl-6 md:pr-6 relative z-10">
         <motion.div
           style={{ y: contentY, opacity: contentOpacity }}
           className="flex items-center justify-between gap-12 pt-20"
@@ -126,36 +141,65 @@ export default function Hero() {
             software development, AI research, and building scalable applications.
           </motion.p>
 
-          {/* CTAs */}
+          {/* CTAs -- desktop only; mobile promotes the social links instead */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2 }}
-            className="flex flex-wrap items-center justify-start gap-4 mb-10"
+            className="hidden md:flex flex-wrap items-center justify-start gap-4 mb-10"
           >
-            <a
-              href="mailto:santinifederico06@gmail.com"
-              className="shimmer-btn inline-flex items-center gap-2 bg-gradient-to-r from-primary-600 to-accent-500 hover:from-primary-500 hover:to-accent-400 text-white px-8 py-3.5 rounded-xl font-medium shadow-glow hover:shadow-glow-lg transition-all duration-300"
-            >
+            <a href="mailto:santinifederico06@gmail.com" className={PRIMARY_BTN}>
               <Mail size={18} />
               Get in Touch
             </a>
-            <a
-              href="/CV.pdf"
-              download
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-medium border-2 border-surface-200 dark:border-surface-700 text-surface-700 dark:text-surface-300 hover:border-primary-500 dark:hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300"
-            >
+            <a href="/CV.pdf" download className={OUTLINE_BTN}>
               <Download size={18} />
               Download CV
             </a>
           </motion.div>
 
-          {/* Social links */}
+          {/* Mobile action row -- GitHub and LinkedIn as the primary buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2 }}
+            className="flex flex-col items-stretch gap-3 md:hidden"
+          >
+            <a
+              href="https://github.com/FreddyZeta1847"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={PRIMARY_BTN}
+            >
+              <Github size={18} />
+              GitHub
+            </a>
+            <a
+              href="https://www.linkedin.com/in/federico-santini"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={OUTLINE_BTN}
+            >
+              <Linkedin size={18} />
+              LinkedIn
+            </a>
+            {/* Hero is the app's only /CV.pdf link, so keep a quiet way in. */}
+            <a
+              href="/CV.pdf"
+              download
+              className="inline-flex items-center justify-center gap-1.5 pt-1 text-sm text-surface-500 underline underline-offset-4 dark:text-surface-400"
+            >
+              <Download size={14} />
+              Download CV
+            </a>
+          </motion.div>
+
+          {/* Social links -- desktop only (mobile uses the labelled row above) */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.4 }}
-            className="flex items-center justify-start gap-4"
+            className="hidden md:flex items-center justify-start gap-4"
           >
             <MagneticButton
               href="https://github.com/FreddyZeta1847"
