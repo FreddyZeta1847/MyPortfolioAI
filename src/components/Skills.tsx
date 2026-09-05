@@ -27,26 +27,14 @@ function SkillPill({ name }: { name: string }) {
   const IconComp = skillIconMap[name];
   const featured = FEATURED.has(name.toLowerCase());
 
-  if (featured) {
-    return (
-      <motion.span
-        whileHover={{ y: -3 }}
-        className="relative inline-flex p-[1.5px] rounded-xl bg-gradient-to-br from-primary-400 via-fuchsia-400 to-accent-400 shadow-glow cursor-default"
-      >
-        <span className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-[10px] bg-surface-50 dark:bg-surface-900 text-sm font-semibold text-primary-700 dark:text-primary-300 overflow-hidden">
-          {IconComp && <IconComp className="text-[0.95em]" />}
-          {name}
-          {/* sheen sweep */}
-          <span className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-white/60 to-transparent animate-shine" />
-        </span>
-      </motion.span>
-    );
-  }
-
   return (
     <motion.span
-      whileHover={{ y: -3 }}
-      className="inline-flex items-center gap-1.5 glass px-3 py-1.5 rounded-xl text-sm font-medium text-surface-700 dark:text-surface-200 hover:shadow-glow hover:text-primary-600 dark:hover:text-primary-400 transition-all cursor-default"
+      whileHover={{ y: -2 }}
+      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+        featured
+          ? 'bg-gradient-to-r from-primary-600 to-primary-700 text-white shadow-accent-glow'
+          : 'border border-surface-300 dark:border-surface-700 text-surface-700 dark:text-surface-300 hover:border-primary-600 dark:hover:border-primary-500'
+      }`}
     >
       {IconComp && <IconComp className="text-[0.95em]" />}
       {name}
@@ -73,22 +61,22 @@ function BentoTile({
     <motion.div
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay, ease: [0.25, 0.46, 0.45, 0.94] }}
+      transition={{ duration: 0.5, delay, ease: 'easeOut' }}
       className={className}
     >
-      <SpotlightCard className="glass rounded-2xl p-6 shadow-soft h-full">
+      <div className="glass rounded-lg p-6 shadow-soft h-full bg-surface-50/50 dark:bg-surface-900/50">
         <div className="flex items-center gap-2.5 mb-4">
-          <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary-500/10 text-primary-600 dark:text-primary-400">
+          <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary-500/15 text-primary-600 dark:text-primary-500">
             <Icon size={16} />
           </span>
-          <h3 className="font-display font-semibold text-surface-800 dark:text-white">{label}</h3>
+          <h3 className="font-semibold text-surface-800 dark:text-white">{label}</h3>
         </div>
         <div className="flex flex-wrap gap-2">
           {items.map((item) => (
             <SkillPill key={item} name={item} />
           ))}
         </div>
-      </SpotlightCard>
+      </div>
     </motion.div>
   );
 }
@@ -113,15 +101,15 @@ export default function Skills() {
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
             className="md:col-span-2 lg:row-span-2"
           >
-            <SpotlightCard className="glass rounded-2xl p-6 md:p-8 shadow-soft h-full flex flex-col justify-center">
+            <div className="glass rounded-lg p-6 md:p-8 shadow-soft h-full flex flex-col justify-center bg-surface-50/50 dark:bg-surface-900/50">
               <SkillRadar />
-              <p className="text-center text-sm text-surface-500 dark:text-surface-400 mt-2">
-                Strength across the domains I work in.
+              <p className="text-center text-sm text-surface-500 dark:text-surface-400 mt-4">
+                Proficiency across key technical domains.
               </p>
-            </SpotlightCard>
+            </div>
           </motion.div>
 
           <BentoTile

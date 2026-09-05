@@ -1,14 +1,21 @@
 /**
- * Fixed full-viewport aurora mesh: three giant blurred orbs drifting on
- * transform-only keyframes. Sits behind every section (sections use
- * semi-transparent backgrounds so the glow bleeds through).
+ * Minimal background: subtle dot grid with a single accent glow in the corner.
  */
 export default function AuroraBackground() {
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none" aria-hidden="true">
-      <div className="aurora-glow w-[60vw] h-[60vw] -top-[15vw] -left-[10vw] bg-primary-600/10 dark:bg-primary-600/25 animate-aurora will-change-transform" />
-      <div className="aurora-glow w-[50vw] h-[50vw] -bottom-[10vw] -right-[10vw] bg-accent-500/[0.07] dark:bg-accent-500/15 animate-aurora-slow will-change-transform" />
-      <div className="aurora-glow w-[45vw] h-[45vw] top-[30%] left-[25%] bg-primary-900/5 dark:bg-primary-900/30" />
+      {/* Subtle dot grid */}
+      <svg className="absolute inset-0 w-full h-full opacity-5 dark:opacity-8">
+        <defs>
+          <pattern id="dots" width="40" height="40" patternUnits="userSpaceOnUse">
+            <circle cx="20" cy="20" r="1" fill="currentColor" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#dots)" />
+      </svg>
+
+      {/* Single subtle accent glow (bottom right, very faint) */}
+      <div className="absolute -bottom-40 -right-40 w-80 h-80 rounded-full bg-gradient-radial from-accent-500/15 to-transparent blur-3xl dark:from-accent-600/20" />
     </div>
   );
 }

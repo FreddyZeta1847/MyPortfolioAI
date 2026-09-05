@@ -6,28 +6,30 @@ export default {
     extend: {
       colors: {
         primary: {
-          50: '#f5f3ff',
-          100: '#ede9fe',
-          200: '#ddd6fe',
-          300: '#c4b5fd',
-          400: '#a78bfa',
-          500: '#8b5cf6',
-          600: '#7c3aed',
-          700: '#6d28d9',
-          800: '#5b21b6',
-          900: '#4c1d95',
+          // Deep teal-green inspired by Milan tech scene
+          50: '#f0f9f8',
+          100: '#d9eff0',
+          200: '#b3dfe1',
+          300: '#8ccfd2',
+          400: '#5ebab5',
+          500: '#2fa89f',
+          600: '#1f8b84',
+          700: '#15736f',
+          800: '#0f5b5a',
+          900: '#0a4342',
         },
         accent: {
-          50: '#ecfeff',
-          100: '#cffafe',
-          200: '#a5f3fc',
-          300: '#67e8f9',
-          400: '#22d3ee',
-          500: '#06b6d4',
-          600: '#0891b2',
-          700: '#0e7490',
-          800: '#155e75',
-          900: '#164e63',
+          // Warm rust/terracotta Italian earth tones
+          50: '#fef6f3',
+          100: '#fce8e1',
+          200: '#f8d4c5',
+          300: '#f4b8a0',
+          400: '#e89875',
+          500: '#d97546',
+          600: '#c85c2e',
+          700: '#a83d1e',
+          800: '#8a2f17',
+          900: '#6b1e0f',
         },
         surface: {
           50: '#e9e7f1',
@@ -45,53 +47,21 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+        display: ['Inter', 'system-ui', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'monospace'],
       },
       boxShadow: {
-        'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
-        'glass': '0 8px 32px rgba(0, 0, 0, 0.08)',
-        'glow': '0 0 20px rgba(139, 92, 246, 0.35)',
-        'glow-lg': '0 0 40px rgba(139, 92, 246, 0.25)',
-        'glow-cyan': '0 0 20px rgba(34, 211, 238, 0.3)',
+        'soft': '0 2px 8px rgba(0, 0, 0, 0.06)',
+        'glass': '0 4px 16px rgba(0, 0, 0, 0.08)',
+        'accent-glow': '0 0 16px rgba(217, 117, 70, 0.25)',
       },
       animation: {
-        'shimmer': 'shimmer 2s linear infinite',
-        'shine': 'shine 3.5s ease-in-out infinite',
-        'float': 'float 6s ease-in-out infinite',
-        'pulse-slow': 'pulse 3s ease-in-out infinite',
-        'gradient': 'gradient 8s ease infinite',
-        'bounce-slow': 'bounce 2s ease-in-out infinite',
         'marquee': 'marquee 30s linear infinite',
-        'aurora': 'aurora 18s ease-in-out infinite',
-        'aurora-slow': 'aurora 26s ease-in-out infinite reverse',
       },
       keyframes: {
-        shimmer: {
-          '0%': { transform: 'translateX(-100%)' },
-          '100%': { transform: 'translateX(100%)' },
-        },
-        shine: {
-          '0%': { transform: 'translateX(-120%) skewX(-12deg)' },
-          '60%, 100%': { transform: 'translateX(320%) skewX(-12deg)' },
-        },
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-20px)' },
-        },
-        gradient: {
-          '0%, 100%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
-        },
-        // Shifts exactly one list copy; the band renders 4 copies so one list
-        // width always exceeds any viewport overhang (seamless on wide screens).
         marquee: {
           '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-25%)' },
-        },
-        aurora: {
-          '0%, 100%': { transform: 'translate(0, 0) scale(1)' },
-          '50%': { transform: 'translate(60px, -40px) scale(1.15)' },
         },
       },
     },

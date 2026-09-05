@@ -14,45 +14,26 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { Github, Linkedin, Mail, ChevronDown, Download } from 'lucide-react';
-import TypingEffect from './TypingEffect';
 import HeroBackground from './HeroBackground';
 import HeroTerminal from './HeroTerminal';
-import MagneticButton from './MagneticButton';
 import { scrollToElement } from '../utils/scrollTo';
 
-// Shared so the desktop CTAs and the mobile social buttons keep identical
-// weight without duplicating ~200-character class strings.
 const PRIMARY_BTN =
-  'shimmer-btn inline-flex items-center justify-center gap-2 bg-gradient-to-r from-primary-600 to-accent-500 hover:from-primary-500 hover:to-accent-400 text-white px-8 py-3.5 rounded-xl font-medium shadow-glow hover:shadow-glow-lg transition-all duration-300';
+  'inline-flex items-center justify-center gap-2 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white px-8 py-3.5 rounded-lg font-medium shadow-soft hover:shadow-accent-glow transition-all duration-200';
 
 const OUTLINE_BTN =
-  'inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-medium border-2 border-surface-200 dark:border-surface-700 text-surface-700 dark:text-surface-300 hover:border-primary-500 dark:hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300';
+  'inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-lg font-medium border border-surface-300 dark:border-surface-600 text-surface-700 dark:text-surface-300 hover:border-primary-600 dark:hover:border-primary-500 hover:bg-surface-100 dark:hover:bg-surface-800 transition-all duration-200';
 
-const typingWords = [
-  'Cloud Infrastructures',
-  'Scalable Software',
-  'AI Solutions',
-  'Game Prototypes',
-];
-
-const wordAnimation = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.08 },
-  },
-};
-
-const letterAnimation = {
-  hidden: { opacity: 0, y: 50 },
-  visible: {
+const nameAnimation = {
+  hidden: { opacity: 0, x: -20 },
+  visible: (delay: number) => ({
     opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
-  },
+    x: 0,
+    transition: { duration: 0.7, delay, ease: 'easeOut' },
+  }),
 };
 
 export default function Hero() {
-  const nameWords = ['Federico', 'Santini'];
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
@@ -78,74 +59,67 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8"
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-accent-500/30 bg-accent-500/5 mb-8"
           >
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500" />
-            </span>
+            <span className="w-2 h-2 rounded-full bg-accent-500" />
             <span className="text-sm font-medium text-surface-600 dark:text-surface-300">
-              Available for opportunities
+              Open to collaborate
             </span>
           </motion.div>
 
-          {/* Name with staggered animation */}
-          <motion.h1
-            className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6 flex flex-wrap gap-x-4"
-            variants={wordAnimation}
-            initial="hidden"
-            animate="visible"
-          >
-            {nameWords.map((word, wi) => (
-              <span key={wi} className="inline-block">
-                {word.split('').map((letter, li) => (
-                  <motion.span
-                    key={li}
-                    variants={letterAnimation}
-                    className={
-                      wi === 1
-                        ? 'gradient-text'
-                        : 'text-surface-800 dark:text-white'
-                    }
-                  >
-                    {letter}
-                  </motion.span>
-                ))}
-              </span>
-            ))}
-          </motion.h1>
+          {/* Name */}
+          <div className="mb-6 flex flex-wrap gap-x-4">
+            <motion.h1
+              custom={0}
+              variants={nameAnimation}
+              initial="hidden"
+              animate="visible"
+              className="text-5xl md:text-7xl lg:text-8xl font-bold text-surface-900 dark:text-white"
+            >
+              Federico
+            </motion.h1>
+            <motion.h1
+              custom={0.15}
+              variants={nameAnimation}
+              initial="hidden"
+              animate="visible"
+              className="text-5xl md:text-7xl lg:text-8xl font-bold text-primary-600 dark:text-primary-500"
+            >
+              Santini
+            </motion.h1>
+          </div>
 
-          {/* Typing effect */}
+          {/* Tagline */}
           <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className="text-xl md:text-2xl text-surface-500 dark:text-surface-400 mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+            className="text-lg md:text-xl text-surface-600 dark:text-surface-400 mb-6"
           >
             I build{' '}
-            <TypingEffect
-              words={typingWords}
-              className="text-accent-500 dark:text-accent-400 font-semibold"
-            />
+            <span className="text-primary-600 dark:text-primary-500 font-semibold">
+              scalable cloud solutions
+            </span>
+            {' '}— from AI research to production infrastructure.
           </motion.p>
 
           {/* Description */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1 }}
-            className="text-lg text-surface-500 dark:text-surface-400 max-w-2xl mb-10 leading-relaxed"
+            transition={{ delay: 0.6, duration: 0.6 }}
+            className="text-base text-surface-600 dark:text-surface-400 max-w-2xl mb-12 leading-relaxed"
           >
-            Computer Engineering student at Politecnico di Milano with a passion for
-            software development, AI research, and building scalable applications.
+            Computer Engineering student at Politecnico di Milano. Passionate about software architecture,
+            distributed systems, and leveraging AI to solve real problems.
           </motion.p>
 
           {/* CTAs -- desktop only; mobile promotes the social links instead */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
             className="hidden md:flex flex-wrap items-center justify-start gap-4 mb-10"
           >
             <a href="mailto:santinifederico06@gmail.com" className={PRIMARY_BTN}>
@@ -162,7 +136,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
             className="flex flex-col items-stretch gap-3 md:hidden"
           >
             <a
@@ -183,7 +157,6 @@ export default function Hero() {
               <Linkedin size={18} />
               LinkedIn
             </a>
-            {/* Hero is the app's only /CV.pdf link, so keep a quiet way in. */}
             <a
               href="/CV.pdf"
               download
@@ -198,27 +171,27 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1.4 }}
+            transition={{ delay: 1, duration: 0.6 }}
             className="hidden md:flex items-center justify-start gap-4"
           >
-            <MagneticButton
+            <a
               href="https://github.com/FreddyZeta1847"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub"
-              className="flex items-center justify-center w-12 h-12 rounded-xl bg-surface-100 dark:bg-surface-800 hover:bg-surface-800 dark:hover:bg-surface-700 text-surface-600 hover:text-white dark:text-surface-300 transition-all duration-300"
+              className="flex items-center justify-center w-11 h-11 rounded-lg border border-surface-300 dark:border-surface-700 text-surface-600 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-800 hover:text-primary-600 dark:hover:text-primary-500 transition-all duration-200"
             >
-              <Github size={20} />
-            </MagneticButton>
-            <MagneticButton
+              <Github size={18} />
+            </a>
+            <a
               href="https://www.linkedin.com/in/federico-santini"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
-              className="flex items-center justify-center w-12 h-12 rounded-xl bg-surface-100 dark:bg-surface-800 hover:bg-[#0077B5] text-surface-600 hover:text-white dark:text-surface-300 transition-all duration-300"
+              className="flex items-center justify-center w-11 h-11 rounded-lg border border-surface-300 dark:border-surface-700 text-surface-600 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-800 hover:text-primary-600 dark:hover:text-primary-500 transition-all duration-200"
             >
-              <Linkedin size={20} />
-            </MagneticButton>
+              <Linkedin size={18} />
+            </a>
           </motion.div>
         </div>
 

@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { Mail, Phone, Github, Linkedin, MapPin, Copy } from 'lucide-react';
-import MagneticButton from './MagneticButton';
 
 const EMAIL = 'santinifederico06@gmail.com';
 
@@ -40,51 +39,47 @@ export default function Contact() {
           viewport={{ once: true, amount: 0.3 }}
           className="relative max-w-3xl mx-auto text-center"
         >
-          {/* Ambient glow */}
-          <div className="aurora-glow w-96 h-96 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary-500/10 dark:bg-primary-600/20" />
-
           <motion.p
             variants={reveal}
             custom={0}
-            className="relative font-mono text-xs tracking-[0.3em] text-accent-600 dark:text-accent-400 uppercase mb-6"
+            className="relative text-xs tracking-widest uppercase text-primary-600 dark:text-primary-500 mb-4"
           >
-            05 / Contact
+            Get in Touch
           </motion.p>
 
           <motion.h2
             variants={reveal}
             custom={0.1}
-            className="relative font-display text-4xl md:text-6xl font-bold text-surface-800 dark:text-white mb-6 leading-tight"
+            className="relative text-4xl md:text-5xl font-bold text-surface-900 dark:text-white mb-6 leading-tight"
           >
-            Let&apos;s build <span className="gradient-text">something.</span>
+            Let&apos;s <span className="text-primary-600 dark:text-primary-500">build something</span> together.
           </motion.h2>
 
           <motion.p
             variants={reveal}
             custom={0.2}
-            className="relative text-surface-600 dark:text-surface-400 max-w-xl mx-auto mb-10 text-lg"
+            className="relative text-surface-600 dark:text-surface-400 max-w-xl mx-auto mb-10"
           >
-            Whether you&apos;d like to collaborate, discuss an opportunity, or simply connect about
-            technology, feel free to reach out!
+            Open to collaborations and interesting projects. Reach out and let&apos;s connect.
           </motion.p>
 
           {/* Email CTA + copy */}
           <motion.div
             variants={reveal}
             custom={0.3}
-            className="relative flex flex-wrap items-center justify-center gap-3 mb-10"
+            className="relative flex flex-wrap items-center justify-center gap-2 mb-10"
           >
-            <MagneticButton
+            <a
               href={`mailto:${EMAIL}`}
-              className="shimmer-btn inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-primary-600 to-accent-500 hover:from-primary-500 hover:to-accent-400 text-white font-medium rounded-xl transition-all duration-300 shadow-glow hover:shadow-glow-lg"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-medium rounded-lg shadow-soft hover:shadow-accent-glow transition-all duration-200"
             >
-              <Mail size={20} />
+              <Mail size={18} />
               {EMAIL}
-            </MagneticButton>
+            </a>
             <button
               onClick={copyEmail}
               aria-label="Copy email address"
-              className="inline-flex items-center gap-2 px-4 py-4 glass rounded-xl text-surface-600 dark:text-surface-300 hover:text-accent-600 dark:hover:text-accent-400 hover:shadow-glow-cyan transition-all duration-300"
+              className="inline-flex items-center gap-2 px-4 py-3 border border-surface-300 dark:border-surface-700 rounded-lg text-surface-600 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-800 transition-all duration-200"
             >
               <Copy size={18} />
             </button>
@@ -94,12 +89,12 @@ export default function Contact() {
           <motion.div
             variants={reveal}
             custom={0.4}
-            className="relative flex flex-wrap items-center justify-center gap-3"
+            className="relative flex flex-wrap items-center justify-center gap-2"
           >
             {detailChips.map(({ icon: Icon, label, href }) => {
               const content = (
                 <>
-                  <Icon size={15} className="text-primary-500 dark:text-primary-400" />
+                  <Icon size={14} className="text-primary-600 dark:text-primary-500" />
                   <span className="text-sm font-medium">{label}</span>
                 </>
               );
@@ -108,14 +103,14 @@ export default function Contact() {
                   key={label}
                   href={href}
                   {...(href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                  className="inline-flex items-center gap-2 glass px-4 py-2.5 rounded-full text-surface-700 dark:text-surface-200 hover:shadow-glow hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300"
+                  className="inline-flex items-center gap-2 px-3 py-2 border border-surface-300 dark:border-surface-700 rounded-lg text-surface-700 dark:text-surface-300 hover:border-primary-600 dark:hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-500 transition-all duration-200"
                 >
                   {content}
                 </a>
               ) : (
                 <span
                   key={label}
-                  className="inline-flex items-center gap-2 glass px-4 py-2.5 rounded-full text-surface-700 dark:text-surface-200"
+                  className="inline-flex items-center gap-2 px-3 py-2 border border-surface-300 dark:border-surface-700 rounded-lg text-surface-700 dark:text-surface-300"
                 >
                   {content}
                 </span>
