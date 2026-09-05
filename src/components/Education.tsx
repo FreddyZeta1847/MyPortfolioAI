@@ -16,7 +16,7 @@ export default function Education() {
   return (
     <section id="education" className="section-padding bg-primary-100/40 dark:bg-surface-900/50 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
-        <SectionHeader kicker="01 / Education" title="Education" />
+        <SectionHeader kicker="Education" title="Education" />
 
         <div ref={ref} className="max-w-3xl mx-auto space-y-6">
           {education.map((item, index) => (

@@ -109,7 +109,7 @@ export default function MoreBuilds() {
             <button
               onClick={() => setOpen((o) => !o)}
               aria-expanded={open}
-              className="inline-flex items-center gap-2 glass px-6 py-3 rounded-full text-sm font-medium text-surface-700 dark:text-surface-200 hover:shadow-glow hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300"
+              className="inline-flex items-center gap-2 glass px-6 py-3 rounded-full text-sm font-medium text-surface-700 dark:text-surface-200 hover:shadow-accent-glow hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300"
             >
               {open ? 'Show less' : `Show more builds (${repos.length})`}
               <ChevronDown
@@ -126,7 +126,7 @@ export default function MoreBuilds() {
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+                transition={{ duration: 0.4, ease: 'easeOut' }}
                 className="overflow-hidden"
               >
                 <div className="border-t border-surface-200 dark:border-white/[0.06]">

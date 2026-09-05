@@ -26,7 +26,7 @@ export default function Navbar() {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
       className={`fixed w-full z-50 transition-all duration-500 ${
         scrolled
           ? 'glass-strong shadow-glass py-3'
@@ -38,7 +38,7 @@ export default function Navbar() {
           {/* Logo */}
           <button
             onClick={() => handleNavClick('hero')}
-            className="font-display text-xl font-bold gradient-text hover:opacity-80 transition-opacity"
+            className="font-display text-xl font-bold text-primary-600 dark:text-primary-500 hover:opacity-80 transition-opacity"
           >
             FS.
           </button>

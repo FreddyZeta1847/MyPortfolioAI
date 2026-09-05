@@ -48,8 +48,8 @@ export default function SkillRadar() {
       <svg viewBox={`0 0 ${SIZE} ${SIZE - 20}`} className="w-full h-auto overflow-visible">
         <defs>
           <linearGradient id="radarFill" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#8b5cf6" />
-            <stop offset="100%" stopColor="#22d3ee" />
+            <stop offset="0%" stopColor="#2fa89f" />
+            <stop offset="100%" stopColor="#d97546" />
           </linearGradient>
         </defs>
 
@@ -120,7 +120,7 @@ export default function SkillRadar() {
                 cx={x}
                 cy={y}
                 r={3.5}
-                fill="#a78bfa"
+                fill="#d97546"
                 strokeWidth={1.5}
                 className="stroke-white dark:stroke-surface-950"
               />

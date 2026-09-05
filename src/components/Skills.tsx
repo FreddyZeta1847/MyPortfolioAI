@@ -90,7 +90,7 @@ export default function Skills() {
     <section id="skills" className="section-padding bg-primary-100/40 dark:bg-surface-900/50 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeader
-          kicker="03 / Skills"
+          kicker="Skills"
           title="Skills & Technologies"
           subtitle="A snapshot of where my strengths lie, and the tools I reach for. I keep this current through courses and personal projects."
         />

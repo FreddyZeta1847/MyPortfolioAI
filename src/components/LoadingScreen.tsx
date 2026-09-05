@@ -27,12 +27,12 @@ export default function LoadingScreen() {
             width="80"
             height="80"
             viewBox="0 0 80 80"
-            style={{ filter: 'drop-shadow(0 0 12px rgba(139, 92, 246, 0.5))' }}
+            style={{ filter: 'drop-shadow(0 0 12px rgba(47, 168, 159, 0.5))' }}
           >
             <defs>
               <linearGradient id="fsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#8b5cf6" />
-                <stop offset="100%" stopColor="#22d3ee" />
+                <stop offset="0%" stopColor="#2fa89f" />
+                <stop offset="100%" stopColor="#d97546" />
               </linearGradient>
             </defs>
             {/* F */}

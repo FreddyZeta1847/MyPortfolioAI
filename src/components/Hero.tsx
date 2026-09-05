@@ -15,7 +15,6 @@ import { useRef } from 'react';
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { Github, Linkedin, Mail, ChevronDown, Download } from 'lucide-react';
 import HeroBackground from './HeroBackground';
-import HeroTerminal from './HeroTerminal';
 import { scrollToElement } from '../utils/scrollTo';
 
 const PRIMARY_BTN =
@@ -52,7 +51,7 @@ export default function Hero() {
       <div className="mx-auto w-full max-w-[1800px] px-4 md:pl-6 md:pr-6 relative z-10">
         <motion.div
           style={{ y: contentY, opacity: contentOpacity }}
-          className="flex items-center justify-between gap-12 pt-20"
+          className="flex items-center justify-start gap-12 pt-20"
         >
         <div className="max-w-4xl text-left">
           {/* Status badge */}
@@ -64,7 +63,7 @@ export default function Hero() {
           >
             <span className="w-2 h-2 rounded-full bg-accent-500" />
             <span className="text-sm font-medium text-surface-600 dark:text-surface-300">
-              Open to collaborate
+              Open to internships & collaborations
             </span>
           </motion.div>
 
@@ -108,18 +107,18 @@ export default function Hero() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.6 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
             className="text-base text-surface-600 dark:text-surface-400 max-w-2xl mb-12 leading-relaxed"
           >
-            Computer Engineering student at Politecnico di Milano. Passionate about software architecture,
-            distributed systems, and leveraging AI to solve real problems.
+            Computer Engineering student at Politecnico di Milano. I build voice assistants,
+            computer-vision tools, and agentic AI systems — and I like shipping things people actually use.
           </motion.p>
 
           {/* CTAs -- desktop only; mobile promotes the social links instead */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.6 }}
+            transition={{ delay: 0.6, duration: 0.6 }}
             className="hidden md:flex flex-wrap items-center justify-start gap-4 mb-10"
           >
             <a href="mailto:santinifederico06@gmail.com" className={PRIMARY_BTN}>
@@ -136,7 +135,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.6 }}
+            transition={{ delay: 0.6, duration: 0.6 }}
             className="flex flex-col items-stretch gap-3 md:hidden"
           >
             <a
@@ -171,7 +170,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1, duration: 0.6 }}
+            transition={{ delay: 0.7, duration: 0.6 }}
             className="hidden md:flex items-center justify-start gap-4"
           >
             <a
@@ -194,11 +193,6 @@ export default function Hero() {
             </a>
           </motion.div>
         </div>
-
-        {/* Terminal card (decorative, lg+ only) */}
-        <div className="hidden lg:block shrink-0 pr-4">
-          <HeroTerminal />
-        </div>
         </motion.div>
       </div>
 
@@ -206,7 +200,7 @@ export default function Hero() {
       <motion.button
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
+        transition={{ delay: 1.0 }}
         onClick={() => scrollToElement('education')}
         className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-surface-400 dark:text-surface-500 hover:text-primary-500 transition-colors"
         aria-label="Scroll to content"

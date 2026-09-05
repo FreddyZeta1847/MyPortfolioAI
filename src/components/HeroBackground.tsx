@@ -47,8 +47,8 @@ export default function HeroBackground() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const isDark = document.documentElement.classList.contains('dark');
-      const color = isDark ? '167, 139, 250' : '124, 58, 237';
-      const accent = isDark ? '34, 211, 238' : '6, 182, 212';
+      const color = isDark ? '47, 168, 159' : '31, 139, 132';
+      const accent = isDark ? '217, 117, 70' : '200, 92, 46';
 
       const rendered = particles.map((p) => {
         // Drift + wrap (base position)

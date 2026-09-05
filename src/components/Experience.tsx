@@ -55,7 +55,7 @@ function Logo({ company, src, size = 'w-12 h-12' }: { company: string; src: stri
   const [failed, setFailed] = useState(false);
   return (
     <div
-      className={`flex-shrink-0 ${size} rounded-xl overflow-hidden shadow-glow ring-2 ring-primary-500/20 bg-gradient-to-br from-primary-500 to-accent-400 flex items-center justify-center`}
+      className={`flex-shrink-0 ${size} rounded-xl overflow-hidden shadow-soft ring-2 ring-primary-500/20 bg-gradient-to-br from-primary-500 to-accent-400 flex items-center justify-center`}
     >
       {failed ? (
         <span className="text-white font-display font-bold text-lg">{company.charAt(0)}</span>
@@ -153,7 +153,7 @@ function TimelineNode({
         initial={{ scaleY: 0 }}
         animate={inView ? { scaleY: 1 } : {}}
         transition={{ duration: 0.4, delay }}
-        className={`absolute w-0.5 h-7 bg-surface-300 dark:bg-surface-700 ${above ? 'origin-bottom' : 'origin-top'}`}
+        className={`absolute w-0.5 h-7 bg-surface-300 dark:bg-surface-700 shadow-soft ${above ? 'origin-bottom' : 'origin-top'}`}
         style={{
           left: `${pos}%`,
           top: above ? `calc(${yPct}% - 28px)` : `${yPct}%`,
@@ -167,7 +167,7 @@ function TimelineNode({
         animate={inView ? { scale: 1 } : {}}
         transition={{ duration: 0.4, delay: delay + 0.1, type: 'spring' }}
         className={`absolute w-4 h-4 rounded-full ring-4 ring-surface-50 dark:ring-surface-950 z-10 transition-colors duration-300 ${
-          expanded ? 'bg-accent-400 shadow-glow-cyan' : 'bg-primary-500'
+          expanded ? 'bg-accent-400 shadow-accent-glow' : 'bg-primary-500'
         }`}
         style={{ left: `${pos}%`, top: `${yPct}%`, transform: 'translate(-50%, -50%)' }}
       />
@@ -180,7 +180,7 @@ function TimelineNode({
         onHoverStart={() => setHovered(true)}
         onHoverEnd={() => setHovered(false)}
         onClick={() => setPinned((p) => !p)}
-        className="absolute w-60 glass rounded-xl p-4 shadow-soft hover:shadow-glow transition-shadow duration-300 z-20 cursor-pointer"
+        className="absolute w-60 glass rounded-xl p-4 shadow-soft hover:shadow-accent-glow transition-shadow duration-300 z-20 cursor-pointer"
         style={{
           left: `${pos}%`,
           ...(above
@@ -202,7 +202,7 @@ export default function Experience() {
   return (
     <section id="experience" className="section-padding bg-surface-50/80 dark:bg-surface-950/60 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
-        <SectionHeader kicker="02 / Experience" title="Work Experience" />
+        <SectionHeader kicker="Experience" title="Work Experience" />
 
         {/* ── Desktop: curved time arrow ──────────────────────────────── */}
         <div ref={ref} className="hidden md:block max-w-5xl mx-auto">
@@ -219,8 +219,8 @@ export default function Experience() {
             >
               <defs>
                 <linearGradient id="expArrow" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#8b5cf6" />
-                  <stop offset="100%" stopColor="#22d3ee" />
+                  <stop offset="0%" stopColor="#2fa89f" />
+                  <stop offset="100%" stopColor="#d97546" />
                 </linearGradient>
               </defs>
               <motion.path
@@ -250,7 +250,7 @@ export default function Experience() {
                 animate={inView ? { opacity: 1, scale: 1 } : {}}
                 transition={{ duration: 0.4, delay: 1.1, type: 'spring' }}
               >
-                <polygon points="0,0 14,6 0,12" fill="#22d3ee" />
+                <polygon points="0,0 14,6 0,12" fill="#d97546" />
               </motion.svg>
             </div>
 

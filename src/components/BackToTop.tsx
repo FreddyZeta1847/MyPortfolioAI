@@ -26,7 +26,7 @@ export default function BackToTop() {
             if (lenis) lenis.scrollTo(0);
             else window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
-          className="fixed bottom-8 right-8 z-50 p-3 rounded-full glass text-primary-500 dark:text-primary-400 hover:shadow-glow transition-shadow"
+          className="fixed bottom-8 right-8 z-50 p-3 rounded-full glass text-primary-500 dark:text-primary-400 hover:shadow-accent-glow transition-shadow"
           aria-label="Back to top"
         >
           <ArrowUp size={20} />

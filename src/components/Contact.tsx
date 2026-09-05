@@ -9,7 +9,7 @@ const reveal = {
   visible: (delay: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, delay, ease: [0.25, 0.46, 0.45, 0.94] as const },
+    transition: { duration: 0.6, delay, ease: 'easeOut' as const },
   }),
 };
 
@@ -44,7 +44,7 @@ export default function Contact() {
             custom={0}
             className="relative text-xs tracking-widest uppercase text-primary-600 dark:text-primary-500 mb-4"
           >
-            Get in Touch
+            Contact
           </motion.p>
 
           <motion.h2
@@ -52,7 +52,7 @@ export default function Contact() {
             custom={0.1}
             className="relative text-4xl md:text-5xl font-bold text-surface-900 dark:text-white mb-6 leading-tight"
           >
-            Let&apos;s <span className="text-primary-600 dark:text-primary-500">build something</span> together.
+            Got a <span className="text-primary-600 dark:text-primary-500">project</span> — or just a question?
           </motion.h2>
 
           <motion.p
@@ -60,7 +60,7 @@ export default function Contact() {
             custom={0.2}
             className="relative text-surface-600 dark:text-surface-400 max-w-xl mx-auto mb-10"
           >
-            Open to collaborations and interesting projects. Reach out and let&apos;s connect.
+            Whether it&apos;s an internship, a project, or a technical question — my inbox is open.
           </motion.p>
 
           {/* Email CTA + copy */}

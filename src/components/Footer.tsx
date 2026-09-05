@@ -14,11 +14,11 @@ export default function Footer() {
         <div className="grid md:grid-cols-3 gap-12 mb-12">
           {/* Brand */}
           <div>
-            <h2 className="font-display text-2xl font-bold gradient-text mb-3">
+            <h2 className="font-display text-2xl font-bold text-primary-600 dark:text-primary-500 mb-3">
               Federico Santini
             </h2>
             <p className="text-surface-400 text-sm leading-relaxed max-w-xs">
-              Computer Engineering student at Politecnico di Milano. Passionate about building scalable software and AI solutions.
+              Computer Engineering @ Politecnico di Milano. Building AI tools, one repo at a time.
             </p>
           </div>
 
