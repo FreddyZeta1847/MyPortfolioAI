@@ -166,7 +166,7 @@ function TimelineNode({
         initial={{ scale: 0 }}
         animate={inView ? { scale: 1 } : {}}
         transition={{ duration: 0.4, delay: delay + 0.1, type: 'spring' }}
-        className={`absolute w-4 h-4 rounded-full ring-4 ring-surface-50 dark:ring-surface-950 z-10 transition-colors duration-300 ${
+        className={`absolute w-4 h-4 rounded-full ring-4 ring-white dark:ring-surface-950 z-10 transition-colors duration-300 ${
           expanded ? 'bg-accent-400 shadow-accent-glow' : 'bg-primary-500'
         }`}
         style={{ left: `${pos}%`, top: `${yPct}%`, transform: 'translate(-50%, -50%)' }}
@@ -180,7 +180,7 @@ function TimelineNode({
         onHoverStart={() => setHovered(true)}
         onHoverEnd={() => setHovered(false)}
         onClick={() => setPinned((p) => !p)}
-        className="absolute w-60 glass rounded-xl p-4 shadow-soft hover:shadow-accent-glow transition-shadow duration-300 z-20 cursor-pointer"
+        className="absolute w-60 glass rounded-xl p-4 bg-white dark:bg-surface-900 shadow-soft hover:shadow-accent-glow transition-shadow duration-300 z-20 cursor-pointer"
         style={{
           left: `${pos}%`,
           ...(above
@@ -200,11 +200,13 @@ export default function Experience() {
   const [waveRef, waveWidth] = useElementWidth<HTMLDivElement>();
 
   return (
-    <section id="experience" className="section-padding bg-surface-50/80 dark:bg-surface-950/60 transition-colors duration-300">
+    <section id="experience" className="section-padding bg-white dark:bg-surface-950/60 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeader kicker="Experience" title="Work Experience" />
 
         {/* ── Desktop: curved time arrow ──────────────────────────────── */}
+        {/* Cards are opaque, so an expanded top-row card may overlap the
+            header without the two texts mixing. */}
         <div ref={ref} className="hidden md:block max-w-5xl mx-auto">
           <div ref={waveRef} className="relative h-[520px]">
             {/* Curved arrow (sine wave). No vector-effect here: non-scaling-stroke
@@ -288,7 +290,7 @@ export default function Experience() {
               transition={{ duration: 0.5, delay: i * 0.1 }}
               className="relative mb-8 last:mb-0"
             >
-              <div className="absolute -left-8 top-3 w-4 h-4 rounded-full bg-primary-500 ring-4 ring-surface-50 dark:ring-surface-950" />
+              <div className="absolute -left-8 top-3 w-4 h-4 rounded-full bg-primary-500 ring-4 ring-white dark:ring-surface-950" />
               <div className="glass rounded-xl p-4 shadow-soft">
                 <CardBody item={item} expanded />
               </div>

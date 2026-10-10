@@ -26,12 +26,12 @@ export default function Contact() {
       await navigator.clipboard.writeText(EMAIL);
       toast.success('Email copied to clipboard');
     } catch {
-      toast.error('Could not copy — please copy it manually');
+      toast.error('Could not copy, please copy it manually');
     }
   };
 
   return (
-    <section id="contact" className="section-padding bg-primary-100/40 dark:bg-surface-900/50 transition-colors duration-300">
+    <section id="contact" className="section-padding bg-cream dark:bg-surface-900/50 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
         <motion.div
           initial="hidden"
@@ -52,7 +52,7 @@ export default function Contact() {
             custom={0.1}
             className="relative text-4xl md:text-5xl font-bold text-surface-900 dark:text-white mb-6 leading-tight"
           >
-            Got a <span className="text-primary-600 dark:text-primary-500">project</span> — or just a question?
+            Got a <span className="text-primary-600 dark:text-primary-500">project</span> or just a question?
           </motion.h2>
 
           <motion.p
@@ -60,7 +60,7 @@ export default function Contact() {
             custom={0.2}
             className="relative text-surface-600 dark:text-surface-400 max-w-xl mx-auto mb-10"
           >
-            Whether it&apos;s an internship, a project, or a technical question — my inbox is open.
+            Whether it&apos;s an internship, a project, or a technical question, my inbox is open.
           </motion.p>
 
           {/* Email CTA + copy */}

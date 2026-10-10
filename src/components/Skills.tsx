@@ -64,7 +64,7 @@ function BentoTile({
       transition={{ duration: 0.5, delay, ease: 'easeOut' }}
       className={className}
     >
-      <div className="glass rounded-lg p-6 shadow-soft h-full bg-surface-50/50 dark:bg-surface-900/50">
+      <div className="glass rounded-lg p-6 shadow-soft h-full bg-white/70 dark:bg-surface-900/50">
         <div className="flex items-center gap-2.5 mb-4">
           <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary-500/15 text-primary-600 dark:text-primary-500">
             <Icon size={16} />
@@ -87,7 +87,7 @@ export default function Skills() {
   const byCategory = (key: string) => skills.find((g) => g.category === key)?.items ?? [];
 
   return (
-    <section id="skills" className="section-padding bg-primary-100/40 dark:bg-surface-900/50 transition-colors duration-300">
+    <section id="skills" className="section-padding bg-cream dark:bg-surface-900/50 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeader
           kicker="Skills"
@@ -104,7 +104,7 @@ export default function Skills() {
             transition={{ duration: 0.5, ease: 'easeOut' }}
             className="md:col-span-2 lg:row-span-2"
           >
-            <div className="glass rounded-lg p-6 md:p-8 shadow-soft h-full flex flex-col justify-center bg-surface-50/50 dark:bg-surface-900/50">
+            <div className="glass rounded-lg p-6 md:p-8 shadow-soft h-full flex flex-col justify-center bg-white/70 dark:bg-surface-900/50">
               <SkillRadar />
               <p className="text-center text-sm text-surface-500 dark:text-surface-400 mt-4">
                 Proficiency across key technical domains.

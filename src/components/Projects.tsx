@@ -24,7 +24,7 @@ export default function Projects() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
   return (
-    <section id="projects" className="section-padding bg-surface-50/80 dark:bg-surface-950/60 transition-colors duration-300">
+    <section id="projects" className="section-padding bg-white dark:bg-surface-950/60 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeader
           kicker="Projects"
@@ -68,7 +68,7 @@ function ProjectCard({
         aria-label={`${project.title} on GitHub`}
         className="group block h-full rounded-lg transition-transform duration-200 hover:-translate-y-1"
       >
-        <div className="glass flex h-full flex-col overflow-hidden rounded-lg shadow-soft hover:shadow-accent-glow transition-shadow duration-200 bg-surface-50/50 dark:bg-surface-900/50">
+        <div className="glass flex h-full flex-col overflow-hidden rounded-lg shadow-soft hover:shadow-accent-glow transition-shadow duration-200 bg-white dark:bg-surface-900/50">
           {/* Thumbnail — GitHub OG card, 2:1, subtle zoom on hover */}
           <div className="aspect-video overflow-hidden border-b border-surface-200 dark:border-surface-700">
             <img

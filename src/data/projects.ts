@@ -21,21 +21,21 @@ const ogCard = (repo: string) => `https://opengraph.githubassets.com/1/FreddyZet
 export const projects: Project[] = [
   {
     id: 1,
+    title: 'blueprint',
+    description:
+      'Claude Code plugin to think a project through before building it. Specialist agents discuss each decision, lock it into an Obsidian vault, and automatic checks keep Claude from contradicting it.',
+    technologies: ['JavaScript', 'Claude Code', 'AI Agents', 'Obsidian'],
+    imageUrl: ogCard('blueprint'),
+    githubUrl: 'https://github.com/FreddyZeta1847/blueprint',
+  },
+  {
+    id: 2,
     title: 'Jarvis',
     description:
       'Voice-first personal AI assistant. A multi-agent backend orchestrates expense tracking, Google Calendar, Gmail and weather, all driven by natural speech in a mobile-first PWA.',
     technologies: ['React', 'FastAPI', 'Azure OpenAI', 'Agentic AI', 'TTS-STT'],
     imageUrl: ogCard('Jarvis'),
     githubUrl: 'https://github.com/FreddyZeta1847/Jarvis',
-  },
-  {
-    id: 2,
-    title: 'NEOLED',
-    description:
-      'LED control by hand gesture. MediaPipe tracks your fingers through a webcam and streams the count over USB serial to an ESP32, which lights one LED per raised finger.',
-    technologies: ['Python', 'MediaPipe', 'OpenCV', 'ESP32'],
-    imageUrl: ogCard('NEOLED'),
-    githubUrl: 'https://github.com/FreddyZeta1847/NEOLED',
   },
   {
     id: 3,

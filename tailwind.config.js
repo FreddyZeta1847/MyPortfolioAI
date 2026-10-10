@@ -31,6 +31,8 @@ export default {
           800: '#8a2f17',
           900: '#6b1e0f',
         },
+        // Light-mode section backgrounds alternate white / cream
+        cream: '#f7f1e6',
         surface: {
           50: '#e9e7f1',
           100: '#f4f4f8',

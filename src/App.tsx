@@ -25,7 +25,7 @@ function App() {
         <IntroProvider>
           <IntroSequence />
           <CustomCursor />
-          <div className="min-h-screen bg-surface-50 dark:bg-surface-950 font-sans antialiased transition-colors duration-300">
+          <div className="min-h-screen bg-white dark:bg-surface-950 font-sans antialiased transition-colors duration-300">
             <AuroraBackground />
             <ScrollProgress />
             <Navbar />
