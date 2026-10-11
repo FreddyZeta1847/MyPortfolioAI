@@ -1,3 +1,8 @@
+/**
+ * Navbar — fixed top navigation bar.
+ * Shows the FS monogram logo (dark/light variant swapped via Tailwind's `dark:` class),
+ * the section links with an animated active indicator, the theme toggle and a mobile menu.
+ */
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
@@ -38,9 +43,11 @@ export default function Navbar() {
           {/* Logo */}
           <button
             onClick={() => handleNavClick('hero')}
-            className="font-display text-xl font-bold text-primary-600 dark:text-primary-500 hover:opacity-80 transition-opacity"
+            aria-label="Federico Santini — back to top"
+            className="hover:opacity-80 transition-opacity"
           >
-            FS.
+            <img src="/images/logo.png" alt="" className="h-9 w-auto dark:hidden" />
+            <img src="/images/logo-ligth.png" alt="" className="h-9 w-auto hidden dark:block" />
           </button>
 
           {/* Desktop menu */}
