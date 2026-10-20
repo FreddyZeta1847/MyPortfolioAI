@@ -38,7 +38,7 @@ export default function Navbar() {
           : 'bg-transparent py-5'
       }`}
     >
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="w-full px-4 md:px-6">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <button

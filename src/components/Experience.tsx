@@ -32,6 +32,11 @@ const ARROW_PATH = (() => {
   return d;
 })();
 
+// The curve climbs back up to the right of the last node, so a card centred on
+// it would sit on the arrowhead. Shift that card left (0 at md, up to 84px on
+// wide screens, where the neighbouring card leaves room) to keep the tip visible.
+const LAST_CARD_SHIFT = 'clamp(0px, (100vw - 768px) * 0.33, 84px)';
+
 // Node's vertical position as a % of the container, mapped from the wave.
 const nodeYPct = (t: number) => ((TIMELINE_H / 2 - WAVE_AMP * Math.sin(2 * Math.PI * t)) / TIMELINE_H) * 100;
 
@@ -140,11 +145,13 @@ function TimelineNode({
   yPct,
   inView,
   index,
+  nudgeLeft,
 }: {
   item: ExperienceType;
   pos: number;
   yPct: number;
   inView: boolean;
+  nudgeLeft: boolean;
   index: number;
 }) {
   const [hovered, setHovered] = useState(false);
@@ -188,7 +195,7 @@ function TimelineNode({
         onClick={() => setPinned((p) => !p)}
         className="absolute w-60 glass rounded-xl p-4 bg-white dark:bg-surface-900 shadow-soft hover:shadow-accent-glow transition-shadow duration-300 z-20 cursor-pointer"
         style={{
-          left: `${pos}%`,
+          left: nudgeLeft ? `calc(${pos}% - ${LAST_CARD_SHIFT})` : `${pos}%`,
           bottom: `calc(${100 - yPct}% + 28px)`,
           transform: 'translateX(-50%)',
         }}
@@ -272,6 +279,7 @@ export default function Experience() {
                   yPct={yPct}
                   inView={inView}
                   index={i}
+                  nudgeLeft={i === experience.length - 1}
                 />
               );
             })}
