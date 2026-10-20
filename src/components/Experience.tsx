@@ -1,3 +1,11 @@
+/*
+ * Experience.tsx
+ *
+ * Work-experience section. On desktop the roles sit on a curved time arrow; every
+ * card is anchored above its node, so expanding a card (hover/click) grows it
+ * upward and never covers the arrow. On mobile it is a plain vertical timeline.
+ * Data comes from ../data/experience.
+ */
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
@@ -130,14 +138,12 @@ function TimelineNode({
   item,
   pos,
   yPct,
-  above,
   inView,
   index,
 }: {
   item: ExperienceType;
   pos: number;
   yPct: number;
-  above: boolean;
   inView: boolean;
   index: number;
 }) {
@@ -153,10 +159,10 @@ function TimelineNode({
         initial={{ scaleY: 0 }}
         animate={inView ? { scaleY: 1 } : {}}
         transition={{ duration: 0.4, delay }}
-        className={`absolute w-0.5 h-7 bg-surface-300 dark:bg-surface-700 shadow-soft ${above ? 'origin-bottom' : 'origin-top'}`}
+        className="absolute w-0.5 h-7 bg-surface-300 dark:bg-surface-700 shadow-soft origin-bottom"
         style={{
           left: `${pos}%`,
-          top: above ? `calc(${yPct}% - 28px)` : `${yPct}%`,
+          top: `calc(${yPct}% - 28px)`,
           transform: 'translateX(-50%)',
         }}
       />
@@ -174,7 +180,7 @@ function TimelineNode({
 
       {/* Card */}
       <motion.div
-        initial={{ opacity: 0, y: above ? -20 : 20 }}
+        initial={{ opacity: 0, y: -20 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.5, delay: delay + 0.15 }}
         onHoverStart={() => setHovered(true)}
@@ -183,9 +189,7 @@ function TimelineNode({
         className="absolute w-60 glass rounded-xl p-4 bg-white dark:bg-surface-900 shadow-soft hover:shadow-accent-glow transition-shadow duration-300 z-20 cursor-pointer"
         style={{
           left: `${pos}%`,
-          ...(above
-            ? { bottom: `calc(${100 - yPct}% + 28px)` }
-            : { top: `calc(${yPct}% + 28px)` }),
+          bottom: `calc(${100 - yPct}% + 28px)`,
           transform: 'translateX(-50%)',
         }}
       >
@@ -266,7 +270,6 @@ export default function Experience() {
                   item={item}
                   pos={pos}
                   yPct={yPct}
-                  above={i % 2 === 0}
                   inView={inView}
                   index={i}
                 />
