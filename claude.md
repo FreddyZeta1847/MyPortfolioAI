@@ -14,7 +14,6 @@ Help improve and transform this personal portfolio website to make it:
 - **Styling**: Tailwind CSS 3.4
 - **Icons**: Lucide React
 - **Navigation**: React Scroll
-- **Backend**: Node.js + Express (contact form)
 
 ## Project Structure
 ```
@@ -25,8 +24,6 @@ src/
 ├── App.tsx         # Main app component
 ├── main.tsx        # Entry point
 └── index.css       # Global styles
-backend/
-└── server.js       # Express server for contact form
 ```
 
 ## Areas for Improvement
@@ -71,6 +68,5 @@ backend/
 - Fonts: Inter (body), Poppins (display)
 
 ## Notes
-- Backend runs on port 3001
-- Contact form saves to messages.json
+- Contact is mailto + copy-email (no backend); hosted as a static site
 - Uses react-scroll for smooth navigation
