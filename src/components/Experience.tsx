@@ -1,99 +1,108 @@
 /*
  * Experience.tsx
  *
- * Work-experience section. On desktop the roles sit on a curved time arrow; every
- * card is anchored above its node, so expanding a card (hover/click) grows it
- * upward and never covers the arrow. On mobile it is a plain vertical timeline.
- * Data comes from ../data/experience.
+ * Work-experience section drawn like a git graph: newest role on top, every card always
+ * open, and vertical "lanes" on the left that end in an arrowhead ("now"). Jobs with a
+ * `branch` (e.g. freelance) run on a second lane that forks off the main one, so roles that
+ * overlap in time are visible as such. The lane geometry is measured from the rendered rows
+ * (heights depend on text and images) and redrawn whenever the graph is resized.
+ * Data comes from ../data/experience. Works unchanged on mobile (tighter lanes).
  */
-import { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Calendar, Briefcase } from 'lucide-react';
 import { experience } from '../data/experience';
 import { Experience as ExperienceType } from '../types';
 import SectionHeader from './SectionHeader';
 
-// ── Wave geometry (desktop arrow) ───────────────────────────────────────────
-// The arrow is a sine wave sampled into a smooth polyline. Both the drawn path
-// and each node's vertical position come from `waveY`, so dots always sit on it.
-// viewBox is 1000×160 (centre line at y=80); WAVE_AMP is the crest/trough height.
-const WAVE_AMP = 64;
-const TIMELINE_H = 520; // must match the container's h-[520px]
-const waveY = (t: number) => 80 - WAVE_AMP * Math.sin(2 * Math.PI * t);
+// Lane x positions and the card's left edge, in px. Tighter on phones.
+const LAYOUT = {
+  wide: { main: 22, side: 58, card: 96 },
+  narrow: { main: 14, side: 38, card: 64 },
+};
+const DOT_Y = 24;   // dot sits level with the card's logo
+const HEAD_TOP = 4; // arrowheads sit just above the first row
+const MAIN_BRANCH = 'work';
 
-const ARROW_PATH = (() => {
-  const steps = 64;
-  let d = `M0,${waveY(0).toFixed(2)}`;
-  for (let i = 1; i <= steps; i++) {
-    const t = i / steps;
-    d += ` L${(t * 1000).toFixed(1)},${waveY(t).toFixed(2)}`;
-  }
-  return d;
-})();
+const branchOf = (item: ExperienceType) => item.branch ?? MAIN_BRANCH;
 
-// The curve climbs back up to the right of the last node, so a card centred on
-// it would sit on the arrowhead. Shift that card left (0 at md, up to 84px on
-// wide screens, where the neighbouring card leaves room) to keep the tip visible.
-const LAST_CARD_SHIFT = 'clamp(0px, (100vw - 768px) * 0.33, 84px)';
-
-// Node's vertical position as a % of the container, mapped from the wave.
-const nodeYPct = (t: number) => ((TIMELINE_H / 2 - WAVE_AMP * Math.sin(2 * Math.PI * t)) / TIMELINE_H) * 100;
-
-// End-tangent of the wave, in screen degrees. dx/dt is the container's pixel
-// width; dy/dt is -WAVE_AMP*2*PI because the SVG's 160px height matches its
-// 160-unit viewBox 1:1. Computing it (instead of hardcoding) keeps the
-// arrowhead glued to the curve's tip at every breakpoint.
-const headAngleFor = (width: number) =>
-  width ? (Math.atan2(-WAVE_AMP * 2 * Math.PI, width) * 180) / Math.PI : -22;
-
-// Tracks an element's rendered width so the arrowhead can follow the curve.
-function useElementWidth<T extends HTMLElement>() {
-  const ref = useRef<T>(null);
-  const [width, setWidth] = useState(0);
-
+// ── Responsive switch for the lane layout ───────────────────────────────────
+function useWideScreen() {
+  const query = '(min-width: 640px)';
+  const [wide, setWide] = useState(() => window.matchMedia(query).matches);
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new ResizeObserver(([entry]) => setWidth(entry.contentRect.width));
-    observer.observe(el);
-    return () => observer.disconnect();
+    const mq = window.matchMedia(query);
+    const onChange = () => setWide(mq.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
   }, []);
+  return wide;
+}
 
-  return [ref, width] as const;
+// ── Measures where each row's dot sits (row top + DOT_Y) and the graph's size ─
+interface Geometry { ys: number[]; w: number; h: number }
+
+function useGeometry(graphRef: React.RefObject<HTMLDivElement>, rowRefs: React.MutableRefObject<(HTMLLIElement | null)[]>) {
+  const [geo, setGeo] = useState<Geometry>({ ys: [], w: 0, h: 0 });
+
+  useLayoutEffect(() => {
+    const graph = graphRef.current;
+    if (!graph) return;
+    const measure = () =>
+      setGeo({
+        ys: rowRefs.current.map((el) => (el ? el.offsetTop + DOT_Y : 0)),
+        w: graph.offsetWidth,
+        h: graph.offsetHeight,
+      });
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(graph);
+    document.fonts.ready.then(measure); // text height changes once the fonts arrive
+    return () => observer.disconnect();
+  }, [graphRef, rowRefs]);
+
+  return geo;
 }
 
 // ── Company logo with a graceful fallback if the image is missing ───────────
-function Logo({ company, src, size = 'w-12 h-12' }: { company: string; src: string; size?: string }) {
+function Logo({ company, src }: { company: string; src: string }) {
   const [failed, setFailed] = useState(false);
   return (
-    <div
-      className={`flex-shrink-0 ${size} rounded-xl overflow-hidden shadow-soft ring-2 ring-primary-500/20 bg-gradient-to-br from-primary-500 to-accent-400 flex items-center justify-center`}
-    >
+    <div className="flex-shrink-0 w-12 h-12 rounded-xl overflow-hidden shadow-soft ring-2 ring-primary-500/20 bg-gradient-to-br from-primary-500 to-accent-400 flex items-center justify-center">
       {failed ? (
         <span className="text-white font-display font-bold text-lg">{company.charAt(0)}</span>
       ) : (
-        <img
-          src={src}
-          alt={company}
-          onError={() => setFailed(true)}
-          className="w-full h-full object-cover"
-        />
+        <img src={src} alt={company} onError={() => setFailed(true)} className="w-full h-full object-cover" />
       )}
     </div>
   );
 }
 
-// Shared card body. `expanded` controls whether description + tags are shown.
-function CardBody({ item, expanded }: { item: ExperienceType; expanded: boolean }) {
+// Pulsing "in corso" marker for roles that are still going.
+function NowMarker() {
   return (
-    <>
-      <div className="flex items-center gap-3">
+    <span className="ml-auto inline-flex items-center gap-1.5 whitespace-nowrap font-sans text-[10px] uppercase tracking-wider text-accent-600 dark:text-accent-400">
+      <span className="relative flex h-1.5 w-1.5">
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-400 opacity-75" />
+        <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent-500" />
+      </span>
+      in corso
+    </span>
+  );
+}
+
+function ExperienceCard({ item }: { item: ExperienceType }) {
+  return (
+    <div className="glass relative rounded-xl p-4 sm:p-5 bg-white dark:bg-surface-900 shadow-soft hover:shadow-accent-glow transition-shadow duration-300">
+      <span className="absolute top-4 right-4 font-mono text-[10px] tracking-wide px-1.5 py-0.5 rounded border border-surface-200 dark:border-surface-700 text-surface-500 dark:text-surface-400">
+        {branchOf(item)}
+      </span>
+
+      <div className="flex items-center gap-3 pr-20">
         <Logo company={item.company} src={item.logo} />
         <div className="min-w-0">
-          <h3 className="font-semibold text-surface-800 dark:text-white leading-tight truncate">
-            {item.company}
-          </h3>
+          <h3 className="font-semibold text-surface-800 dark:text-white leading-tight truncate">{item.company}</h3>
           <div className="flex items-center gap-1.5 text-sm text-surface-600 dark:text-surface-300">
             <Briefcase size={13} className="text-accent-500 dark:text-accent-400 flex-shrink-0" />
             <span className="truncate">{item.role}</span>
@@ -101,212 +110,137 @@ function CardBody({ item, expanded }: { item: ExperienceType; expanded: boolean 
         </div>
       </div>
 
-      <div className="flex items-center gap-1.5 mt-3 font-mono text-xs font-medium text-primary-600 dark:text-primary-400">
+      <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1 mt-3 font-mono text-xs font-medium text-primary-600 dark:text-primary-400">
         <Calendar size={13} />
-        <span>{item.period}</span>
+        <span className="whitespace-nowrap">{item.period}</span>
+        {item.current && <NowMarker />}
       </div>
 
-      <AnimatePresence initial={false}>
-        {expanded && (
-          <motion.div
-            key="details"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="overflow-hidden"
+      <p className="text-sm text-surface-500 dark:text-surface-400 mt-3 pt-3 border-t border-surface-200/70 dark:border-white/[0.06]">
+        {item.description}
+      </p>
+      <div className="flex flex-wrap gap-1.5 mt-3">
+        {item.competencies.map((c) => (
+          <span
+            key={c}
+            className="px-2.5 py-1 rounded-md text-xs font-medium border border-primary-500/30 bg-primary-500/10 text-primary-700 dark:text-primary-300"
           >
-            <p className="text-sm text-surface-500 dark:text-surface-400 mt-3 pt-3 border-t border-surface-200/70 dark:border-white/[0.06]">
-              {item.description}
-            </p>
-            <div className="flex flex-wrap gap-1.5 mt-3">
-              {item.competencies.map((c) => (
-                <span
-                  key={c}
-                  className="px-2.5 py-1 rounded-md text-xs font-medium border border-primary-500/30 bg-primary-500/10 text-primary-700 dark:text-primary-300"
-                >
-                  {c}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+            {c}
+          </span>
+        ))}
+      </div>
+    </div>
   );
 }
 
-// ── Single node, sitting on the curved arrow (desktop) ──────────────────────
-// `yPct` is the node's vertical position (% of the container) along the curve.
-// Cards expand on hover or click (click also helps discoverability).
-function TimelineNode({
-  item,
-  pos,
-  yPct,
-  inView,
-  index,
-  nudgeLeft,
-}: {
-  item: ExperienceType;
-  pos: number;
-  yPct: number;
-  inView: boolean;
-  nudgeLeft: boolean;
-  index: number;
-}) {
-  const [hovered, setHovered] = useState(false);
-  const [pinned, setPinned] = useState(false);
-  const expanded = hovered || pinned;
-  const delay = 0.5 + index * 0.2;
+// ── SVG overlay: lanes, arrowheads, dots and the short stubs to each card ───
+function Lanes({ items, geo, wide, inView }: { items: ExperienceType[]; geo: Geometry; wide: boolean; inView: boolean }) {
+  const x = wide ? LAYOUT.wide : LAYOUT.narrow;
+  const { ys } = geo;
+  const sideIdx = items.map((it, i) => (branchOf(it) !== MAIN_BRANCH ? i : -1)).filter((i) => i >= 0);
+  const hasSide = sideIdx.length > 0;
+  const top = HEAD_TOP;
+
+  // The side lane forks off the main one at the row just below its last (oldest) role.
+  const forkRow = Math.min((hasSide ? Math.max(...sideIdx) : 0) + 1, items.length - 1);
+  const yFork = ys[forkRow];
+
+  const mainPath = `M${x.main},${ys[ys.length - 1]} L${x.main},${top + 10}`;
+  const sidePath = hasSide
+    ? `M${x.main},${yFork} C${x.main},${yFork - 30} ${x.side},${yFork - 6} ${x.side},${yFork - 40} L${x.side},${top + 10}`
+    : '';
+  const laneX = (item: ExperienceType) => (branchOf(item) === MAIN_BRANCH ? x.main : x.side);
 
   return (
-    <>
-      {/* Connector */}
-      <motion.div
-        initial={{ scaleY: 0 }}
-        animate={inView ? { scaleY: 1 } : {}}
-        transition={{ duration: 0.4, delay }}
-        className="absolute w-0.5 h-7 bg-surface-300 dark:bg-surface-700 shadow-soft origin-bottom"
-        style={{
-          left: `${pos}%`,
-          top: `calc(${yPct}% - 28px)`,
-          transform: 'translateX(-50%)',
-        }}
-      />
+    <svg width={geo.w} height={geo.h} className="absolute left-0 top-0 overflow-visible pointer-events-none" aria-hidden="true">
+      <defs>
+        <linearGradient id="expLane" gradientUnits="userSpaceOnUse" x1="0" y1={geo.h} x2="0" y2="0">
+          <stop offset="0%" stopColor="#2fa89f" />
+          <stop offset="100%" stopColor="#d97546" />
+        </linearGradient>
+      </defs>
 
-      {/* Dot */}
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={inView ? { scale: 1 } : {}}
-        transition={{ duration: 0.4, delay: delay + 0.1, type: 'spring' }}
-        className={`absolute w-4 h-4 rounded-full ring-4 ring-white dark:ring-surface-950 z-10 transition-colors duration-300 ${
-          expanded ? 'bg-accent-400 shadow-accent-glow' : 'bg-primary-500'
-        }`}
-        style={{ left: `${pos}%`, top: `${yPct}%`, transform: 'translate(-50%, -50%)' }}
-      />
+      {items.map((item, i) => (
+        <line
+          key={`stub-${i}`}
+          x1={laneX(item)} y1={ys[i]} x2={x.card - 10} y2={ys[i]}
+          className="stroke-surface-300 dark:stroke-surface-700"
+          strokeWidth={2} strokeDasharray="3 4"
+        />
+      ))}
 
-      {/* Card */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.5, delay: delay + 0.15 }}
-        onHoverStart={() => setHovered(true)}
-        onHoverEnd={() => setHovered(false)}
-        onClick={() => setPinned((p) => !p)}
-        className="absolute w-60 glass rounded-xl p-4 bg-white dark:bg-surface-900 shadow-soft hover:shadow-accent-glow transition-shadow duration-300 z-20 cursor-pointer"
-        style={{
-          left: nudgeLeft ? `calc(${pos}% - ${LAST_CARD_SHIFT})` : `${pos}%`,
-          bottom: `calc(${100 - yPct}% + 28px)`,
-          transform: 'translateX(-50%)',
-        }}
-      >
-        <CardBody item={item} expanded={expanded} />
-      </motion.div>
-    </>
+      {[mainPath, sidePath].filter(Boolean).map((d, i) => (
+        <motion.path
+          key={i}
+          d={d}
+          fill="none"
+          stroke="url(#expLane)"
+          strokeWidth={2.5}
+          strokeLinecap="round"
+          initial={{ pathLength: 0 }}
+          animate={inView ? { pathLength: 1 } : {}}
+          transition={{ duration: 1.6, ease: 'easeInOut' }}
+        />
+      ))}
+
+      {[x.main, ...(hasSide ? [x.side] : [])].map((lx) => (
+        <motion.polygon
+          key={`head-${lx}`}
+          points="-6,0 0,-14 6,0"
+          fill="#d97546"
+          transform={`translate(${lx} ${top + 4})`}
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.4, delay: 1.2 }}
+        />
+      ))}
+
+      {items.map((item, i) => (
+        <motion.circle
+          key={`dot-${i}`}
+          cx={laneX(item)} cy={ys[i]} r={7}
+          strokeWidth={4}
+          className={`stroke-white dark:stroke-surface-950 ${item.current ? 'fill-accent-400' : 'fill-primary-500'}`}
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.4, delay: 0.3 + i * 0.15 }}
+        />
+      ))}
+    </svg>
   );
 }
 
 export default function Experience() {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 });
-  const [waveRef, waveWidth] = useElementWidth<HTMLDivElement>();
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const graphRef = useRef<HTMLDivElement>(null);
+  const rowRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const wide = useWideScreen();
+  const geo = useGeometry(graphRef, rowRefs);
+  const items = [...experience].reverse(); // newest first
 
   return (
     <section id="experience" className="section-padding bg-white dark:bg-surface-950/60 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
         <SectionHeader kicker="Experience" title="Work Experience" />
 
-        {/* ── Desktop: curved time arrow ──────────────────────────────── */}
-        {/* Cards are opaque, so an expanded top-row card may overlap the
-            header without the two texts mixing. */}
-        <div ref={ref} className="hidden md:block max-w-5xl mx-auto">
-          <div ref={waveRef} className="relative h-[520px]">
-            {/* Curved arrow (sine wave). No vector-effect here: non-scaling-stroke
-                makes the browser resolve Framer Motion's pathLength dasharray in
-                screen units, which paints a 1px-dash/1px-gap line instead of a
-                solid one. The viewBox stretch is near-uniform, so 2.5px reads
-                as ~2px at every width. */}
-            <svg
-              viewBox="0 0 1000 160"
-              preserveAspectRatio="none"
-              className="absolute left-0 right-0 top-1/2 -translate-y-1/2 w-full h-40 overflow-visible"
-            >
-              <defs>
-                <linearGradient id="expArrow" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#2fa89f" />
-                  <stop offset="100%" stopColor="#d97546" />
-                </linearGradient>
-              </defs>
-              <motion.path
-                d={ARROW_PATH}
-                fill="none"
-                stroke="url(#expArrow)"
-                strokeWidth={2.5}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                initial={{ pathLength: 0 }}
-                animate={inView ? { pathLength: 1 } : {}}
-                transition={{ duration: 1.4, ease: 'easeInOut' }}
-              />
-            </svg>
-            {/* Arrowhead — custom triangle sitting on the curve's right endpoint,
-                tilted to follow the curve's gentle descent. */}
-            <div
-              className="absolute right-0 top-1/2 overflow-visible"
-              style={{ transform: `translate(3px, -50%) rotate(${headAngleFor(waveWidth)}deg)` }}
-            >
-              <motion.svg
-                width="14"
-                height="12"
-                viewBox="0 0 14 12"
-                className="block overflow-visible"
-                initial={{ opacity: 0, scale: 0.4 }}
-                animate={inView ? { opacity: 1, scale: 1 } : {}}
-                transition={{ duration: 0.4, delay: 1.1, type: 'spring' }}
-              >
-                <polygon points="0,0 14,6 0,12" fill="#d97546" />
-              </motion.svg>
-            </div>
-
-            {experience.map((item, i) => {
-              const t = (i + 0.5) / experience.length;
-              const pos = t * 100;
-              const yPct = nodeYPct(t);
-              return (
-                <TimelineNode
-                  key={i}
-                  item={item}
-                  pos={pos}
-                  yPct={yPct}
-                  inView={inView}
-                  index={i}
-                  nudgeLeft={i === experience.length - 1}
-                />
-              );
-            })}
+        <div ref={ref}>
+          <div ref={graphRef} className="relative max-w-3xl mx-auto">
+            {geo.ys.length === items.length && <Lanes items={items} geo={geo} wide={wide} inView={inView} />}
+            <ol className="relative space-y-8 pt-8">
+              {items.map((item, i) => (
+                <motion.li
+                  key={item.company}
+                  ref={(el) => { rowRefs.current[i] = el; }}
+                  style={{ paddingLeft: (wide ? LAYOUT.wide : LAYOUT.narrow).card }}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={inView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.5, delay: 0.3 + i * 0.15 }}
+                >
+                  <ExperienceCard item={item} />
+                </motion.li>
+              ))}
+            </ol>
           </div>
-          <p className="text-center text-sm text-surface-400 dark:text-surface-500 italic mt-2">
-            Hover or click a role to see details and skills.
-          </p>
-        </div>
-
-        {/* ── Mobile: vertical stacked timeline ───────────────────────── */}
-        <div className="md:hidden max-w-md mx-auto relative pl-8">
-          <div className="absolute left-[7px] top-2 bottom-2 w-0.5 bg-gradient-to-b from-primary-500 to-accent-400" />
-          {experience.map((item, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="relative mb-8 last:mb-0"
-            >
-              <div className="absolute -left-8 top-3 w-4 h-4 rounded-full bg-primary-500 ring-4 ring-white dark:ring-surface-950" />
-              <div className="glass rounded-xl p-4 shadow-soft">
-                <CardBody item={item} expanded />
-              </div>
-            </motion.div>
-          ))}
         </div>
       </div>
     </section>

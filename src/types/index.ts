@@ -1,3 +1,9 @@
+/*
+ * index.ts (types)
+ *
+ * Shared TypeScript interfaces for the portfolio's static data (navigation, projects,
+ * skills, experience, radar axes, GitHub repos). The files in src/data/ are typed with these.
+ */
 export interface NavItem {
   id: string;
   title: string;
@@ -31,7 +37,9 @@ export interface Experience {
   period: string;
   logo: string;            // path under /public, e.g. '/images/company1.png'
   description: string;
-  competencies: string[];  // shown as LinkedIn-style tags on expand
+  competencies: string[];  // shown as LinkedIn-style tags
+  current?: boolean;       // role is still going: glowing dot + "in corso" marker
+  branch?: string;         // timeline lane; omitted = main "work" lane, any other name = side lane
 }
 
 export interface RadarAxis {
