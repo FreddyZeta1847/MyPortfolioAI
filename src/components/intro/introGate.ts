@@ -40,5 +40,7 @@ export function shouldPlayIntro(): boolean {
   if (typeof window === 'undefined') return false;
   if (prefersReducedMotion()) return false;
   if (isForcedByUrl()) return true;
+  // A visitor opening a project link lands on that project, not on the bedroom intro.
+  if (window.location.pathname.startsWith('/projects/')) return false;
   return !hasSeenIntro();
 }

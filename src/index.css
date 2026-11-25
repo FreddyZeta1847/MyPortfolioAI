@@ -45,6 +45,12 @@
   }
 }
 
+/* Ambient motion inside the project scenes (components/projects/scenes.tsx) */
+@keyframes scene-caret { 50% { opacity: 0; } }
+@keyframes scene-wave { from { transform: scaleY(0.3); } to { transform: scaleY(1); } }
+@keyframes scene-pulse { 0%, 100% { transform: scale(1); } 30% { transform: scale(1.5); } }
+@keyframes scene-breathe { 50% { box-shadow: 0 0 0 5px rgba(47, 168, 159, 0.18); } }
+
 @layer utilities {
   /* Reduced motion */
   @media (prefers-reduced-motion: reduce) {

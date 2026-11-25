@@ -10,13 +10,17 @@ export interface NavItem {
 }
 
 export interface Project {
-  id: number;
+  slug: string;            // URL part of its page: /projects/<slug> — shared links depend on it, never rename
   title: string;
-  description: string;
+  kind: string;            // what it is, in a few words ("WhatsApp bot")
+  hook: string;            // one-line pitch shown on the cover
+  status: string;
+  problem: string;
+  how: string;
+  methods: string[];       // 3 short lines
+  fact: { value: string; label: string };  // one hard, true number
   technologies: string[];
-  imageUrl: string;
-  githubUrl?: string;
-  gifs?: string[];
+  githubUrl: string;
 }
 
 export interface Skill {

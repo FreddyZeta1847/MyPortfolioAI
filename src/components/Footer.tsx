@@ -1,5 +1,5 @@
 import { Github, Linkedin, Mail, Phone } from 'lucide-react';
-import { scrollToElement } from '../utils/scrollTo';
+import { goToSection } from '../utils/router';
 import { navItems } from '../data/navItems';
 
 export default function Footer() {
@@ -31,7 +31,7 @@ export default function Footer() {
               {navItems.map((item) => (
                 <button
                   key={item.id}
-                  onClick={() => scrollToElement(item.id)}
+                  onClick={() => goToSection(item.id)}
                   className="block text-surface-400 hover:text-accent-400 text-sm transition-colors"
                 >
                   {item.title}
