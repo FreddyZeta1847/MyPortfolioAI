@@ -1,40 +1,48 @@
 /**
  * Projects.tsx
  *
- * The "Projects" section: the six GitHub-pinned builds shown as a card grid
- * (3 across on desktop = 2 rows, 2 on tablet, 1 on phone), followed by the
- * collapsible live GitHub archive in <MoreBuilds />.
+ * The "Projects" section: the six featured builds as covers of different sizes (two wide
+ * covers frame four narrow ones on desktop, one column on phones). Each cover is its project's
+ * live scene plus kind, name and one-line hook, and links to the project's own page at
+ * /projects/<slug> (ProjectPage.tsx). A hint under the header tells visitors to open one.
+ * Below the covers sits the collapsible live GitHub archive in <MoreBuilds />.
  *
- * Each card is a single link straight to the repository — the thumbnail,
- * description and tech pills are all visible up front, so there is no expand
- * step and no cursor-following preview to compensate for text-only rows.
- *
- * Card data (including the OG-card thumbnails) comes from data/projects.ts.
+ * Cover data comes from data/projects.ts, scenes from projects/scenes.tsx.
  */
-import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, MousePointerClick } from 'lucide-react';
 import { projects } from '../data/projects';
 import { Project } from '../types';
+import { followLink } from '../utils/router';
 import SectionHeader from './SectionHeader';
-import SpotlightCard from './SpotlightCard';
 import MoreBuilds from './MoreBuilds';
+import { SCENES } from './projects/scenes';
+
+// Grid span and scene height per cover, in display order (see data/projects.ts).
+const SHAPES: Record<string, { span: string; height: string }> = {
+  blueprint: { span: 'md:col-span-4', height: 'h-64 md:h-72' },
+  jarvis: { span: 'md:col-span-2', height: 'h-64 md:h-72' },
+  'ai-calendar-assistant': { span: 'md:col-span-2', height: 'h-60' },
+  sift: { span: 'md:col-span-2', height: 'h-60' },
+  'asl-live': { span: 'md:col-span-2', height: 'h-60' },
+  'fcc-dashboard': { span: 'md:col-span-6', height: 'h-64' },
+};
+const WIDE = 'fcc-dashboard'; // full-width cover: scene and text side by side
 
 export default function Projects() {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
-
   return (
     <section id="projects" className="section-padding bg-white dark:bg-surface-950/60 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
-        <SectionHeader
-          kicker="Projects"
-          title="Projects"
-          subtitle="My six pinned builds — tap a card to open it on GitHub."
-        />
+        <SectionHeader kicker="Projects" title="Projects" subtitle="Six builds, each with its own story." />
 
-        <div ref={ref} className="mx-auto grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} inView={inView} />
+        <p className="-mt-10 mb-10 flex items-center justify-center gap-2 text-sm font-medium text-primary-700 dark:text-primary-400 md:-mt-14">
+          <MousePointerClick size={16} />
+          <span className="[@media(hover:none)]:hidden">Click a project to see how it works</span>
+          <span className="hidden [@media(hover:none)]:inline">Tap a project to see how it works</span>
+        </p>
+
+        <div className="mx-auto grid max-w-6xl gap-5 md:grid-cols-6">
+          {projects.map((project) => (
+            <ProjectCover key={project.slug} project={project} />
           ))}
         </div>
 
@@ -46,63 +54,33 @@ export default function Projects() {
   );
 }
 
-function ProjectCard({
-  project,
-  index,
-  inView,
-}: {
-  project: Project;
-  index: number;
-  inView: boolean;
-}) {
+function ProjectCover({ project }: { project: Project }) {
+  const { span, height } = SHAPES[project.slug];
+  const Scene = SCENES[project.slug];
+  const wide = project.slug === WIDE;
+  const path = `/projects/${project.slug}`;
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: index * 0.06, ease: 'easeOut' }}
+    <a
+      href={path}
+      onClick={(e) => followLink(e, path)}
+      aria-label={`${project.title}: ${project.hook} Open the project page.`}
+      className={`${span} group block rounded-lg border border-surface-200 bg-surface-100/60 p-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-500/60 hover:shadow-glass dark:border-surface-800 dark:bg-surface-900/50 ${
+        wide ? 'md:grid md:grid-cols-[1.4fr_1fr] md:items-center md:gap-6' : ''
+      }`}
     >
-      <a
-        href={project.githubUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={`${project.title} on GitHub`}
-        className="group block h-full rounded-lg transition-transform duration-200 hover:-translate-y-1"
-      >
-        <div className="glass flex h-full flex-col overflow-hidden rounded-lg shadow-soft hover:shadow-accent-glow transition-shadow duration-200 bg-white dark:bg-surface-900/50">
-          {/* Thumbnail — GitHub OG card, 2:1, subtle zoom on hover */}
-          <div className="aspect-video overflow-hidden border-b border-surface-200 dark:border-surface-700">
-            <img
-              src={project.imageUrl}
-              alt={project.title}
-              loading="lazy"
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-          </div>
-
-          <div className="flex flex-1 flex-col p-5">
-            <h3 className="flex items-start gap-2 text-lg font-bold text-surface-800 transition-colors duration-200 group-hover:text-primary-600 dark:text-white dark:group-hover:text-primary-500">
-              <span className="flex-1">{project.title}</span>
-              <ArrowUpRight size={16} className="mt-0.5 shrink-0 text-surface-400 group-hover:text-primary-600 dark:group-hover:text-primary-500" />
-            </h3>
-
-            <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-surface-600 dark:text-surface-400">
-              {project.description}
-            </p>
-
-            {/* Tech badges pinned to the bottom */}
-            <div className="mt-auto flex flex-wrap gap-1.5 pt-4">
-              {project.technologies.map((tech) => (
-                <span
-                  key={tech}
-                  className="rounded-md border border-surface-300 dark:border-surface-700 px-2 py-1 text-xs font-medium text-surface-700 dark:text-surface-300"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </a>
-    </motion.div>
+      <div className={height}>
+        <Scene />
+      </div>
+      <div className="px-2 pb-2 pt-4">
+        <p className="text-xs text-surface-500 dark:text-surface-400">{project.kind}</p>
+        <h3 className="mt-1 flex items-center gap-2 text-xl font-bold text-surface-900 transition-colors group-hover:text-primary-600 dark:text-white dark:group-hover:text-primary-500">
+          {project.title}
+          <ArrowUpRight size={16} className="text-surface-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+        </h3>
+        <p className="mt-1 text-sm text-surface-600 dark:text-surface-400">{project.hook}</p>
+        {wide && <p className="mt-4 hidden text-sm leading-relaxed text-surface-600 dark:text-surface-400 md:block">{project.how}</p>}
+      </div>
+    </a>
   );
 }

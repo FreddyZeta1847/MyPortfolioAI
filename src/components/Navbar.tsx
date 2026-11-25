@@ -8,13 +8,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { navItems } from '../data/navItems';
 import { useActiveSection } from '../hooks/useActiveSection';
-import { scrollToElement } from '../utils/scrollTo';
+import { goToSection, usePathname } from '../utils/router';
 import ThemeToggle from './ThemeToggle';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const activeSection = useActiveSection();
+  const activeSection = useActiveSection(usePathname());
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -23,7 +23,7 @@ export default function Navbar() {
   }, []);
 
   const handleNavClick = (id: string) => {
-    scrollToElement(id);
+    goToSection(id);
     setIsOpen(false);
   };
 
