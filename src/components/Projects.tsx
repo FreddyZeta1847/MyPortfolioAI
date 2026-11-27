@@ -1,11 +1,13 @@
 /**
  * Projects.tsx
  *
- * The "Projects" section: the eight featured builds as covers of different sizes (rows of
- * 2/3 + 1/3, three thirds, two halves, then one full-width cover closing the grid on desktop;
- * one column on phones). Each cover is its project's
- * live scene plus kind, name and one-line hook, and links to the project's own page at
- * /projects/<slug> (ProjectPage.tsx). A hint under the header tells visitors to open one.
+ * The "Projects" section: the eight featured builds as covers. The flagship project (blueprint)
+ * opens the grid as a full-width banner: scene left, story, facts and a "Flagship" badge right
+ * (mockup A of mockups/projects/f-flagship.html). Then two rows of three thirds, then one
+ * full-width cover closing the grid on desktop; one column on phones. Each cover is its
+ * project's live scene plus kind, version (read live from GitHub, when it has one), name and
+ * one-line hook, and links to the project's own page
+ * at /projects/<slug> (ProjectPage.tsx). A hint under the header tells visitors to open one.
  * Below the covers sits the collapsible live GitHub archive in <MoreBuilds />.
  *
  * Cover data comes from data/projects.ts, scenes from projects/scenes.tsx.
@@ -17,16 +19,17 @@ import { followLink } from '../utils/router';
 import SectionHeader from './SectionHeader';
 import MoreBuilds from './MoreBuilds';
 import { SCENES } from './projects/scenes';
+import { FlagshipBadge, VersionTag } from './projects/pageParts';
 
-// Grid span and scene height per cover, in display order (see data/projects.ts).
+// Grid span and scene height per regular cover, in display order (see data/projects.ts).
+// az-mod's scene needs h-72 at a third of the width, so its whole row gets it.
 const SHAPES: Record<string, { span: string; height: string }> = {
-  blueprint: { span: 'md:col-span-4', height: 'h-64 md:h-72' },
-  jarvis: { span: 'md:col-span-2', height: 'h-64 md:h-72' },
+  jarvis: { span: 'md:col-span-2', height: 'h-60' },
   'ai-calendar-assistant': { span: 'md:col-span-2', height: 'h-60' },
   sift: { span: 'md:col-span-2', height: 'h-60' },
-  'asl-live': { span: 'md:col-span-2', height: 'h-60' },
-  'az-mod': { span: 'md:col-span-3', height: 'h-72' },
-  gameclaude: { span: 'md:col-span-3', height: 'h-72' },
+  'asl-live': { span: 'md:col-span-2', height: 'h-72' },
+  'az-mod': { span: 'md:col-span-2', height: 'h-72' },
+  gameclaude: { span: 'md:col-span-2', height: 'h-72' },
   'fcc-dashboard': { span: 'md:col-span-6', height: 'h-64' },
 };
 const WIDE = 'fcc-dashboard'; // full-width cover: scene and text side by side
@@ -44,9 +47,11 @@ export default function Projects() {
         </p>
 
         <div className="mx-auto grid max-w-6xl gap-5 md:grid-cols-6">
-          {projects.map((project) => (
-            <ProjectCover key={project.slug} project={project} />
-          ))}
+          {projects.map((project) =>
+            project.flagship
+              ? <FlagshipCover key={project.slug} project={project} />
+              : <ProjectCover key={project.slug} project={project} />
+          )}
         </div>
 
         <div className="mx-auto mt-16 max-w-6xl">
@@ -54,6 +59,43 @@ export default function Projects() {
         </div>
       </div>
     </section>
+  );
+}
+
+/** The flagship project: a full-width banner with its story and facts. */
+function FlagshipCover({ project }: { project: Project }) {
+  const Scene = SCENES[project.slug];
+  const path = `/projects/${project.slug}`;
+  return (
+    <a
+      href={path}
+      onClick={(e) => followLink(e, path)}
+      aria-label={`${project.title}, flagship project: ${project.hook} Open the project page.`}
+      className="group block rounded-lg border border-accent-300/70 bg-surface-100/60 p-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent-500/70 hover:shadow-glass dark:border-accent-800/70 dark:bg-surface-900/50 md:col-span-6 md:grid md:grid-cols-[1.45fr_1fr] md:items-center md:gap-8"
+    >
+      <div className="h-72 md:h-80">
+        <Scene />
+      </div>
+      <div className="px-2 pb-2 pt-5 md:pr-6">
+        <FlagshipBadge />
+        <p className="mt-4 flex items-center gap-2 text-xs text-surface-500 dark:text-surface-400">{project.kind}<VersionTag project={project} /></p>
+        <h3 className="mt-1 text-3xl font-bold tracking-tight text-surface-900 transition-colors group-hover:text-primary-600 dark:text-white dark:group-hover:text-primary-500 md:text-4xl">{project.title}</h3>
+        <p className="mt-2 text-lg text-surface-700 dark:text-surface-300">{project.hook}</p>
+        <p className="mt-3 text-sm leading-relaxed text-surface-600 dark:text-surface-400">{project.how}</p>
+        <dl className="mt-6 grid grid-cols-3 gap-3 border-t border-surface-200 pt-5 dark:border-surface-800">
+          {project.facts.map((fact) => (
+            <div key={fact.label} className="flex flex-col-reverse">
+              <dt className="mt-1 text-xs leading-snug text-surface-500 dark:text-surface-400">{fact.label}</dt>
+              <dd className="text-2xl font-bold tabular-nums text-accent-600 dark:text-accent-400">{fact.value}</dd>
+            </div>
+          ))}
+        </dl>
+        <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary-700 transition-colors group-hover:text-accent-600 dark:text-primary-400 dark:group-hover:text-accent-400">
+          Read the case study
+          <ArrowUpRight size={16} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+        </span>
+      </div>
+    </a>
   );
 }
 
@@ -76,7 +118,7 @@ function ProjectCover({ project }: { project: Project }) {
         <Scene />
       </div>
       <div className="px-2 pb-2 pt-4">
-        <p className="text-xs text-surface-500 dark:text-surface-400">{project.kind}</p>
+        <p className="flex items-center gap-2 text-xs text-surface-500 dark:text-surface-400">{project.kind}<VersionTag project={project} /></p>
         <h3 className="mt-1 flex items-center gap-2 text-xl font-bold text-surface-900 transition-colors group-hover:text-primary-600 dark:text-white dark:group-hover:text-primary-500">
           {project.title}
           <ArrowUpRight size={16} className="text-surface-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />

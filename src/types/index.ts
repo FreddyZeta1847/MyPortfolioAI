@@ -25,6 +25,10 @@ export interface Project {
   // Page layout, picked per project: walkthrough = watch the mechanism, caseStudy = the story
   // and the why, spec = a tool to install (decision of 2026-11-27 in blueprint/decisions.md).
   layout: 'walkthrough' | 'caseStudy' | 'spec';
+  flagship?: boolean;       // the main project: full-width banner cover and a "Flagship" badge
+  // Released projects: the JSON manifest in the repo whose `version` is read live
+  // (hooks/useVersion.ts), and the last known version, shown until then or if that fails.
+  version?: { file: string; known: string };
   githubUrl: string;
 }
 
