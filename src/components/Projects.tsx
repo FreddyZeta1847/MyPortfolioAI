@@ -1,8 +1,9 @@
 /**
  * Projects.tsx
  *
- * The "Projects" section: the six featured builds as covers of different sizes (two wide
- * covers frame four narrow ones on desktop, one column on phones). Each cover is its project's
+ * The "Projects" section: the eight featured builds as covers of different sizes (rows of
+ * 2/3 + 1/3, three thirds, two halves, then one full-width cover closing the grid on desktop;
+ * one column on phones). Each cover is its project's
  * live scene plus kind, name and one-line hook, and links to the project's own page at
  * /projects/<slug> (ProjectPage.tsx). A hint under the header tells visitors to open one.
  * Below the covers sits the collapsible live GitHub archive in <MoreBuilds />.
@@ -24,6 +25,8 @@ const SHAPES: Record<string, { span: string; height: string }> = {
   'ai-calendar-assistant': { span: 'md:col-span-2', height: 'h-60' },
   sift: { span: 'md:col-span-2', height: 'h-60' },
   'asl-live': { span: 'md:col-span-2', height: 'h-60' },
+  'az-mod': { span: 'md:col-span-3', height: 'h-72' },
+  gameclaude: { span: 'md:col-span-3', height: 'h-72' },
   'fcc-dashboard': { span: 'md:col-span-6', height: 'h-64' },
 };
 const WIDE = 'fcc-dashboard'; // full-width cover: scene and text side by side
@@ -32,7 +35,7 @@ export default function Projects() {
   return (
     <section id="projects" className="section-padding bg-white dark:bg-surface-950/60 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
-        <SectionHeader kicker="Projects" title="Projects" subtitle="Six builds, each with its own story." />
+        <SectionHeader kicker="Projects" title="Projects" subtitle="Eight builds, each with its own story." />
 
         <p className="-mt-10 mb-10 flex items-center justify-center gap-2 text-sm font-medium text-primary-700 dark:text-primary-400 md:-mt-14">
           <MousePointerClick size={16} />

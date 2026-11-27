@@ -6,7 +6,7 @@ import { projects } from '../data/projects';
 import { GitHubRepo } from '../types';
 
 const GITHUB_USER = 'FreddyZeta1847';
-const CACHE_KEY = 'gh-more-builds-v4';
+const CACHE_KEY = 'gh-more-builds-v5';
 
 // Repos already shown as featured projects (from data/projects.ts githubUrl slugs),
 // plus the profile-README repo.

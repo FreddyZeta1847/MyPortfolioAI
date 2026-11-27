@@ -7,18 +7,24 @@
  *
  * Every scene is a short story in steps driven by useLoopStep: the steps play one after the
  * other, the last frame rests ~2 s, then it starts over — only while the scene is on screen.
+ * A scene can also be held on one step from outside (the walkthrough page): SCENE_STEP_OF says
+ * which scene step shows each of the project's 4 "how it works" steps.
  * Ambient motion (voice wave, landmark pulse, caret) uses the scene-* keyframes in index.css.
- * Numbers in the sift and fcc scenes are made up and labelled "example data".
+ * Numbers in the sift, fcc-dashboard and az-mod scenes are made up and labelled "example data".
  */
 import type { ComponentType } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { Calendar, CloudSun, Mail, Mic, Rss, Volume2, Wallet } from 'lucide-react';
 import { useLoopStep } from '../../hooks/useLoopStep';
 
+/** `step` set from outside (the walkthrough page) freezes the scene on that step. */
+export type SceneProps = { step?: number };
+
 /** Loop state of a scene plus the ref that tells it whether it is on screen. */
-function useScene(steps: number, stepMs?: number) {
+function useScene(steps: number, stepMs?: number, forced?: number) {
   const { ref, inView } = useInView({ threshold: 0.3 });
-  return { ref, ...useLoopStep(steps, inView, stepMs) };
+  const loop = useLoopStep(steps, inView && forced === undefined, stepMs);
+  return { ref, ...(forced === undefined ? loop : { step: forced, cycle: 0 }) };
 }
 
 /** Classes that fade an element in when `on`, out (and slightly down) otherwise. */
@@ -35,8 +41,8 @@ function ExampleNote() {
 /* ---------- blueprint: a terminal where the stage phases light up one by one ---------- */
 const PHASES = ['clarify', 'plan', 'build', 'test', 'review', 'first use'];
 
-function BlueprintScene() {
-  const { ref, step } = useScene(PHASES.length + 1, 700);
+function BlueprintScene({ step: forced }: SceneProps) {
+  const { ref, step } = useScene(PHASES.length + 1, 700, forced);
   return (
     <div ref={ref} className="flex h-full w-full flex-col overflow-hidden rounded-lg border border-surface-800 bg-surface-950 font-mono text-[12px] text-surface-200 shadow-glass sm:text-[13px]">
       <div className="flex items-center gap-1.5 border-b border-surface-800 px-3 py-2">
@@ -81,8 +87,8 @@ const AGENTS = [
 const WAVE = Array.from({ length: 28 }, (_, i) => 0.35 + 0.65 * Math.abs(Math.sin(i * 1.7)));
 const WIRE_X = [50, 150, 250, 350];
 
-function JarvisScene() {
-  const { ref, step, cycle } = useScene(4, 900);
+function JarvisScene({ step: forced }: SceneProps) {
+  const { ref, step, cycle } = useScene(4, 900, forced);
   const active = cycle % AGENTS.length;
   return (
     <div ref={ref} className="flex h-full w-full flex-col items-center justify-between gap-4 overflow-hidden rounded-lg border border-surface-200 bg-gradient-to-b from-primary-50 to-white p-5 dark:border-surface-700 dark:from-primary-900/30 dark:to-surface-900">
@@ -143,8 +149,8 @@ function JarvisScene() {
 /* ---------- AI Calendar Assistant: a WhatsApp message becomes a calendar event ---------- */
 const HOURS = ['18', '19', '20', '21', '22'];
 
-function CalendarScene() {
-  const { ref, step } = useScene(4, 900);
+function CalendarScene({ step: forced }: SceneProps) {
+  const { ref, step } = useScene(4, 900, forced);
   return (
     <div ref={ref} className="grid h-full w-full grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] gap-4 overflow-hidden rounded-lg border border-surface-200 bg-cream p-4 dark:border-surface-700 dark:bg-surface-900">
       <div className="flex flex-col justify-center gap-2 text-[13px]">
@@ -184,8 +190,8 @@ const FEED = [
 const PICKED = [0, 4, 3];
 const DRAFT_STATUS = ['In review', 'Edited', 'Posted by you'];
 
-function SiftScene() {
-  const { ref, step } = useScene(5, 800);
+function SiftScene({ step: forced }: SceneProps) {
+  const { ref, step } = useScene(5, 800, forced);
   return (
     <div ref={ref} className="relative grid h-full w-full grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 overflow-hidden rounded-lg border border-surface-200 bg-white p-4 pb-8 dark:border-surface-700 dark:bg-surface-900">
       <ul className="space-y-1.5 text-[11px]">
@@ -233,8 +239,8 @@ const BONES = [[0, 1], [1, 2], [2, 3], [3, 4], [0, 5], [5, 6], [6, 7], [7, 8], [
   [13, 14], [14, 15], [15, 16], [13, 17], [17, 18], [18, 19], [19, 20], [0, 17]];
 const WORD = 'HELLO';
 
-function AslScene() {
-  const { ref, step } = useScene(WORD.length + 2, 550);
+function AslScene({ step: forced }: SceneProps) {
+  const { ref, step } = useScene(WORD.length + 2, 550, forced);
   return (
     <div ref={ref} className="grid h-full w-full grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] items-center gap-3 overflow-hidden rounded-lg border border-surface-800 bg-surface-950 p-4 text-surface-100">
       <svg className="max-h-56 w-full" viewBox="20 36 160 196" role="img" aria-label="A hand with its 21 landmarks">
@@ -275,8 +281,8 @@ function AslScene() {
 const BARS = [30, 42, 38, 55, 48, 62, 58, 70, 66, 81, 77, 90, 86, 100];
 const MODELS = [['deepseek-chat', '204', '$11.20'], ['kimi-k2', '96', '$7.20'], ['ollama · qwen3', '12', 'unknown']];
 
-function FccScene() {
-  const { ref, step } = useScene(4, 900);
+function FccScene({ step: forced }: SceneProps) {
+  const { ref, step } = useScene(4, 900, forced);
   return (
     <div ref={ref} className="relative flex h-full w-full flex-col gap-3 overflow-hidden rounded-lg border border-surface-200 bg-white p-4 pb-8 text-[12px] dark:border-surface-700 dark:bg-surface-900">
       <div className="flex items-center justify-between">
@@ -331,11 +337,116 @@ function FccScene() {
   );
 }
 
-export const SCENES: Record<string, ComponentType> = {
+/* ---------- az-mod: the Azure pane fills in — resources, month's cost, one warning ---------- */
+const RESOURCES = [
+  ['ca-portfolio-api', 'Container App', 'Running'],
+  ['stportfolio', 'Storage', 'Running'],
+  ['kv-portfolio', 'Key Vault', 'Check'],
+  ['swa-portfolio', 'Static Web App', 'Running'],
+];
+
+function AzModScene({ step: forced }: SceneProps) {
+  const { ref, step } = useScene(RESOURCES.length + 3, 500, forced);
+  return (
+    <div ref={ref} className="relative grid h-full w-full grid-cols-[auto_minmax(0,1fr)] gap-4 overflow-hidden rounded-lg border border-surface-200 bg-white p-4 pb-8 text-[12px] dark:border-surface-700 dark:bg-surface-900">
+      <div className="flex flex-col items-center gap-2">
+        <svg viewBox="0 0 42 42" className="h-24 w-24 -rotate-90" aria-hidden="true">
+          <circle cx="21" cy="21" r="15.9" fill="none" strokeWidth="5" className="stroke-surface-200 dark:stroke-surface-700" />
+          <circle cx="21" cy="21" r="15.9" fill="none" stroke="#2fa89f" strokeWidth="5" strokeDasharray="75 25" />
+          <circle cx="21" cy="21" r="15.9" fill="none" stroke="#d97546" strokeWidth="5" strokeDasharray="25 75" strokeDashoffset="-75" />
+        </svg>
+        <p className="text-center leading-tight text-surface-500">3 running<br />1 to check</p>
+      </div>
+      <div className="space-y-1.5">
+        <div className="flex items-center justify-between">
+          <p className="font-semibold text-surface-800 dark:text-surface-100">Azure · rg-portfolio</p>
+          <p className="text-surface-400">2 min ago</p>
+        </div>
+        {RESOURCES.map(([name, type, state], i) => (
+          <div key={name} className={`flex items-center justify-between rounded-md border border-surface-200 px-2.5 py-1.5 transition-all duration-300 dark:border-surface-700 ${show(step >= i + 1)}`}>
+            <span className="truncate">
+              <b className="font-mono font-medium text-surface-800 dark:text-surface-100">{name}</b> <span className="text-surface-400">· {type}</span>
+            </span>
+            <span className="flex shrink-0 items-center gap-1.5 text-surface-500">
+              <span className={`h-2 w-2 rounded-full ${state === 'Check' ? 'bg-accent-500' : 'bg-primary-500'}`} />{state}
+            </span>
+          </div>
+        ))}
+        <div className={`flex items-center justify-between pt-1 transition-all duration-300 ${show(step >= RESOURCES.length + 1)}`}>
+          <span className="text-surface-500">This month</span>
+          <span className="font-semibold tabular-nums text-surface-800 dark:text-surface-100">€4.12 <span className="font-normal text-surface-400">/ €6.80 last</span></span>
+        </div>
+        <p className={`rounded-md bg-accent-500/10 px-2.5 py-1.5 text-accent-700 transition-all duration-300 dark:text-accent-300 ${show(step >= RESOURCES.length + 2)}`}>
+          Da guardare: Key Vault without purge protection
+        </p>
+      </div>
+      <ExampleNote />
+    </div>
+  );
+}
+
+/* ---------- gameclaude: a game of Parola solved in three guesses ---------- */
+const GUESSES = [['CIELO', 'xxxxx'], ['PORTA', 'gxxgg'], ['PASTA', 'ggggg']];
+const GAMES = ['Parola', 'Campo minato', 'Raddoppia'];
+
+function GameclaudeScene({ step: forced }: SceneProps) {
+  const { ref, step } = useScene(GUESSES.length + 1, 900, forced);
+  const tile = 'grid h-8 w-8 place-items-center rounded border font-mono text-sm font-bold';
+  return (
+    <div ref={ref} className="flex h-full w-full flex-col items-center gap-3 overflow-hidden rounded-lg border border-surface-200 bg-cream p-4 dark:border-surface-700 dark:bg-surface-900">
+      <div className="flex gap-1 text-[11px] font-medium">
+        {GAMES.map((game, i) => (
+          <span key={game} className={`rounded-md px-2.5 py-1 ${i === 0 ? 'bg-surface-900 text-white dark:bg-surface-100 dark:text-surface-900' : 'border border-surface-300 text-surface-600 dark:border-surface-700 dark:text-surface-300'}`}>
+            {i + 1} {game}
+          </span>
+        ))}
+      </div>
+      <div className="grid gap-1">
+        {GUESSES.map(([word, marks], row) => (
+          <div key={word} className="flex gap-1">
+            {[...word].map((letter, i) => {
+              const shown = step >= row + 1;
+              const tone = !shown
+                ? 'border-surface-300 dark:border-surface-700 text-transparent'
+                : marks[i] === 'g'
+                  ? 'border-primary-500 bg-primary-500 text-surface-950'
+                  : 'border-surface-200 bg-surface-200 text-surface-600 dark:border-surface-700 dark:bg-surface-700 dark:text-surface-300';
+              return (
+                <span key={i} className={`${tile} ${tone} transition-colors duration-300`} style={{ transitionDelay: shown ? `${i * 70}ms` : '0ms' }}>
+                  {letter}
+                </span>
+              );
+            })}
+          </div>
+        ))}
+        <div className="flex gap-1">
+          {[0, 1, 2, 3, 4].map((i) => <span key={i} className="h-8 w-8 rounded border border-surface-300 dark:border-surface-700" />)}
+        </div>
+      </div>
+      <p className={`text-[11px] text-surface-500 transition-opacity duration-300 ${step >= GUESSES.length ? 'opacity-100' : 'opacity-0'}`}>
+        Word of the day · solved in 3
+      </p>
+    </div>
+  );
+}
+
+export const SCENES: Record<string, ComponentType<SceneProps>> = {
   blueprint: BlueprintScene,
   jarvis: JarvisScene,
   'ai-calendar-assistant': CalendarScene,
   sift: SiftScene,
   'asl-live': AslScene,
+  'az-mod': AzModScene,
+  gameclaude: GameclaudeScene,
   'fcc-dashboard': FccScene,
+};
+
+/**
+ * For the walkthrough page: which scene step shows each of the project's 4 "how it works"
+ * steps (e.g. Jarvis "Route" → the orchestrator lit). Projects without an entry just loop.
+ */
+export const SCENE_STEP_OF: Record<string, number[]> = {
+  jarvis: [1, 2, 3, 3],
+  sift: [0, 1, 3, 4],
+  'asl-live': [0, 1, 5, 6],
 };
