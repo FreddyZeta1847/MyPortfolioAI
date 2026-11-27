@@ -17,9 +17,14 @@ export interface Project {
   status: string;
   problem: string;
   how: string;
-  methods: string[];       // 3 short lines
-  fact: { value: string; label: string };  // one hard, true number
+  methods: string[];       // 3 short lines: "why it's built this way"
+  steps: { title: string; text: string }[];   // 4 steps of "how it works"
+  facts: { value: string; label: string }[];  // 3 hard, true numbers
   technologies: string[];
+  install?: string;        // one command to try it, when there is one
+  // Page layout, picked per project: walkthrough = watch the mechanism, caseStudy = the story
+  // and the why, spec = a tool to install (decision of 2026-11-27 in blueprint/decisions.md).
+  layout: 'walkthrough' | 'caseStudy' | 'spec';
   githubUrl: string;
 }
 
