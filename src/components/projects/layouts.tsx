@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import type { Project } from '../../types';
 import { SCENES, SCENE_STEP_OF } from './scenes';
-import { BackLink, GitHubButton, InstallLine, Meta, PrevNext, SectionTitle, StackList, WhyList } from './pageParts';
+import { BackLink, FlagshipBadge, GitHubButton, InstallLine, Meta, PrevNext, SectionTitle, StackList, WhyList } from './pageParts';
 
 export type LayoutProps = { project: Project; prev: Project; next: Project };
 
@@ -28,6 +28,7 @@ export function CaseStudyLayout({ project, prev, next }: LayoutProps) {
       <BackLink />
       <header className="mt-10 grid gap-10 lg:grid-cols-[1fr_1.15fr] lg:items-center">
         <div>
+          {project.flagship && <div className="mb-4"><FlagshipBadge /></div>}
           <Meta project={project} />
           <h1 className="mt-2 text-5xl font-bold tracking-tight text-surface-900 dark:text-white md:text-6xl">{project.title}</h1>
           <p className="mt-4 text-xl text-surface-700 dark:text-surface-300 md:text-2xl">{project.hook}</p>

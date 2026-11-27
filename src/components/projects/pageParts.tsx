@@ -2,12 +2,12 @@
  * pageParts.tsx
  *
  * The building blocks shared by the three project-page layouts (layouts.tsx): back link,
- * kind · status line, GitHub button, install command with a copy button, "why it's built this
+ * kind · status line with the live version tag, "Flagship" badge, GitHub button, install command with a copy button, "why it's built this
  * way" list, the tech stack with brand logos, section titles, and the previous / next project
  * cards. Each piece reads straight from a Project (data/projects.ts).
  */
 import type { ReactNode } from 'react';
-import { ArrowLeft, Check, Copy, Github } from 'lucide-react';
+import { ArrowLeft, Check, Copy, Github, Star } from 'lucide-react';
 import toast from 'react-hot-toast';
 import type { IconType } from 'react-icons';
 import {
@@ -17,6 +17,7 @@ import {
 import { VscAzure } from 'react-icons/vsc';
 import type { Project } from '../../types';
 import { followLink } from '../../utils/router';
+import { useVersion } from '../../hooks/useVersion';
 
 export function BackLink() {
   return (
@@ -31,7 +32,34 @@ export function BackLink() {
 }
 
 export function Meta({ project }: { project: Project }) {
-  return <p className="text-sm text-surface-500 dark:text-surface-400">{project.kind} · {project.status}</p>;
+  return (
+    <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-surface-500 dark:text-surface-400">
+      {project.kind} · {project.status}<VersionTag project={project} />
+    </p>
+  );
+}
+
+/** "v3.6.0" pill with the version read live from the repo; nothing for unversioned projects. */
+export function VersionTag({ project }: { project: Project }) {
+  const version = useVersion(project);
+  if (!version) return null;
+  return (
+    <span
+      title="Latest version, read from GitHub"
+      className="rounded border border-primary-300 bg-primary-50 px-1.5 py-0.5 font-mono text-xs font-medium text-primary-700 dark:border-primary-800 dark:bg-primary-900/30 dark:text-primary-300"
+    >
+      v{version}
+    </span>
+  );
+}
+
+/** Pill for the project marked `flagship`, on its cover and its page. */
+export function FlagshipBadge() {
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-accent-300 bg-accent-50 px-2.5 py-1 text-xs font-semibold text-accent-700 dark:border-accent-800 dark:bg-accent-900/30 dark:text-accent-300">
+      <Star size={12} className="fill-current" aria-hidden="true" />Flagship · still evolving
+    </span>
+  );
 }
 
 export function SectionTitle({ children }: { children: ReactNode }) {

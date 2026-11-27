@@ -25,7 +25,7 @@ export const projects: Project[] = [
     title: 'blueprint',
     kind: 'Claude Code plugin',
     hook: 'Think it through before you build.',
-    status: 'Active',
+    status: 'Actively evolving',
     problem: 'Claude Code forgets everything between sessions and starts building before it knows what matters.',
     how: 'It turns a request into a written context and a staged plan on disk. Every stage runs a fixed loop of phases, checked by hooks.',
     methods: ['Context-first planning', 'A fixed loop for each stage type', 'Deterministic Node hooks: no model, zero cost'],
@@ -39,6 +39,8 @@ export const projects: Project[] = [
     technologies: ['JavaScript', 'Claude Code', 'AI Agents', 'Node hooks'],
     install: '/plugin marketplace add FreddyZeta1847/blueprint',
     layout: 'caseStudy',
+    flagship: true,
+    version: { file: '.claude-plugin/plugin.json', known: '3.6.0' },
     githubUrl: GH + 'blueprint',
   },
   {
@@ -100,6 +102,7 @@ export const projects: Project[] = [
     technologies: ['TypeScript', 'SQLite', 'LLM routing', 'Docker'],
     install: 'docker compose up -d',
     layout: 'walkthrough',
+    version: { file: 'package.json', known: '1.1.0' },
     githubUrl: GH + 'sift',
   },
   {
@@ -141,6 +144,7 @@ export const projects: Project[] = [
     technologies: ['TypeScript', 'Claude Code', 'Azure CLI', 'Node hooks'],
     install: '/plugin install az-mod --marketplace FreddyZeta1847/az-mod',
     layout: 'spec',
+    version: { file: '.claude-plugin/plugin.json', known: '1.0.0' },
     githubUrl: GH + 'az-mod',
   },
   {
@@ -162,6 +166,7 @@ export const projects: Project[] = [
     technologies: ['TypeScript', 'SVG', 'Claude Code'],
     install: '/plugin install gameclaude --marketplace FreddyZeta1847/gameclaude',
     layout: 'spec',
+    version: { file: '.claude-plugin/plugin.json', known: '1.0.0' },
     githubUrl: GH + 'gameclaude',
   },
   {
@@ -182,6 +187,7 @@ export const projects: Project[] = [
     facts: [{ value: '221', label: 'tests' }, { value: '5 s', label: 'log polling' }, { value: '0', label: 'prices guessed' }],
     technologies: ['Python', 'FastAPI', 'React', 'SQLite', 'Local-first'],
     layout: 'spec',
+    version: { file: 'package.json', known: '1.1.1' },
     githubUrl: GH + 'fcc-dashboard',
   },
 ];
